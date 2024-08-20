@@ -1,11 +1,22 @@
 # DealDirect
+
 ![Django](https://img.shields.io/badge/Django-5%2B-brightgreen)
+
 ![Python](https://img.shields.io/badge/Python-3.12%2B-blue)
+
 ![Redis](https://img.shields.io/badge/Redis-Caching-red)
+
 ![RabbitMQ](https://img.shields.io/badge/RabbitMQ-Broker-orange)
+
 ![Celery](https://img.shields.io/badge/Celery-Queue-green)
+
 ![License](https://img.shields.io/badge/License-MIT-yellow)
+
 ![Docker](https://img.shields.io/badge/Docker-Ready-blue)
+
+![SQLite](https://img.shields.io/badge/SQLite-Development-lightgrey)
+
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Production-blue)
 ## Code Formatting
 
 This project uses `black` for code formatting. Black is a code formatter for Python that ensures consistent code style.
