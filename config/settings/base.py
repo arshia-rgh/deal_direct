@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     # local apps
     "accounts",
     "products",
+    "cart",
 ]
 
 MIDDLEWARE = [
