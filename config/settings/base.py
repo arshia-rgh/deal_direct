@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     "django_extensions",
     # local apps
     "accounts",
+    "products",
 ]
 
 MIDDLEWARE = [
