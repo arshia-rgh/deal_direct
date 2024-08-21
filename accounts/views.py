@@ -78,3 +78,7 @@ class VerifyEmailView(APIView):
                 {"message": "Invalid verification link."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+
+class UserLoginView:
+    pass
