@@ -8,7 +8,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import User
-from accounts.serializers import UserRegisterSerializer, UserProfileSerializer
+from accounts.serializers import (
+    UserRegisterSerializer,
+    UserProfileSerializer,
+    UserPasswordChangeSerializer,
+)
 from .permissions import IsAuthenticatedAndActive
 
 
@@ -104,6 +108,7 @@ class UserProfileRetrieveUpdateView(generics.RetrieveUpdateAPIView):
 
 
 class UserPasswordChangeView(generics.UpdateAPIView):
+    serializer_class = UserPasswordChangeSerializer
     permission_classes = (IsAuthenticatedAndActive,)
 
     def get_object(self):
