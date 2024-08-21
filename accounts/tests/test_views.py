@@ -61,3 +61,7 @@ class UserRegisterViewAPITestCase(APITestCase):
         )
         self.assertEqual(response.status_code, 400)
         self.assertIn("email", response.data)
+
+
+class EmailVerifyViewAPItestCase(APITestCase):
+    pass
