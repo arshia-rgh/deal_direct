@@ -113,3 +113,13 @@ class UserPasswordChangeView(generics.UpdateAPIView):
 
     def get_object(self):
         return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.object.set_password(serializer.validated_data["password"])
+        self.object.save()
+        return Response(
+            {"message": "Password changed successfully"}, status=status.HTTP_200_OK
+        )
