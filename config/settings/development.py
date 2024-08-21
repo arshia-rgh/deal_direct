@@ -13,3 +13,7 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+# Celery
+CELERY_BROKER_URL = "amqp://localhost"
+CELERY_RESULT_BACKEND = "rpc://"

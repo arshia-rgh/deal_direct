@@ -17,3 +17,7 @@ DATABASES = {
         "PORT": os.environ.get("DB_PORT"),  # The port of the database.
     }
 }
+
+# Celery
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
+CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND")
