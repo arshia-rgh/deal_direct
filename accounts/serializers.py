@@ -5,4 +5,11 @@ from .models import User
 class UserRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        exclude = ["is_active", "is_staff", "is_superuser"]
+        fields = [
+            "first_name",
+            "last_name",
+            "email",
+            "username",
+            "password",
+            "phone_number",
+        ]
