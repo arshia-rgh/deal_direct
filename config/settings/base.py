@@ -23,7 +23,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     # local apps
     "accounts.apps.AccountsConfig",
-    "products",
+    "products.apps.ProductsConfig",
     "cart",
     "orders",
 ]
