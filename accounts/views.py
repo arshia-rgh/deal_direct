@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 
 from accounts.models import User
 from accounts.serializers import UserRegisterSerializer
+from .permissions import IsAuthenticatedAndActive
 
 
 class UserRegisterView(generics.CreateAPIView):
@@ -81,4 +82,4 @@ class VerifyEmailView(APIView):
 
 
 class UserProfileRetrieveUpdateView(generics.RetrieveUpdateAPIView):
-    pass
+    permission_classes = (IsAuthenticatedAndActive,)
