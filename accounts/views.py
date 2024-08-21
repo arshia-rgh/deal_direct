@@ -82,8 +82,22 @@ class VerifyEmailView(APIView):
 
 
 class UserProfileRetrieveUpdateView(generics.RetrieveUpdateAPIView):
+    """
+    API view for retrieving and updating the authenticated user's profile.
+
+    This view allows the authenticated user to retrieve and update their own profile information.
+    It uses the `UserProfileSerializer` for serialization and the `IsAuthenticatedAndActive`
+    permission class to ensure that only authenticated and active users can access this view.
+    """
+
     serializer_class = UserProfileSerializer
     permission_classes = (IsAuthenticatedAndActive,)
 
     def get_object(self):
+        """
+        Retrieve the authenticated user's profile.
+
+        Returns:
+            User: The authenticated user.
+        """
         return self.request.user
