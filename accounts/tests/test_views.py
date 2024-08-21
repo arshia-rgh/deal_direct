@@ -24,3 +24,4 @@ class UserRegisterViewAPITestCase(APITestCase):
             },
         )
         self.assertTrue(User.objects.filter(username="testuser").exists())
+        self.assertFalse(User.objects.get(username="testuser").is_active)
