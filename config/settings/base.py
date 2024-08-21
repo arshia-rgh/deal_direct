@@ -20,7 +20,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_extensions",
     # local apps
-    "accounts",
+    "accounts.apps.AccountsConfig",
     "products",
     "cart",
     "orders",
