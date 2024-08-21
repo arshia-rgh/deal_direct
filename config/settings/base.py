@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 from django.core.management.utils import get_random_secret_key
+from django.utils import timezone
 
 # added extra .parent
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -116,6 +117,9 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
 }
+
+# JWT
+SIMPLE_JWT = {"ACCESS_TOKEN_LIFETIME": timezone.timedelta(days=1)}
 
 # Celery settings
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
