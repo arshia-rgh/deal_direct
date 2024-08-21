@@ -12,10 +12,29 @@ from accounts.serializers import UserRegisterSerializer
 
 
 class UserRegisterView(generics.CreateAPIView):
+    """
+    API view for user registration.
+
+    This view handles the creation of a new user. Upon successful registration,
+    it sends a message to the user to check their email for account activation.
+    """
+
     serializer_class = UserRegisterSerializer
     permission_classes = (AllowAny,)
 
     def create(self, request, *args, **kwargs):
+        """
+        Create a new user and send a message to check the email for account activation.
+
+        Args:
+            request (Request): The DRF request object.
+            *args: Additional positional arguments.
+            **kwargs: Additional keyword arguments.
+
+        Returns:
+            Response: A response object containing a success message and HTTP status code 201.
+        """
+
         response = super().create(request, *args, **kwargs)
         return Response(
             {
