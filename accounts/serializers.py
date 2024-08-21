@@ -47,6 +47,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "last_name",
             "email",
             "username",
-            "password",
             "phone_number",
+        ]
+        read_only_fields = [
+            "password",
         ]
