@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     # third party apps
     "rest_framework",
     "django_extensions",
+    "rest_framework_simplejwt",
     # local apps
     "accounts.apps.AccountsConfig",
     "products",
