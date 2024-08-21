@@ -7,7 +7,20 @@ User = get_user_model()
 
 
 class UserRegisterViewAPITestCase(APITestCase):
+    """
+    Test case for the User registration API view.
+
+    This test case includes tests for registering a user with correct data,
+    missing fields, existing username, and invalid email format.
+    """
+
     def test_register_correct_data(self):
+        """
+        Test user registration with correct data.
+
+        This test verifies that a user can be registered with valid data,
+        and checks that the user is created but not yet active.
+        """
         response = self.client.post(
             reverse("accounts:register"),
             data={
@@ -27,6 +40,12 @@ class UserRegisterViewAPITestCase(APITestCase):
         self.assertFalse(User.objects.get(username="testuser").is_active)
 
     def test_register_missing_fields(self):
+        """
+        Test user registration with missing fields.
+
+        This test verifies that the registration fails when required fields are missing,
+        and checks that the appropriate error messages are returned.
+        """
         response = self.client.post(
             reverse("accounts:register"),
             data={"username": "testuser"},
@@ -36,6 +55,12 @@ class UserRegisterViewAPITestCase(APITestCase):
         self.assertIn("email", response.data)
 
     def test_register_existing_username(self):
+        """
+        Test user registration with an existing username.
+
+        This test verifies that the registration fails when the username already exists,
+        and checks that the appropriate error message is returned.
+        """
         User.objects.create_user(
             username="testuser", email="test1@email.com", password="test12pass"
         )
@@ -51,6 +76,12 @@ class UserRegisterViewAPITestCase(APITestCase):
         self.assertIn("username", response.data)
 
     def test_register_invalid_email(self):
+        """
+        Test user registration with an invalid email format.
+
+        This test verifies that the registration fails when the email format is invalid,
+        and checks that the appropriate error message is returned.
+        """
         response = self.client.post(
             reverse("accounts:register"),
             data={
