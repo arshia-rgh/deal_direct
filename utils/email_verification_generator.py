@@ -4,7 +4,7 @@ from django.utils.http import urlsafe_base64_encode
 
 
 def generate_email_verification_token(user):
-    return default_token_generator(user)
+    return default_token_generator.make_token(user)
 
 
 def generate_uid(user):
