@@ -49,3 +49,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "username",
             "phone_number",
         ]
+
+
+class UserPasswordChangeSerializer(serializers.ModelSerializer):
+    pass
