@@ -17,6 +17,12 @@
 ![SQLite](https://img.shields.io/badge/SQLite-Development-lightgrey)
 
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Production-blue)
+
+## ERD
+checkout the diagram at:
+
+- [ERD](documents/Entity%20Relationship%20Diagram.jpg)
+
 ## Code Formatting
 
 This project uses `black` for code formatting. Black is a code formatter for Python that ensures consistent code style.
