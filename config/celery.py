@@ -9,7 +9,7 @@ load_dotenv()
 mode = os.getenv("MODE", "development")
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", f"config.settings.{mode}")
 
-app = Celery("config")
+app = Celery("deal")
 
 # Using a string here means the worker doesn't have to serialize
 # the configuration object to child processes.
