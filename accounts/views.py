@@ -101,3 +101,7 @@ class UserProfileRetrieveUpdateView(generics.RetrieveUpdateAPIView):
             User: The authenticated user.
         """
         return self.request.user
+
+
+class UserPasswordChangeView(generics.UpdateAPIView):
+    permission_classes = (IsAuthenticatedAndActive,)
