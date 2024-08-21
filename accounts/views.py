@@ -108,13 +108,38 @@ class UserProfileRetrieveUpdateView(generics.RetrieveUpdateAPIView):
 
 
 class UserPasswordChangeView(generics.UpdateAPIView):
+    """
+    API view for changing the authenticated user's password.
+
+    This view allows the authenticated user to change their password. It uses the
+    `UserPasswordChangeSerializer` for validation and the `IsAuthenticatedAndActive`
+    permission class to ensure that only authenticated and active users can access this view.
+    """
+
     serializer_class = UserPasswordChangeSerializer
     permission_classes = (IsAuthenticatedAndActive,)
 
     def get_object(self):
+        """
+        Retrieve the authenticated user.
+
+        Returns:
+            User: The authenticated user.
+        """
         return self.request.user
 
     def update(self, request, *args, **kwargs):
+        """
+        Update the authenticated user's password.
+
+        Args:
+            request (Request): The DRF request object.
+            *args: Additional positional arguments.
+            **kwargs: Additional keyword arguments.
+
+        Returns:
+            Response: A response object containing a success message and HTTP status code 200.
+        """
         self.object = self.get_object()
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
