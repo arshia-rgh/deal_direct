@@ -20,7 +20,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     Methods:
         create(validated_data):
             Creates and returns a new user instance with the validated data.
-            (override to make sure the password will be hashed)
+        **Note**: (override to make sure the password will be hashed)
     """
 
     class Meta:
