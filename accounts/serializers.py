@@ -51,5 +51,25 @@ class UserProfileSerializer(serializers.ModelSerializer):
         ]
 
 
-class UserPasswordChangeSerializer(serializers.ModelSerializer):
-    pass
+class UserPasswordChangeSerializer(serializers.Serializer):
+    old_password = serializers.CharField(max_length=255)
+    password = serializers.CharField(max_length=255)
+    confirm_password = serializers.CharField(max_length=255)
+
+    class Meta:
+        model = User
+
+    def validate(self, attrs):
+        if attrs["password"] != attrs["confirm_password"]:
+            raise serializers.ValidationError(
+                detail={"error": "passwords aren't the same"}
+            )
+        return attrs
+
+    def validate_old_password(self, value):
+        user = self.context["request"].user
+        if not user.check_password(value):
+            raise serializers.ValidationError(
+                detail={"error": "the old password isn't correct"}
+            )
+        return value
