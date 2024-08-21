@@ -49,6 +49,3 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "username",
             "phone_number",
         ]
-        read_only_fields = [
-            "password",
-        ]
