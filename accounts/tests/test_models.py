@@ -16,3 +16,17 @@ class UserModelAPITestCase(APITestCase):
         self.assertEqual(self.user1.username, "testuser")
         self.assertTrue(User.objects.filter(username="testuser").exists())
         self.assertTrue(self.user1.check_password("testpassword12"))
+
+    def test_user_creation_invalid_data(self):
+        with self.assertRaises(ValueError):
+            User.objects.create_user(username="", email="invalid email", password="")
+
+    def test_user_update(self):
+        self.user1.username = "updateduser"
+        self.user1.save()
+        self.assertEqual(self.user1.username, "updateduser")
+
+    def test_user_deletion(self):
+        user_id = self.user1.id
+        self.user1.delete()
+        self.assertFalse(User.objects.filter(id=user_id).exists())
