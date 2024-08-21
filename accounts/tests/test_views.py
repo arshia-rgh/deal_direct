@@ -1,9 +1,13 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
+from django.core import mail
+from django.test import override_settings
 from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from rest_framework.test import APITestCase
+
+from accounts.tasks import send_email_verification_link
 
 User = get_user_model()
 
@@ -167,3 +171,37 @@ class EmailVerifyViewAPItestCase(APITestCase):
         self.assertEqual(response.status_code, 404)
         self.user.refresh_from_db()
         self.assertFalse(self.user.is_active)
+
+
+@override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+class EmailSendTestCase(APITestCase):
+    """
+    Test case for sending emails.
+    """
+
+    def test_send_mail(self):
+        """
+        Test that an email is sent when a user registers.
+        """
+
+        response = self.client.post(
+            reverse("accounts:register"),
+            data={
+                "username": "testuser",
+                "password": "test12pass",
+                "email": "test@email.com",
+            },
+        )
+        self.assertEqual(response.status_code, 201)
+
+        # Manually trigger the Celery task for testing purposes
+        user = User.objects.get(username="testuser")
+        send_email_verification_link(user.id)
+
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].subject, "Verify your email address")
+        self.assertIn(
+            "Please click the link below to verify your email address:",
+            mail.outbox[0].body,
+        )
+        self.assertEqual(mail.outbox[0].to, ["test@email.com"])
