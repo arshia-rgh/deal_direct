@@ -14,7 +14,7 @@ def send_email_verification_link(user_id):
     from django.contrib.auth import get_user_model
 
     User = get_user_model()
-    user = User.objects.get(user_id)
+    user = User.objects.get(id=user_id)
     token = generate_email_verification_token(user)
     uid = generate_uid(user)
 
