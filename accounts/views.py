@@ -105,3 +105,6 @@ class UserProfileRetrieveUpdateView(generics.RetrieveUpdateAPIView):
 
 class UserPasswordChangeView(generics.UpdateAPIView):
     permission_classes = (IsAuthenticatedAndActive,)
+
+    def get_object(self):
+        return self.request.user
