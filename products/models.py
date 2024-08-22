@@ -1,5 +1,6 @@
 from utils.base_model import BaseModel
 from django.db import models
+from accounts.models import User
 
 
 class Product(BaseModel):
@@ -10,10 +11,10 @@ class Product(BaseModel):
     category = models.ForeignKey(to="Category", on_delete=models.CASCADE)
 
     uploaded_by = models.ForeignKey(
-        to="User", on_delete=models.CASCADE, related_name="uploaded_products"
+        to=User, on_delete=models.CASCADE, related_name="uploaded_products"
     )
     bought_by = models.ForeignKey(
-        to="User",
+        to=User,
         on_delete=models.CASCADE,
         related_name="bought_products",
         null=True,
