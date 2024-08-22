@@ -277,3 +277,7 @@ class TestUserPasswordChange:
 
         assert response.status_code == 400
         assert "confirm_password" in response.data
+
+
+class TestPasswordReset:
+    pass
