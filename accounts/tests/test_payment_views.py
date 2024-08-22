@@ -27,3 +27,21 @@ class TestDeposit:
         )
 
         assert response.status_code == 400
+
+    def test_increase_wallet_payment_fail(
+        self, api_client, active_user, mock_send_request
+    ):
+        mock_send_request.return_value = {"status": False, "code": 500}
+
+        api_client.force_authenticate(active_user)
+
+        response = api_client.post(
+            reverse("accounts:deposit"),
+            data={
+                "amount": "10.00",
+            },
+        )
+
+        assert response.status_code == 400
+        assert response.data["error"] == "Payment request failed"
+        assert response.data["code"] == 500
