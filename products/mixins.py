@@ -4,6 +4,18 @@ from rest_framework.throttling import ScopedRateThrottle
 
 
 class ListCacheMixin:
+    """
+    Mixin to cache the list of queryset results.
+
+    Attributes:
+        cache_key (str): The key to use for caching the queryset.
+        timeout (int): The cache timeout in seconds. Default is 15 minutes.
+
+    Methods:
+        list(request, *args, **kwargs): Retrieves the list of queryset results from the cache if available,
+                                        otherwise fetches from the database and caches the results.
+    """
+
     cache_key = None
     timeout = 60 * 15
 
@@ -22,6 +34,13 @@ class ListCacheMixin:
 
 
 class ThrottleMixin:
+    """
+    Mixin to apply scoped rate throttling to viewsets.
+
+    Methods:
+        get_throttles(): Determines the throttle scope based on the request method and returns a list of throttles.
+    """
+
     def get_throttles(self):
         if self.request.method in ["PATCH", "PUT", "POST"]:
             self.throttle_scope = "uploads"
