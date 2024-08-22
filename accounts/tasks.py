@@ -23,3 +23,8 @@ def send_email_verification_link(user_id):
     subject = "Verify your email address"
     message = f"Please click the link below to verify your email address:\n{verification_link}"
     send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email])
+
+
+@shared_task
+def update_bonus_wallet_amount_when_verified(user_id):
+    pass
