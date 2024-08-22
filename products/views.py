@@ -3,11 +3,11 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from products.models import Product, Category
 from products.serializers import ProductSerializer, CategorySerializer
-from .mixins import ListCacheMixin
+from .mixins import ListCacheMixin, ThrottleMixin
 from .permissions import IsOwnerOrReadOnly
 
 
-class ProductViewSet(viewsets.ModelViewSet, ListCacheMixin):
+class ProductViewSet(viewsets.ModelViewSet, ListCacheMixin, ThrottleMixin):
     """
     A viewset for viewing, creating, updating, and deleting products.
 
@@ -22,7 +22,7 @@ class ProductViewSet(viewsets.ModelViewSet, ListCacheMixin):
     permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
 
 
-class CategoryViewSet(viewsets.ModelViewSet, ListCacheMixin):
+class CategoryViewSet(viewsets.ModelViewSet, ListCacheMixin, ThrottleMixin):
     """
     A viewset for viewing, creating, updating, and deleting categories.
 
