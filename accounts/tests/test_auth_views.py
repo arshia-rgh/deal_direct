@@ -144,4 +144,11 @@ class TestSendMail:
 
 
 class TestProfileRetrieveUpdate:
-    pass
+    @pytest.mark.django_db
+    def test_profile_retrieve(self, authenticated_user, test_user):
+        test_user.is_active = True
+        test_user.save()
+        response = authenticated_user.get(
+            reverse("accounts:profile"),
+        )
+        assert response.status_code == 200
