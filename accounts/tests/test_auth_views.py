@@ -1,5 +1,3 @@
-from http.client import responses
-
 import pytest
 from django.contrib.auth import get_user_model
 from django.core import mail
@@ -13,12 +11,12 @@ from accounts.tasks import send_email_verification_link, send_password_reset_ema
 User = get_user_model()
 
 
+@pytest.mark.django_db
 class TestUserRegisterView:
     """
     Test cases for the user registration view.
     """
 
-    @pytest.mark.django_db
     def test_register_correct_data(self, api_client):
         """
         Test registering a user with correct data.
@@ -48,7 +46,6 @@ class TestUserRegisterView:
         assert User.objects.filter(username="testuser").exists()
         assert not User.objects.get(username="testuser").is_active
 
-    @pytest.mark.django_db
     def test_register_missing_fields(self, api_client):
         """
         Test registering a user with missing fields.
@@ -69,7 +66,6 @@ class TestUserRegisterView:
         assert "password" in response.data
         assert "email" in response.data
 
-    @pytest.mark.django_db
     def test_register_existing_username(self, api_client):
         """
         Test registering a user with an existing username.
@@ -96,7 +92,6 @@ class TestUserRegisterView:
         assert response.status_code == 400
         assert "username" in response.data
 
-    @pytest.mark.django_db
     def test_register_invalid_email(self, api_client):
         """
         Test registering a user with an invalid email.
@@ -121,8 +116,8 @@ class TestUserRegisterView:
         assert "email" in response.data
 
 
+@pytest.mark.django_db
 class TestVerifyEmailView:
-    @pytest.mark.django_db
     def test_email_verification_success(
         self, api_client, inactive_user, uid_token_setup
     ):
@@ -140,7 +135,6 @@ class TestVerifyEmailView:
         inactive_user.refresh_from_db()
         assert inactive_user.is_active
 
-    @pytest.mark.django_db
     def test_email_verification_invalid_token(
         self, api_client, inactive_user, uid_token_setup
     ):
@@ -156,7 +150,6 @@ class TestVerifyEmailView:
         inactive_user.refresh_from_db()
         assert not inactive_user.is_active
 
-    @pytest.mark.django_db
     def test_email_verification_invalid_uid(self, api_client, uid_token_setup):
         _, token = uid_token_setup
         invalid_uid = urlsafe_base64_encode(force_bytes(999))
@@ -169,8 +162,8 @@ class TestVerifyEmailView:
         assert response.status_code == 404
 
 
+@pytest.mark.django_db
 class TestSendMail:
-    @pytest.mark.django_db
     @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
     def test_send_mail(self, api_client):
         response = api_client.post(
@@ -195,8 +188,8 @@ class TestSendMail:
         assert mail.outbox[0].to == ["test@email.com"]
 
 
+@pytest.mark.django_db
 class TestProfileRetrieveUpdate:
-    @pytest.mark.django_db
     def test_profile_retrieve_active_and_authenticated_user(
         self, authenticated_user, test_user
     ):
@@ -213,7 +206,6 @@ class TestProfileRetrieveUpdate:
         assert response.data["phone_number"] == test_user.phone_number
         assert float(response.data["wallet"]) == test_user.wallet
 
-    @pytest.mark.django_db
     def test_profile_retrieve_inactive_user(self, api_client, test_user):
         test_user.is_active = False
         test_user.save()
@@ -221,7 +213,6 @@ class TestProfileRetrieveUpdate:
         response = api_client.get(reverse("accounts:profile"))
         assert response.status_code == 403
 
-    @pytest.mark.django_db
     def test_profile_update_authenticated_and_active_user(
         self, authenticated_user, test_user
     ):
@@ -237,7 +228,6 @@ class TestProfileRetrieveUpdate:
         assert test_user.username == "updateduser"
         assert test_user.email == "updated@email.com"
 
-    @pytest.mark.django_db
     def test_profile_update_invalid_data(self, authenticated_user, test_user):
         test_user.is_active = True
         test_user.save()
@@ -250,8 +240,8 @@ class TestProfileRetrieveUpdate:
         assert "email" in response.data
 
 
+@pytest.mark.django_db
 class TestUserPasswordChange:
-    @pytest.mark.django_db
     def test_change_password_with_unauthenticated_user(self, api_client):
         response = api_client.post(reverse("accounts:change_password"))
 
@@ -260,7 +250,6 @@ class TestUserPasswordChange:
             "detail": "Authentication credentials were not provided."
         }
 
-    @pytest.mark.django_db
     def test_change_password_with_authenticated_user(
         self, authenticated_user, test_user
     ):
@@ -279,7 +268,6 @@ class TestUserPasswordChange:
         test_user.refresh_from_db()
         assert test_user.check_password("new_password12")
 
-    @pytest.mark.django_db
     def test_change_password_with_incorrect_old_password(
         self, authenticated_user, test_user
     ):
@@ -297,7 +285,6 @@ class TestUserPasswordChange:
         assert response.status_code == 400
         assert "old_password" in response.data
 
-    @pytest.mark.django_db
     def test_change_password_with_mismatched_new_passwords(
         self, authenticated_user, test_user
     ):
@@ -315,7 +302,6 @@ class TestUserPasswordChange:
         assert response.status_code == 400
         assert "error" in response.data
 
-    @pytest.mark.django_db
     def test_change_password_with_missing_fields(self, authenticated_user, test_user):
         test_user.is_active = True
         test_user.save()
@@ -331,8 +317,8 @@ class TestUserPasswordChange:
         assert "confirm_password" in response.data
 
 
+@pytest.mark.django_db
 class TestPasswordReset:
-    @pytest.mark.django_db
     @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
     def test_password_reset_request_valid_email(self, api_client, test_user):
         response = api_client.post(
@@ -347,7 +333,6 @@ class TestPasswordReset:
         assert len(mail.outbox) == 1
         assert mail.outbox[0].to == [test_user.email]
 
-    @pytest.mark.django_db
     def test_password_reset_request_invalid_email(self, api_client):
         response = api_client.post(
             reverse("accounts:password_reset"),
@@ -357,7 +342,6 @@ class TestPasswordReset:
         assert response.status_code == 400
         assert "email" in response.data
 
-    @pytest.mark.django_db
     def test_password_reset_request_user_does_not_exist(self, api_client):
         response = api_client.post(
             reverse("accounts:password_reset"),
@@ -367,7 +351,6 @@ class TestPasswordReset:
         assert response.status_code == 400
         assert response.data == {"error": "user with given email does not exists"}
 
-    @pytest.mark.django_db
     def test_password_reset_confirm_valid_token(
         self, api_client, inactive_user, uid_token_setup
     ):
@@ -386,7 +369,6 @@ class TestPasswordReset:
         inactive_user.refresh_from_db()
         assert inactive_user.check_password("new_password12")
 
-    @pytest.mark.django_db
     def test_password_reset_confirm_invalid_token(
         self, api_client, inactive_user, uid_token_setup
     ):
