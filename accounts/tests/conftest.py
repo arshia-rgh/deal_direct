@@ -37,7 +37,7 @@ def inactive_user(db):
 
 
 @pytest.fixture
-def email_verification_data(inactive_user):
+def uid_token_setup(inactive_user):
     uid = urlsafe_base64_encode(force_bytes(inactive_user.pk))
     token = default_token_generator.make_token(inactive_user)
     return uid, token

@@ -122,9 +122,9 @@ class TestUserRegisterView:
 class TestVerifyEmailView:
     @pytest.mark.django_db
     def test_email_verification_success(
-        self, api_client, inactive_user, email_verification_data
+        self, api_client, inactive_user, uid_token_setup
     ):
-        uid, token = email_verification_data
+        uid, token = uid_token_setup
         response = api_client.get(
             reverse(
                 "accounts:verify_email",
@@ -140,9 +140,9 @@ class TestVerifyEmailView:
 
     @pytest.mark.django_db
     def test_email_verification_invalid_token(
-        self, api_client, inactive_user, email_verification_data
+        self, api_client, inactive_user, uid_token_setup
     ):
-        uid, _ = email_verification_data
+        uid, _ = uid_token_setup
         response = api_client.get(
             reverse(
                 "accounts:verify_email",
@@ -155,8 +155,8 @@ class TestVerifyEmailView:
         assert not inactive_user.is_active
 
     @pytest.mark.django_db
-    def test_email_verification_invalid_uid(self, api_client, email_verification_data):
-        _, token = email_verification_data
+    def test_email_verification_invalid_uid(self, api_client, uid_token_setup):
+        _, token = uid_token_setup
         invalid_uid = urlsafe_base64_encode(force_bytes(999))
         response = api_client.get(
             reverse(
@@ -364,3 +364,9 @@ class TestPasswordReset:
 
         assert response.status_code == 400
         assert response.data == {"error": "user with given email does not exists"}
+
+    @pytest.mark.django_db
+    def test_password_reset_confirm_valid_token(
+        self, api_client, inactive_user, uid_token_setup
+    ):
+        pass
