@@ -136,7 +136,7 @@ class IncreaseWalletSerializer(serializers.Serializer):
     amount = serializers.DecimalField(max_digits=10, decimal_places=2)
 
 
-class PasswordResetSerializer(serializers.ModelSerializer):
+class PasswordResetRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [

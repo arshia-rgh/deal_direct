@@ -13,7 +13,7 @@ from accounts.serializers import (
     UserRegisterSerializer,
     UserProfileSerializer,
     UserPasswordChangeSerializer,
-    PasswordResetSerializer,
+    PasswordResetRequestSerializer,
 )
 from accounts.tasks import update_wallet_balance, send_password_reset_email
 
@@ -162,7 +162,7 @@ class PasswordResetRequestAPIView(APIView):
     permission_classes = (AllowAny,)
 
     def post(self, request):
-        serializer = PasswordResetSerializer(data=request.data)
+        serializer = PasswordResetRequestSerializer(data=request.data)
         email = serializer.validated_data["email"]
         if serializer.is_valid():
             try:
