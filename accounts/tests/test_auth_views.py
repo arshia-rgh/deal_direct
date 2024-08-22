@@ -199,4 +199,11 @@ class TestProfileRetrieveUpdate:
 
 
 class TestUserPasswordChange:
-    pass
+    @pytest.mark.django_db
+    def test_change_password_with_unauthenticated_user(self, api_client):
+        response = api_client.post(reverse("accounts:change_password"))
+
+        assert response.status_code == 401
+        assert response.data == {
+            "detail": "Authentication credentials were not provided."
+        }
