@@ -21,13 +21,15 @@ ZP_API_STARTPAY = f"https://{sandbox}.zarinpal.com/pg/StartPay/"
 
 
 def send_request(request, amount, description, phone, email):
+    callback_url = request.build_absolute_uri(reverse_lazy("accounts:verify-deposit"))
+
     data = {
         "MerchantID": settings.ZARINPAL["MERCHANT"],
         "Amount": float(amount),
         "Description": description,
         "Phone": phone,
         "Email": email,
-        "CallbackURL": ...,
+        "CallbackURL": callback_url,
     }
     data = json.dumps(data)
     # set content length by data
