@@ -164,8 +164,8 @@ class PasswordResetRequestAPIView(APIView):
 
     def post(self, request):
         serializer = PasswordResetRequestSerializer(data=request.data)
-        email = serializer.validated_data["email"]
         if serializer.is_valid(raise_exception=True):
+            email = serializer.validated_data["email"]
             try:
                 user = User.objects.get(email=email)
                 send_password_reset_email.delay(user.id)
@@ -187,8 +187,8 @@ class PasswordResetConfirmAPIView(APIView):
 
         if user is not None and default_token_generator.check_token(user, token):
             serializer = PasswordResetConfirmSerializer(data=request.data)
-            new_password = serializer.validated_data["password"]
             if serializer.is_valid(raise_exception=True):
+                new_password = serializer.validated_data["password"]
                 user.set_password(new_password)
                 user.save()
                 return Response(
