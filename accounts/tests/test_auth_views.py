@@ -1,3 +1,5 @@
+import json
+
 import pytest
 from django.contrib.auth import get_user_model
 from django.core import mail
@@ -160,3 +162,28 @@ class TestProfileRetrieveUpdate:
         assert response.data["last_name"] == test_user.last_name
         assert response.data["phone_number"] == test_user.phone_number
         assert float(response.data["wallet"]) == test_user.wallet
+
+    @pytest.mark.django_db
+    def test_profile_retrieve_inactive_user(self, api_client, test_user):
+        test_user.is_active = False
+        test_user.save()
+        api_client.force_authenticate(user=test_user)
+        response = api_client.get(reverse("accounts:profile"))
+        assert response.status_code == 403
+
+    @pytest.mark.django_db
+    def test_profile_update_authenticated_and_active_user(
+        self, authenticated_user, test_user
+    ):
+        test_user.is_active = True
+        test_user.save()
+        response = authenticated_user.patch(
+            reverse("accounts:profile"),
+            data=json.dumps({"username": "updateduser", "email": "updated@email.com"}),
+            content_type="application/json",
+        )
+
+        assert response.status_code == 200
+        test_user.refresh_from_db()
+        assert test_user.username == "updateduser"
+        assert test_user.email == "updated@email.com"
