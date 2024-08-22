@@ -154,3 +154,9 @@ class TestProfileRetrieveUpdate:
             reverse("accounts:profile"),
         )
         assert response.status_code == 200
+        assert response.data["username"] == test_user.username
+        assert response.data["email"] == test_user.email
+        assert response.data["first_name"] == test_user.first_name
+        assert response.data["last_name"] == test_user.last_name
+        assert response.data["phone_number"] == test_user.phone_number
+        assert float(response.data["wallet"]) == test_user.wallet
