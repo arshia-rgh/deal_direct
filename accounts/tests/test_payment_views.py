@@ -15,3 +15,15 @@ class TestDeposit:
         )
         assert response.status_code == 302
         assert response.url == "http://example.com"
+
+    def test_increase_wallet_invalid_data(self, api_client, active_user):
+        api_client.force_authenticate(active_user)
+
+        response = api_client.post(
+            reverse("accounts:deposit"),
+            data={
+                "amount": "invalid amount",
+            },
+        )
+
+        assert response.status_code == 400
