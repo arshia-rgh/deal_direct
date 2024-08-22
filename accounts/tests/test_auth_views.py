@@ -369,4 +369,17 @@ class TestPasswordReset:
     def test_password_reset_confirm_valid_token(
         self, api_client, inactive_user, uid_token_setup
     ):
-        pass
+        uid, token = uid_token_setup
+
+        response = api_client.post(
+            reverse(
+                "accounts:password_reset_confirm",
+                kwargs={"uidb64": uid, "token": token},
+            ),
+            data={"password": "new_password12"},
+        )
+
+        assert response.status_code == 200
+        assert response.data == {"message": "Password has been reset successfully."}
+        inactive_user.refresh_from_db()
+        assert inactive_user.check_password("new_password12")
