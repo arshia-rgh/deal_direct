@@ -1,3 +1,5 @@
+from http.client import responses
+
 import pytest
 from django.contrib.auth import get_user_model
 from django.core import mail
@@ -383,3 +385,22 @@ class TestPasswordReset:
         assert response.data == {"message": "Password has been reset successfully."}
         inactive_user.refresh_from_db()
         assert inactive_user.check_password("new_password12")
+
+    @pytest.mark.django_db
+    def test_password_reset_confirm_invalid_token(
+        self, api_client, inactive_user, uid_token_setup
+    ):
+        uid, _ = uid_token_setup
+
+        response = api_client.post(
+            reverse(
+                "accounts:password_reset_confirm",
+                kwargs={"uidb64": uid, "token": "invalid token"},
+            ),
+            data={"password": "new_password12"},
+        )
+
+        assert response.status_code == 400
+        assert response.data == {"error": "Invalid link"}
+        inactive_user.refresh_from_db()
+        assert not inactive_user.check_password("new_password12")
