@@ -77,4 +77,5 @@ def active_user():
         email="test@gmail.com",
         password="testpassword12",
         is_active=True,
+        wallet=0.00,
     )
