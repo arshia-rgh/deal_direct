@@ -8,13 +8,19 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import User
+from accounts.permissions import IsAuthenticatedAndActive
 from accounts.serializers import (
     UserRegisterSerializer,
     UserProfileSerializer,
     UserPasswordChangeSerializer,
+    PasswordResetRequestSerializer,
+    PasswordResetConfirmSerializer,
 )
-from accounts.permissions import IsAuthenticatedAndActive
-from accounts.tasks import update_wallet_balance
+from accounts.tasks import (
+    update_wallet_balance,
+    send_password_reset_email,
+    send_email_verification_link,
+)
 
 
 class UserRegisterView(generics.CreateAPIView):
@@ -27,6 +33,16 @@ class UserRegisterView(generics.CreateAPIView):
 
     serializer_class = UserRegisterSerializer
     permission_classes = (AllowAny,)
+
+    def perform_create(self, serializer):
+        """
+        Save the new user instance and send an email verification link.
+
+        Args:
+            serializer (UserRegisterSerializer): The serializer instance containing the validated data.
+        """
+        user = serializer.save()
+        send_email_verification_link.delay(user.id)
 
     def create(self, request, *args, **kwargs):
         """
@@ -155,3 +171,67 @@ class UserPasswordChangeView(generics.UpdateAPIView):
         return Response(
             {"message": "Password changed successfully"}, status=status.HTTP_200_OK
         )
+
+
+class PasswordResetRequestAPIView(APIView):
+    """
+    API view for requesting a password reset.
+
+    This view handles the request for a password reset by validating the provided email
+    and sending a password reset email if the user exists.
+
+    Methods:
+        post(request):
+            Handles the POST request to initiate the password reset process.
+    """
+
+    permission_classes = (AllowAny,)
+
+    def post(self, request):
+        serializer = PasswordResetRequestSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            email = serializer.validated_data["email"]
+            try:
+                user = User.objects.get(email=email)
+                send_password_reset_email.delay(user.id)
+                return Response(
+                    {"message": "Password reset email sent successfully"},
+                    status=status.HTTP_200_OK,
+                )
+            except User.DoesNotExist:
+                return Response(
+                    {"error": "user with given email does not exists"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+
+class PasswordResetConfirmAPIView(APIView):
+    """
+    API view for confirming a password reset.
+
+    This view handles the confirmation of a password reset by validating the provided
+    token and user ID, and setting the new password if valid.
+
+    Methods:
+        post(request, uidb64, token):
+            Handles the POST request to confirm the password reset and change the user password.
+    """
+
+    def post(self, request, uidb64, token):
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        if user is not None and default_token_generator.check_token(user, token):
+            serializer = PasswordResetConfirmSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                new_password = serializer.validated_data["password"]
+                user.set_password(new_password)
+                user.save()
+                return Response(
+                    {"message": "Password has been reset successfully."},
+                    status=status.HTTP_200_OK,
+                )
+        return Response({"error": "Invalid link"}, status=status.HTTP_400_BAD_REQUEST)

@@ -10,13 +10,16 @@
 
 ![Celery](https://img.shields.io/badge/Celery-Queue-green)
 
-![License](https://img.shields.io/badge/License-MIT-yellow)
+![Pytest](https://img.shields.io/badge/Pytest-Testing-yellow)
 
 ![Docker](https://img.shields.io/badge/Docker-Ready-blue)
 
 ![SQLite](https://img.shields.io/badge/SQLite-Development-lightgrey)
 
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Production-blue)
+
+![License](https://img.shields.io/badge/License-MIT-yellow)
+
 
 ## ERD
 checkout the diagram at:

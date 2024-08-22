@@ -133,4 +133,33 @@ class UserPasswordChangeSerializer(serializers.Serializer):
 
 
 class IncreaseWalletSerializer(serializers.Serializer):
+    """
+    Serializer for increasing the user's wallet balance.
+
+    Fields:
+        amount (Decimal): The amount to increase the wallet balance by.
+    """
+
     amount = serializers.DecimalField(max_digits=10, decimal_places=2)
+
+
+class PasswordResetRequestSerializer(serializers.Serializer):
+    """
+    Serializer for requesting a password reset.
+
+    Fields:
+        email (str): The email address of the user requesting the password reset.
+    """
+
+    email = serializers.EmailField()
+
+
+class PasswordResetConfirmSerializer(serializers.Serializer):
+    """
+    Serializer for confirming a password reset.
+
+    Fields:
+        password (str): The new password for the user account.
+    """
+
+    password = serializers.CharField(max_length=255)

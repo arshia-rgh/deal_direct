@@ -6,6 +6,8 @@ from accounts.views.auth_views import (
     VerifyEmailView,
     UserProfileRetrieveUpdateView,
     UserPasswordChangeView,
+    PasswordResetRequestAPIView,
+    PasswordResetConfirmAPIView,
 )
 from accounts.views.payment_views import IncreaseWalletAPIView, VerifyDepositAPIView
 
@@ -22,6 +24,14 @@ urlpatterns = [
         "profile/password-change/",
         UserPasswordChangeView.as_view(),
         name="change_password",
+    ),
+    path(
+        "reset-password/", PasswordResetRequestAPIView.as_view(), name="password_reset"
+    ),
+    path(
+        "reset-password/<uidb64>/<token>/",
+        PasswordResetConfirmAPIView.as_view(),
+        name="password_reset_confirm",
     ),
     # payments
     path("deposit/", IncreaseWalletAPIView.as_view(), name="deposit"),
