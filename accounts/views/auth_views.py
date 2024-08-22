@@ -8,13 +8,14 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import User
+from accounts.permissions import IsAuthenticatedAndActive
 from accounts.serializers import (
     UserRegisterSerializer,
     UserProfileSerializer,
     UserPasswordChangeSerializer,
+    PasswordResetSerializer,
 )
-from accounts.permissions import IsAuthenticatedAndActive
-from accounts.tasks import update_wallet_balance
+from accounts.tasks import update_wallet_balance, send_password_reset_email
 
 
 class UserRegisterView(generics.CreateAPIView):
@@ -158,4 +159,18 @@ class UserPasswordChangeView(generics.UpdateAPIView):
 
 
 class PasswordResetRequestAPIView(APIView):
-    pass
+    permission_classes = (AllowAny,)
+
+    def post(self, request):
+        serializer = PasswordResetSerializer(data=request.data)
+        email = serializer.validated_data["email"]
+        if serializer.is_valid():
+            try:
+                user = User.objects.get(email=email)
+                send_password_reset_email(user.id)
+                return Response(
+                    {"message": "Password reset email sent successfully"},
+                    status=status.HTTP_200_OK,
+                )
+            except User.DoesNotExist:
+                return Response({"error": "user with given email does not exists"})
