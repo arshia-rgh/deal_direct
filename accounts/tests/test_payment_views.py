@@ -68,3 +68,14 @@ class TestDeposit:
         mock_update_wallet_balance.delay.assert_called_once_with(
             active_user.id, "100.00"
         )
+
+    def test_verify_deposit_missing_data(self, api_client, active_user):
+        api_client.force_authenticate(active_user)
+
+        response = api_client.post(
+            reverse("accounts:verify-deposit"),
+            data={"Authority": "auth123"},
+        )
+
+        assert response.status_code == 400
+        assert response.data["error"] == "Authority and Amount are required"
