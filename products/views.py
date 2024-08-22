@@ -16,6 +16,7 @@ class ProductViewSet(viewsets.ModelViewSet, ListCacheMixin, ThrottleMixin):
     - Only the user who uploaded the product can update or delete it.
     """
 
+    cache_key = "products_list"
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
@@ -30,6 +31,7 @@ class CategoryViewSet(viewsets.ModelViewSet, ListCacheMixin, ThrottleMixin):
     - Only authenticated users can create, update, or delete a category.
     """
 
+    cache_key = "categories_list"
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
