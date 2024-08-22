@@ -7,6 +7,7 @@ from accounts.views.auth_views import (
     UserProfileRetrieveUpdateView,
     UserPasswordChangeView,
 )
+from accounts.views.payment_views import IncreaseWalletAPIView
 
 app_name = "accounts"
 urlpatterns = [
@@ -22,4 +23,6 @@ urlpatterns = [
         UserPasswordChangeView.as_view(),
         name="change_password",
     ),
+    # payments
+    path("deposit/", IncreaseWalletAPIView.as_view(), name="deposit"),
 ]
