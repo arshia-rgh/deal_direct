@@ -14,6 +14,7 @@ from accounts.serializers import (
     UserProfileSerializer,
     UserPasswordChangeSerializer,
     PasswordResetRequestSerializer,
+    PasswordResetConfirmSerializer,
 )
 from accounts.tasks import update_wallet_balance, send_password_reset_email
 
@@ -164,7 +165,7 @@ class PasswordResetRequestAPIView(APIView):
     def post(self, request):
         serializer = PasswordResetRequestSerializer(data=request.data)
         email = serializer.validated_data["email"]
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             try:
                 user = User.objects.get(email=email)
                 send_password_reset_email.delay(user.id)
@@ -174,3 +175,24 @@ class PasswordResetRequestAPIView(APIView):
                 )
             except User.DoesNotExist:
                 return Response({"error": "user with given email does not exists"})
+
+
+class PasswordResetConfirmAPIView(APIView):
+    def post(self, request, uidb64, token):
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        if user is not None and default_token_generator.check_token(user, token):
+            serializer = PasswordResetConfirmSerializer(data=request.data)
+            new_password = serializer.validated_data["password"]
+            if serializer.is_valid(raise_exception=True):
+                user.set_password(new_password)
+                user.save()
+                return Response(
+                    {"message": "Password has been reset successfully."},
+                    status=status.HTTP_200_OK,
+                )
+        return Response({"error": "Invalid link"}, status=status.HTTP_400_BAD_REQUEST)
