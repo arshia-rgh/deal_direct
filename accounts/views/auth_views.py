@@ -155,3 +155,7 @@ class UserPasswordChangeView(generics.UpdateAPIView):
         return Response(
             {"message": "Password changed successfully"}, status=status.HTTP_200_OK
         )
+
+
+class PasswordResetRequestAPIView(APIView):
+    pass
