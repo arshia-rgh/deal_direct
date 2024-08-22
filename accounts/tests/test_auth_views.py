@@ -344,3 +344,13 @@ class TestPasswordReset:
         assert response.data == {"message": "Password reset email sent successfully"}
         assert len(mail.outbox) == 1
         assert mail.outbox[0].to == [test_user.email]
+
+    @pytest.mark.django_db
+    def test_password_reset_request_invalid_email(self, api_client):
+        response = api_client.post(
+            reverse("accounts:password_reset"),
+            data={"email": "invalid email"},
+        )
+
+        assert response.status_code == 400
+        assert "email" in response.data
