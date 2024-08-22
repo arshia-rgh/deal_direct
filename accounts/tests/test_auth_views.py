@@ -207,3 +207,22 @@ class TestUserPasswordChange:
         assert response.data == {
             "detail": "Authentication credentials were not provided."
         }
+
+    @pytest.mark.django_db
+    def test_change_password_with_authenticated_user(
+        self, authenticated_user, test_user
+    ):
+        test_user.is_active = True
+        test_user.save()
+        response = authenticated_user.patch(
+            reverse("accounts:change_password"),
+            data={
+                "old_password": "testpassword12",
+                "password": "new_password12",
+                "confirm_password": "new_password12",
+            },
+        )
+
+        assert response.status_code == 200
+        test_user.refresh_from_db()
+        assert test_user.check_password("new_password12")
