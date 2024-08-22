@@ -19,7 +19,7 @@ class Product(BaseModel):
     """
 
     name = models.CharField(max_length=100)
-    description = models.TextField()
+    description = models.TextField(blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     image = models.ImageField(upload_to="img/products/")
     category = models.ForeignKey(to="Category", on_delete=models.CASCADE)
@@ -47,4 +47,4 @@ class Category(BaseModel):
     """
 
     name = models.CharField(max_length=100)
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
