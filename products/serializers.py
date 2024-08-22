@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from products.models import Product
+from products.models import Product, Category
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -18,3 +18,9 @@ class ProductSerializer(serializers.ModelSerializer):
         request = self.context.get("request")
         validated_data["uploaded_by"] = request.user
         return super().create(validated_data)
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = "__all__"
