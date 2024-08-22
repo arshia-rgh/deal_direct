@@ -7,7 +7,7 @@ from accounts.views.auth_views import (
     UserProfileRetrieveUpdateView,
     UserPasswordChangeView,
 )
-from accounts.views.payment_views import IncreaseWalletAPIView
+from accounts.views.payment_views import IncreaseWalletAPIView, VerifyDepositAPIView
 
 app_name = "accounts"
 urlpatterns = [
@@ -25,4 +25,5 @@ urlpatterns = [
     ),
     # payments
     path("deposit/", IncreaseWalletAPIView.as_view(), name="deposit"),
+    path("deposit/verify/", VerifyDepositAPIView.as_view(), name="verify-deposit"),
 ]
