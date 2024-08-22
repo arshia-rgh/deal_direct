@@ -29,7 +29,7 @@ def send_request(request, amount, description, phone, email):
     headers = {"content-type": "application/json", "content-length": str(len(data))}
     try:
         response = requests.post(ZP_API_REQUEST, data=data, headers=headers, timeout=10)
-
+        # TODO (bug) response will return 502
         if response.status_code == 200:
             response = response.json()
             if response["Status"] == 100:
