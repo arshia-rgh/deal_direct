@@ -16,7 +16,11 @@ from accounts.serializers import (
     PasswordResetRequestSerializer,
     PasswordResetConfirmSerializer,
 )
-from accounts.tasks import update_wallet_balance, send_password_reset_email
+from accounts.tasks import (
+    update_wallet_balance,
+    send_password_reset_email,
+    send_email_verification_link,
+)
 
 
 class UserRegisterView(generics.CreateAPIView):
@@ -29,6 +33,16 @@ class UserRegisterView(generics.CreateAPIView):
 
     serializer_class = UserRegisterSerializer
     permission_classes = (AllowAny,)
+
+    def perform_create(self, serializer):
+        """
+        Save the new user instance and send an email verification link.
+
+        Args:
+            serializer (UserRegisterSerializer): The serializer instance containing the validated data.
+        """
+        user = serializer.save()
+        send_email_verification_link.delay(user.id)
 
     def create(self, request, *args, **kwargs):
         """
