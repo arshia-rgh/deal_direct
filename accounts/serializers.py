@@ -142,3 +142,11 @@ class PasswordResetRequestSerializer(serializers.ModelSerializer):
         fields = [
             "email",
         ]
+
+
+class PasswordResetConfirmSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "password",
+        ]
