@@ -244,3 +244,36 @@ class TestUserPasswordChange:
 
         assert response.status_code == 400
         assert "old_password" in response.data
+
+    @pytest.mark.django_db
+    def test_change_password_with_mismatched_new_passwords(
+        self, authenticated_user, test_user
+    ):
+        test_user.is_active = True
+        test_user.save()
+        response = authenticated_user.patch(
+            reverse("accounts:change_password"),
+            data={
+                "old_password": "testpassword12",
+                "password": "new_password12",
+                "confirm_password": "different_password",
+            },
+        )
+
+        assert response.status_code == 400
+        assert "error" in response.data
+
+    @pytest.mark.django_db
+    def test_change_password_with_missing_fields(self, authenticated_user, test_user):
+        test_user.is_active = True
+        test_user.save()
+        response = authenticated_user.patch(
+            reverse("accounts:change_password"),
+            data={
+                "old_password": "testpassword12",
+                "password": "new_password12",
+            },
+        )
+
+        assert response.status_code == 400
+        assert "confirm_password" in response.data
