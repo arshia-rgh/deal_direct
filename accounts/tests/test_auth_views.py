@@ -13,7 +13,7 @@ User = get_user_model()
 
 class TestUserRegisterView:
     @pytest.mark.django_db
-    def test_register_correct_data(api_client):
+    def test_register_correct_data(self, api_client):
         response = api_client.post(
             reverse("accounts:register"),
             data={
@@ -30,7 +30,7 @@ class TestUserRegisterView:
         assert not User.objects.get(username="testuser").is_active
 
     @pytest.mark.django_db
-    def test_register_missing_fields(api_client):
+    def test_register_missing_fields(self, api_client):
         response = api_client.post(
             reverse("accounts:register"),
             data={"username": "testuser"},
@@ -40,7 +40,7 @@ class TestUserRegisterView:
         assert "email" in response.data
 
     @pytest.mark.django_db
-    def test_register_existing_username(api_client):
+    def test_register_existing_username(self, api_client):
         User.objects.create_user(
             username="testuser", email="test1@email.com", password="test12pass"
         )
@@ -56,7 +56,7 @@ class TestUserRegisterView:
         assert "username" in response.data
 
     @pytest.mark.django_db
-    def test_register_invalid_email(api_client):
+    def test_register_invalid_email(self, api_client):
         response = api_client.post(
             reverse("accounts:register"),
             data={
@@ -72,7 +72,7 @@ class TestUserRegisterView:
 class TestVerifyEmailView:
     @pytest.mark.django_db
     def test_email_verification_success(
-        api_client, inactive_user, email_verification_data
+        self, api_client, inactive_user, email_verification_data
     ):
         uid, token = email_verification_data
         response = api_client.get(
@@ -90,7 +90,7 @@ class TestVerifyEmailView:
 
     @pytest.mark.django_db
     def test_email_verification_invalid_token(
-        api_client, inactive_user, email_verification_data
+        self, api_client, inactive_user, email_verification_data
     ):
         uid, _ = email_verification_data
         response = api_client.get(
@@ -105,7 +105,7 @@ class TestVerifyEmailView:
         assert not inactive_user.is_active
 
     @pytest.mark.django_db
-    def test_email_verification_invalid_uid(api_client, email_verification_data):
+    def test_email_verification_invalid_uid(self, api_client, email_verification_data):
         _, token = email_verification_data
         invalid_uid = urlsafe_base64_encode(force_bytes(999))
         response = api_client.get(
@@ -120,7 +120,7 @@ class TestVerifyEmailView:
 class TestSendMail:
     @pytest.mark.django_db
     @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
-    def test_send_mail(api_client):
+    def test_send_mail(self, api_client):
         response = api_client.post(
             reverse("accounts:register"),
             data={
