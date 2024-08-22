@@ -8,16 +8,9 @@ import requests
 from django.conf import settings
 from django.urls import reverse_lazy
 
-if settings.ZARINPAL["SANDBOX"]:
-    sandbox = "sandbox"
-else:
-    sandbox = "www"
-
-ZP_API_REQUEST = f"https://{sandbox}.zarinpal.com/pg/rest/WebGate/PaymentRequest.json"
-ZP_API_VERIFY = (
-    f"https://{sandbox}.zarinpal.com/pg/rest/WebGate/PaymentVerification.json"
-)
-ZP_API_STARTPAY = f"https://{sandbox}.zarinpal.com/pg/StartPay/"
+ZP_API_REQUEST = "https://sandbox.zarinpal.com/pg/v4/payment/request.json"
+ZP_API_VERIFY = "https://sandbox.zarinpal.com/pg/v4/payment/verify.json"
+ZP_API_STARTPAY = "https://sandbox.zarinpal.com/pg/StartPay/"
 
 
 def send_request(request, amount, description, phone, email):
