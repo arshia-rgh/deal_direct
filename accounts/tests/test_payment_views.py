@@ -79,3 +79,17 @@ class TestDeposit:
 
         assert response.status_code == 400
         assert response.data["error"] == "Authority and Amount are required"
+
+    def test_verify_deposit_failed(self, mock_verify, api_client, active_user):
+        mock_verify.return_value = {"status": False, "code": 500}
+
+        api_client.force_authenticate(active_user)
+
+        response = api_client.post(
+            reverse("accounts:verify-deposit"),
+            data={"Authority": "auth123", "Amount": "100.00"},
+        )
+
+        assert response.status_code == 400
+        assert response.data["error"] == "Payment verification failed"
+        assert response.data["code"] == 500
