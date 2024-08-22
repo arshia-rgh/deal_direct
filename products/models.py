@@ -1,9 +1,23 @@
-from utils.base_model import BaseModel
 from django.db import models
+
 from accounts.models import User
+from utils.base_model import BaseModel
 
 
 class Product(BaseModel):
+    """
+    Represents a product in the system.
+
+    Attributes:
+        name (str): The name of the product.
+        description (str): A detailed description of the product.
+        price (Decimal): The price of the product.
+        image (ImageField): An image of the product.
+        category (ForeignKey): The category to which the product belongs.
+        uploaded_by (ForeignKey): The user who uploaded the product.
+        bought_by (ForeignKey): The user who bought the product (nullable).
+    """
+
     name = models.CharField(max_length=100)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -24,5 +38,13 @@ class Product(BaseModel):
 
 
 class Category(BaseModel):
+    """
+    Represents a category of products.
+
+    Attributes:
+        name (str): The name of the category.
+        description (str): A detailed description of the category.
+    """
+
     name = models.CharField(max_length=100)
     description = models.TextField()
