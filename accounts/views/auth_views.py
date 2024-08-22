@@ -174,6 +174,17 @@ class UserPasswordChangeView(generics.UpdateAPIView):
 
 
 class PasswordResetRequestAPIView(APIView):
+    """
+    API view for requesting a password reset.
+
+    This view handles the request for a password reset by validating the provided email
+    and sending a password reset email if the user exists.
+
+    Methods:
+        post(request):
+            Handles the POST request to initiate the password reset process.
+    """
+
     permission_classes = (AllowAny,)
 
     def post(self, request):
@@ -192,6 +203,17 @@ class PasswordResetRequestAPIView(APIView):
 
 
 class PasswordResetConfirmAPIView(APIView):
+    """
+    API view for confirming a password reset.
+
+    This view handles the confirmation of a password reset by validating the provided
+    token and user ID, and setting the new password if valid.
+
+    Methods:
+        post(request, uidb64, token):
+            Handles the POST request to confirm the password reset and change the user password.
+    """
+
     def post(self, request, uidb64, token):
         try:
             uid = force_str(urlsafe_base64_decode(uidb64))
