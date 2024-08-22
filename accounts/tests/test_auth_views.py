@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
-from accounts.tasks import send_email_verification_link
+from accounts.tasks import send_email_verification_link, send_password_reset_email
 
 User = get_user_model()
 
@@ -330,4 +330,17 @@ class TestUserPasswordChange:
 
 
 class TestPasswordReset:
-    pass
+    @pytest.mark.django_db
+    @override_settings(EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend")
+    def test_password_reset_request_valid_email(self, api_client, test_user):
+        response = api_client.post(
+            reverse("accounts:password_reset"),
+            data={"email": test_user.email},
+        )
+        # TODO (why) without this line the assertion of email sent will be failed
+        send_password_reset_email(test_user.id)
+
+        assert response.status_code == 200
+        assert response.data == {"message": "Password reset email sent successfully"}
+        assert len(mail.outbox) == 1
+        assert mail.outbox[0].to == [test_user.email]
