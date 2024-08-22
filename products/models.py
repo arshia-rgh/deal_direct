@@ -18,7 +18,7 @@ class Product(BaseModel):
         bought_by (ForeignKey): The user who bought the product (nullable).
     """
 
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     image = models.ImageField(upload_to="img/products/")
