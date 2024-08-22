@@ -14,3 +14,4 @@ class TestDeposit:
             data={"amount": 10.00},
         )
         assert response.status_code == 302
+        assert response.url == "http://example.com"
