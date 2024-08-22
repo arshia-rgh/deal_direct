@@ -23,7 +23,7 @@ ZP_API_STARTPAY = f"https://{sandbox}.zarinpal.com/pg/StartPay/"
 def send_request(request, amount, description, phone, email):
     data = {
         "MerchantID": settings.ZARINPAL["MERCHANT"],
-        "Amount": amount,
+        "Amount": float(amount),
         "Description": description,
         "Phone": phone,
         "Email": email,
