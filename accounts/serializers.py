@@ -130,3 +130,7 @@ class UserPasswordChangeSerializer(serializers.Serializer):
                 detail={"error": "the old password isn't correct"}
             )
         return value
+
+
+class IncreaseWalletSerializer(serializers.Serializer):
+    amount = serializers.DecimalField(max_digits=10, decimal_places=2)

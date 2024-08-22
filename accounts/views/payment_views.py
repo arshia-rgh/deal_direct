@@ -3,5 +3,5 @@ from .zarinpal import send_request
 
 
 class IncreaseWalletAPIView(APIView):
-    def get(self, request):
+    def post(self, request):
         pass
