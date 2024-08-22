@@ -6,6 +6,7 @@ import json
 
 import requests
 from django.conf import settings
+from django.http import JsonResponse
 from django.urls import reverse_lazy
 
 ZP_API_REQUEST = "https://sandbox.zarinpal.com/pg/v4/payment/request.json"
@@ -33,19 +34,21 @@ def send_request(request, amount, description, phone, email):
         if response.status_code == 200:
             response = response.json()
             if response["Status"] == 100:
-                return {
-                    "status": True,
-                    "url": ZP_API_STARTPAY + str(response["Authority"]),
-                    "authority": response["Authority"],
-                }
+                return JsonResponse(
+                    {
+                        "status": True,
+                        "url": ZP_API_STARTPAY + str(response["Authority"]),
+                        "authority": response["Authority"],
+                    }
+                )
             else:
-                return {"status": False, "code": str(response["Status"])}
+                return JsonResponse({"status": False, "code": str(response["Status"])})
         return response
 
     except requests.exceptions.Timeout:
-        return {"status": False, "code": "timeout"}
+        return JsonResponse({"status": False, "code": "timeout"})
     except requests.exceptions.ConnectionError:
-        return {"status": False, "code": "connection error"}
+        return JsonResponse({"status": False, "code": "connection error"})
 
 
 def verify(amount, authority):
@@ -62,7 +65,7 @@ def verify(amount, authority):
     if response.status_code == 200:
         response = response.json()
         if response["Status"] == 100:
-            return {"status": True, "RefID": response["RefID"]}
+            return JsonResponse({"status": True, "RefID": response["RefID"]})
         else:
-            return {"status": False, "code": str(response["Status"])}
+            return JsonResponse({"status": False, "code": str(response["Status"])})
     return response
