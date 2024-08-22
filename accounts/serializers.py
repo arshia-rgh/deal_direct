@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from .models import User
 
 
@@ -61,7 +62,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "email",
             "username",
             "phone_number",
+            "wallet",
         ]
+        read_only_fields = ["wallet"]
 
 
 class UserPasswordChangeSerializer(serializers.Serializer):

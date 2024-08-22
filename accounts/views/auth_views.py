@@ -13,8 +13,8 @@ from accounts.serializers import (
     UserProfileSerializer,
     UserPasswordChangeSerializer,
 )
-from .permissions import IsAuthenticatedAndActive
-from .tasks import update_bonus_wallet_amount_when_verified
+from accounts.permissions import IsAuthenticatedAndActive
+from accounts.tasks import update_bonus_wallet_amount_when_verified
 
 
 class UserRegisterView(generics.CreateAPIView):
