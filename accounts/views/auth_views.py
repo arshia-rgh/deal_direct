@@ -199,7 +199,10 @@ class PasswordResetRequestAPIView(APIView):
                     status=status.HTTP_200_OK,
                 )
             except User.DoesNotExist:
-                return Response({"error": "user with given email does not exists"})
+                return Response(
+                    {"error": "user with given email does not exists"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
 
 class PasswordResetConfirmAPIView(APIView):
