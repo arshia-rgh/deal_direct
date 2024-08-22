@@ -1,5 +1,3 @@
-import json
-
 import pytest
 from django.contrib.auth import get_user_model
 from django.core import mail
@@ -179,8 +177,7 @@ class TestProfileRetrieveUpdate:
         test_user.save()
         response = authenticated_user.patch(
             reverse("accounts:profile"),
-            data=json.dumps({"username": "updateduser", "email": "updated@email.com"}),
-            content_type="application/json",
+            data={"username": "updateduser", "email": "updated@email.com"},
         )
 
         assert response.status_code == 200
@@ -194,8 +191,7 @@ class TestProfileRetrieveUpdate:
         test_user.save()
         response = authenticated_user.patch(
             reverse("accounts:profile"),
-            data=json.dumps({"username": "", "email": "invalid-email"}),
-            content_type="application/json",
+            data={"username": "", "email": "invalid-email"},
         )
         assert response.status_code == 400
         assert "username" in response.data
