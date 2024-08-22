@@ -14,6 +14,14 @@ DATABASES = {
     }
 }
 
+# Cache configs for development
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "unique-snowflake",
+    }
+}
+
 # Celery
 CELERY_BROKER_URL = "amqp://localhost"
 CELERY_RESULT_BACKEND = "rpc://"
