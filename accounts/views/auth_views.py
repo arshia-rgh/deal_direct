@@ -167,7 +167,7 @@ class PasswordResetRequestAPIView(APIView):
         if serializer.is_valid():
             try:
                 user = User.objects.get(email=email)
-                send_password_reset_email(user.id)
+                send_password_reset_email.delay(user.id)
                 return Response(
                     {"message": "Password reset email sent successfully"},
                     status=status.HTTP_200_OK,
