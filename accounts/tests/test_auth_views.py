@@ -200,3 +200,7 @@ class TestProfileRetrieveUpdate:
         assert response.status_code == 400
         assert "username" in response.data
         assert "email" in response.data
+
+
+class TestUserPasswordChange:
+    pass
