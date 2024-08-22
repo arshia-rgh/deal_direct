@@ -187,3 +187,16 @@ class TestProfileRetrieveUpdate:
         test_user.refresh_from_db()
         assert test_user.username == "updateduser"
         assert test_user.email == "updated@email.com"
+
+    @pytest.mark.django_db
+    def test_profile_update_invalid_data(self, authenticated_user, test_user):
+        test_user.is_active = True
+        test_user.save()
+        response = authenticated_user.patch(
+            reverse("accounts:profile"),
+            data=json.dumps({"username": "", "email": "invalid-email"}),
+            content_type="application/json",
+        )
+        assert response.status_code == 400
+        assert "username" in response.data
+        assert "email" in response.data
