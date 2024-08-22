@@ -9,6 +9,13 @@ class Product(BaseModel):
     image = models.ImageField(upload_to="img/products/")
     category = models.ForeignKey(to="Category", on_delete=models.CASCADE)
 
+    uploaded_by = models.ForeignKey(
+        to="User", on_delete=models.CASCADE, related_name="uploaded_products"
+    )
+    bought_by = models.ForeignKey(
+        to="User", on_delete=models.CASCADE, related_name="bought_products"
+    )
+
 
 class Category(BaseModel):
     name = models.CharField(max_length=100)
