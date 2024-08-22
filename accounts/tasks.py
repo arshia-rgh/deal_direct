@@ -1,6 +1,7 @@
 from celery import shared_task
 from django.conf import settings
 from django.core.mail import send_mail
+from django.db.models import F
 from django.urls import reverse
 
 from utils.email_verification_generator import (
@@ -23,3 +24,14 @@ def send_email_verification_link(user_id):
     subject = "Verify your email address"
     message = f"Please click the link below to verify your email address:\n{verification_link}"
     send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email])
+
+
+@shared_task
+def update_wallet_balance(user_id, amount):
+    from django.contrib.auth import get_user_model
+
+    User = get_user_model()
+    user = User.objects.get(id=user_id)
+
+    if user.is_active:
+        User.objects.filter(id=user_id).update(wallet=F("wallet") + amount)

@@ -1,12 +1,13 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from .views import (
+from accounts.views.auth_views import (
     UserRegisterView,
     VerifyEmailView,
     UserProfileRetrieveUpdateView,
     UserPasswordChangeView,
 )
+from accounts.views.payment_views import IncreaseWalletAPIView, VerifyDepositAPIView
 
 app_name = "accounts"
 urlpatterns = [
@@ -22,4 +23,7 @@ urlpatterns = [
         UserPasswordChangeView.as_view(),
         name="change_password",
     ),
+    # payments
+    path("deposit/", IncreaseWalletAPIView.as_view(), name="deposit"),
+    path("deposit/verify/", VerifyDepositAPIView.as_view(), name="verify-deposit"),
 ]

@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from .models import User
 
 
@@ -61,7 +62,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "email",
             "username",
             "phone_number",
+            "wallet",
         ]
+        read_only_fields = ["wallet"]
 
 
 class UserPasswordChangeSerializer(serializers.Serializer):
@@ -127,3 +130,7 @@ class UserPasswordChangeSerializer(serializers.Serializer):
                 detail={"error": "the old password isn't correct"}
             )
         return value
+
+
+class IncreaseWalletSerializer(serializers.Serializer):
+    amount = serializers.DecimalField(max_digits=10, decimal_places=2)
