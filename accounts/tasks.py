@@ -47,3 +47,9 @@ def send_password_reset_email(user_id):
 
     token = generate_email_verification_token(user)
     uid = generate_uid(user)
+
+    reset_link = f"{settings.BASE_URL}{reverse('accounts:password_reset_confirm', kwargs={'uidb64': uid, 'token': token})}"
+
+    subject = "Reset your password"
+    message = f"Please click the link below to reset your password:\n{reset_link}"
+    send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email])
