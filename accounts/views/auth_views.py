@@ -14,7 +14,7 @@ from accounts.serializers import (
     UserPasswordChangeSerializer,
 )
 from accounts.permissions import IsAuthenticatedAndActive
-from accounts.tasks import update_bonus_wallet_amount_when_verified
+from accounts.tasks import update_wallet_balance
 
 
 class UserRegisterView(generics.CreateAPIView):
@@ -76,7 +76,9 @@ class VerifyEmailView(APIView):
         if user is not None and default_token_generator.check_token(user, token):
             user.is_active = True
             user.save()
-            update_bonus_wallet_amount_when_verified.delay(user.id)
+            update_wallet_balance.delay(
+                user.id, 0.99
+            )  # Bonus amount for verify the account
             return Response(
                 {
                     "message": "Email verified successfully. A bonus will be added to your wallet soon"
