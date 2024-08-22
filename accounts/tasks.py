@@ -35,3 +35,15 @@ def update_wallet_balance(user_id, amount):
 
     if user.is_active:
         User.objects.filter(id=user_id).update(wallet=F("wallet") + amount)
+
+
+@shared_task
+def send_password_reset_email(user_id):
+    from django.contrib.auth import get_user_model
+
+    User = get_user_model()
+
+    user = User.objects.get(id=user_id)
+
+    token = generate_email_verification_token(user)
+    uid = generate_uid(user)
