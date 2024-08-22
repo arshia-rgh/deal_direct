@@ -356,10 +356,11 @@ class TestPasswordReset:
         assert "email" in response.data
 
     @pytest.mark.django_db
-    def test_password_reset_request_user_does_not_exists(self, api_client):
+    def test_password_reset_request_user_does_not_exist(self, api_client):
         response = api_client.post(
             reverse("accounts:password_reset"),
             data={"email": "valid@gmail.com"},
         )
 
         assert response.status_code == 400
+        assert response.data == {"error": "user with given email does not exists"}
