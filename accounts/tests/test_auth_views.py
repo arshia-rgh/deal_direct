@@ -226,3 +226,21 @@ class TestUserPasswordChange:
         assert response.status_code == 200
         test_user.refresh_from_db()
         assert test_user.check_password("new_password12")
+
+    @pytest.mark.django_db
+    def test_change_password_with_incorrect_old_password(
+        self, authenticated_user, test_user
+    ):
+        test_user.is_active = True
+        test_user.save()
+        response = authenticated_user.patch(
+            reverse("accounts:change_password"),
+            data={
+                "old_password": "wrongpassword",
+                "password": "new_password12",
+                "confirm_password": "new_password12",
+            },
+        )
+
+        assert response.status_code == 400
+        assert "old_password" in response.data
