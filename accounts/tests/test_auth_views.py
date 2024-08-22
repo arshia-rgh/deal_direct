@@ -141,3 +141,7 @@ class TestSendMail:
             in mail.outbox[0].body
         )
         assert mail.outbox[0].to == ["test@email.com"]
+
+
+class TestProfileRetrieveUpdate:
+    pass
