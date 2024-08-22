@@ -23,7 +23,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     # local apps
     "accounts.apps.AccountsConfig",
-    "products",
+    "products.apps.ProductsConfig",
     "cart",
     "orders",
 ]
@@ -116,6 +116,10 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.ScopedRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {"receives": "1000/day", "uploads": "40/day"},
 }
 
 # JWT
@@ -139,3 +143,6 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 BASE_URL = "http://localhost:8000"
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
