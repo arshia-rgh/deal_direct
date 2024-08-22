@@ -12,8 +12,25 @@ User = get_user_model()
 
 
 class TestUserRegisterView:
+    """
+    Test cases for the user registration view.
+    """
+
     @pytest.mark.django_db
     def test_register_correct_data(self, api_client):
+        """
+        Test registering a user with correct data.
+
+        Args:
+            api_client: The API client for making requests.
+
+        Asserts:
+            - The response status code is 201.
+            - The response data contains a success message.
+            - The user is created in the database.
+            - The user is not active initially.
+        """
+
         response = api_client.post(
             reverse("accounts:register"),
             data={
@@ -31,6 +48,17 @@ class TestUserRegisterView:
 
     @pytest.mark.django_db
     def test_register_missing_fields(self, api_client):
+        """
+        Test registering a user with missing fields.
+
+        Args:
+            api_client: The API client for making requests.
+
+        Asserts:
+            - The response status code is 400.
+            - The response data contains errors for missing fields.
+        """
+
         response = api_client.post(
             reverse("accounts:register"),
             data={"username": "testuser"},
@@ -41,6 +69,17 @@ class TestUserRegisterView:
 
     @pytest.mark.django_db
     def test_register_existing_username(self, api_client):
+        """
+        Test registering a user with an existing username.
+
+        Args:
+            api_client: The API client for making requests.
+
+        Asserts:
+            - The response status code is 400.
+            - The response data contains an error for the existing username.
+        """
+
         User.objects.create_user(
             username="testuser", email="test1@email.com", password="test12pass"
         )
@@ -57,6 +96,17 @@ class TestUserRegisterView:
 
     @pytest.mark.django_db
     def test_register_invalid_email(self, api_client):
+        """
+        Test registering a user with an invalid email.
+
+        Args:
+            api_client: The API client for making requests.
+
+        Asserts:
+            - The response status code is 400.
+            - The response data contains an error for the invalid email.
+        """
+
         response = api_client.post(
             reverse("accounts:register"),
             data={
