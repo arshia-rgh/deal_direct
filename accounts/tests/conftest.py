@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 import pytest
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
@@ -48,3 +50,31 @@ def authenticated_user(api_client, test_user):
     refresh = RefreshToken.for_user(test_user)
     api_client.credentials(HTTP_AUTHORIZATION=f"Bearer {refresh.access_token}")
     return api_client
+
+
+@pytest.fixture
+def mock_send_request():
+    with patch("accounts.views.payment_views.send_request") as mock:
+        yield mock
+
+
+@pytest.fixture
+def mock_verify():
+    with patch("accounts.views.payment_views.verify") as mock:
+        yield mock
+
+
+@pytest.fixture
+def mock_update_wallet_balance():
+    with patch("accounts.views.payment_views.update_wallet_balance") as mock:
+        yield mock
+
+
+@pytest.fixture
+def active_user():
+    return User.objects.create_user(
+        username="testuser",
+        email="test@gmail.com",
+        password="testpassword12",
+        is_active=True,
+    )
