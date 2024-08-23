@@ -1,4 +1,4 @@
-from rest_framework.permissions import BasePermission
+from rest_framework.permissions import BasePermission, SAFE_METHODS
 
 
 class IsOwnerOrReadOnly(BasePermission):
@@ -30,3 +30,10 @@ class IsOwnerOrReadOnly(BasePermission):
         if view.action in ["update", "partial_update", "destroy"]:
             return obj.uploaded_by == request.user
         return False
+
+
+class IsAdminUserOrReadOnly(BasePermission):
+    def has_permission(self, request, view):
+        return bool(
+            request.method in SAFE_METHODS or request.user and request.user.is_staff
+        )
