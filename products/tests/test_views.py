@@ -42,6 +42,17 @@ class TestProductViewSet:
         assert cached_response is not None
         assert len(cached_response) == 20
 
+    def test_retrieve(self, api_client, multiple_products):
+        response = api_client.get(reverse("products:product-detail", kwargs={"pk": 5}))
+
+        assert response.status_code == 200
+
+        product = Product.objects.get(pk=5)
+
+        assert response.data["name"] == product.name
+        assert response.data["uploaded_by"] == product.uploaded_by.id
+        assert response.data["category"] == product.category.id
+
 
 @pytest.mark.django_db
 class TestCategoryViewSet:
