@@ -4,7 +4,7 @@ from django.test import override_settings
 from django.urls import reverse
 from model_bakery import baker
 
-from products.models import Product
+from products.models import Product, Category
 
 
 @pytest.mark.django_db
@@ -226,6 +226,12 @@ class TestCategoryViewSet:
         )
 
         assert response.status_code == 201
+        assert "id" in response.data
+        assert response.data["name"] == "test_category name"
+        assert response.data["description"] is None
+
+        category_id = response.data["id"]
+        assert Category.objects.filter(id=category_id).exists()
 
     def test_create_normal_user(self, api_client, test_user):
         test_user.is_active = True
