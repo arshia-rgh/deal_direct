@@ -8,6 +8,7 @@ from products.mixins import ListCacheMixin, ThrottleMixin
 
 
 class CartViewSet(ListCacheMixin, ThrottleMixin, viewsets.ModelViewSet):
+    queryset = Cart.objects
     serializer_class = CartSerializer
     permission_classes = (IsAuthenticated, IsOwner)
 
@@ -19,6 +20,7 @@ class CartViewSet(ListCacheMixin, ThrottleMixin, viewsets.ModelViewSet):
 
 
 class CartItemViewSet(ListCacheMixin, ThrottleMixin, viewsets.ModelViewSet):
+    queryset = CartItem.objects
     serializer_class = CartItemSerializer
     permission_classes = (IsAuthenticated, IsOwner)
 
