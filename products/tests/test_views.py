@@ -146,6 +146,7 @@ class TestProductViewSet:
         }
     )
     def test_throttle(self, api_client, test_user, test_category):
+        # TODO (why) when i run this test alone it passed but if a run all tests it will fail
         test_user.is_active = True
         test_user.save()
 
