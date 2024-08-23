@@ -29,5 +29,12 @@ class IsOwner(BasePermission):
 
 
 class IsOwnerCartItem(IsOwner):
+    """
+    Custom permission to only allow owners of a cart item to access it.
+
+    This permission class extends the `IsOwner` class to check if the user is the owner of the cart item.
+        (obj.user) is meaningless for cart item
+    """
+
     def has_object_permission(self, request, view, obj):
         return obj.cart.user == request.user
