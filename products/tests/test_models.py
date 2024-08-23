@@ -30,3 +30,14 @@ class TestCategoryModel:
     def test_category_creation(self, test_category):
         assert test_category.name == "test category name"
         assert Category.objects.filter(id=test_category.id).exists()
+
+    def test_category_update(self, test_category):
+        test_category.name = "test category 2"
+        test_category.save()
+
+        assert test_category.name == "test category 2"
+
+    def test_category_delete(self, test_category):
+        test_category.delete()
+
+        assert not Category.objects.filter(name="test category name")
