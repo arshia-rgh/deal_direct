@@ -4,9 +4,10 @@ from rest_framework.permissions import IsAuthenticated
 from cart.models import Cart
 from cart.permissions import IsOwner
 from cart.serializers import CartSerializer
+from products.mixins import ListCacheMixin, ThrottleMixin
 
 
-class CartViewSet(viewsets.ModelViewSet):
+class CartViewSet(ListCacheMixin, ThrottleMixin, viewsets.ModelViewSet):
     serializer_class = CartSerializer
     permission_classes = (IsAuthenticated, IsOwner)
 
