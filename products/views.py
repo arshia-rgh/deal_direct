@@ -7,7 +7,7 @@ from .mixins import ListCacheMixin, ThrottleMixin
 from .permissions import IsOwnerOrReadOnly
 
 
-class ProductViewSet(viewsets.ModelViewSet, ListCacheMixin, ThrottleMixin):
+class ProductViewSet(ListCacheMixin, ThrottleMixin, viewsets.ModelViewSet):
     """
     A viewset for viewing, creating, updating, and deleting products.
 
@@ -23,7 +23,7 @@ class ProductViewSet(viewsets.ModelViewSet, ListCacheMixin, ThrottleMixin):
     permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
 
 
-class CategoryViewSet(viewsets.ModelViewSet, ListCacheMixin, ThrottleMixin):
+class CategoryViewSet(ListCacheMixin, ThrottleMixin, viewsets.ModelViewSet):
     """
     A viewset for viewing, creating, updating, and deleting categories.
 
