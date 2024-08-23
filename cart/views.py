@@ -11,6 +11,9 @@ class CartViewSet(ListCacheMixin, ThrottleMixin, viewsets.ModelViewSet):
     serializer_class = CartSerializer
     permission_classes = (IsAuthenticated, IsOwner)
 
+    def get_queryset(self):
+        return Cart.objects.filter(user=self.request.user)
+
     def get_object(self):
         return Cart.objects.get(user=self.request.user)
 
