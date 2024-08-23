@@ -1,9 +1,5 @@
 from rest_framework import viewsets
-from rest_framework.mixins import (
-    RetrieveModelMixin,
-    CreateModelMixin,
-    DestroyModelMixin,
-)
+from rest_framework.generics import RetrieveDestroyAPIView, CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 
 from cart.models import CartItem
@@ -12,9 +8,11 @@ from cart.serializers import CartItemSerializer
 from products.mixins import ListCacheMixin, ThrottleMixin
 
 
-class CartRetrieveCreateDestroyView(
-    RetrieveModelMixin, CreateModelMixin, DestroyModelMixin
-):
+class CartCreateApiView(CreateAPIView):
+    pass
+
+
+class CartRetrieveDestroyAPIView(RetrieveDestroyAPIView):
     pass
 
 
