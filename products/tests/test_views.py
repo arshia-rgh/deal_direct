@@ -83,6 +83,9 @@ class TestProductViewSet:
         assert response.status_code == 201
         assert response.data["uploaded_by"] == test_user.id
 
+    def test_delete_product_with_no_owner(self, api_client, test_user, test_category):
+        pass
+
 
 @pytest.mark.django_db
 class TestCategoryViewSet:
