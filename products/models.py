@@ -46,5 +46,5 @@ class Category(BaseModel):
         description (str): A detailed description of the category.
     """
 
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     description = models.TextField(null=True, blank=True)
