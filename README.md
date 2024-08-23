@@ -20,12 +20,30 @@
 
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
+***------------------------------------------------***
+## Table of Contents
+- [Endpoints](#endpoints)
+- [ERD](#erd)
+- [Code Formatting](#code-formatting)
+  - [Pre-commit Hooks](#pre-commit-hooks)
+- [Usage](#usage)
 
+***------------------------------------------------***
+## Endpoints
+
+To see the current endpoints, run the following command:
+
+```bash
+python manage.py stdout_endpoints > ENDPOINTS.md
+```
+***------------------------------------------------***
 ## ERD
 checkout the diagram at:
 
 - [ERD](documents/Entity%20Relationship%20Diagram.jpg)
 
+
+***------------------------------------------------***
 ## Code Formatting
 
 This project uses `black` for code formatting. Black is a code formatter for Python that ensures consistent code style.
@@ -54,6 +72,7 @@ to run the pre-commit hooks manually, use:
 pre-commit run --all-files
 ```
 
+***------------------------------------------------***
 ## Usage
 
 1. Clone the repository:
