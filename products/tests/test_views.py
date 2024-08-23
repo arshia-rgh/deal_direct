@@ -207,6 +207,11 @@ class TestCategoryViewSet:
         cached_response = cache.get(cache_key)
 
         assert cached_response is not None
+        assert isinstance(response.data, list)
+        for category in response.data:
+            assert "id" in category
+            assert "name" in category
+            assert "description" in category
 
     def test_create_admin_user(self, api_client, test_user):
         test_user.is_active = True
