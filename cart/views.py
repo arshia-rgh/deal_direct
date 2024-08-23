@@ -4,16 +4,18 @@ from rest_framework.permissions import IsAuthenticated
 
 from cart.models import CartItem
 from cart.permissions import IsOwner
-from cart.serializers import CartItemSerializer
+from cart.serializers import CartItemSerializer, CartSerializer
 from products.mixins import ListCacheMixin, ThrottleMixin
 
 
-class CartCreateApiView(CreateAPIView):
-    pass
+class CartCreateApiView(ThrottleMixin, CreateAPIView):
+    serializer_class = CartSerializer
+    permission_classes = (IsAuthenticated,)
 
 
-class CartRetrieveDestroyAPIView(RetrieveDestroyAPIView):
-    pass
+class CartRetrieveDestroyAPIView(ThrottleMixin, RetrieveDestroyAPIView):
+    serializer_class = CartSerializer
+    permission_classes = (IsAuthenticated, IsOwner)
 
 
 class CartItemViewSet(ListCacheMixin, ThrottleMixin, viewsets.ModelViewSet):
