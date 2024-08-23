@@ -245,6 +245,7 @@ class TestCategoryViewSet:
         )
 
         assert response.status_code == 403
+        assert not Category.objects.filter(name="test_category name").exists()
 
     def test_delete_admin_user(self, api_client, test_user, test_category):
         test_user.is_active = True
@@ -258,6 +259,7 @@ class TestCategoryViewSet:
         )
 
         assert response.status_code == 204
+        assert not Category.objects.filter(id=test_category.id).exists()
 
     def test_delete_normal_user(self, api_client, test_user, test_category):
         test_user.is_active = True
@@ -271,3 +273,4 @@ class TestCategoryViewSet:
         )
 
         assert response.status_code == 403
+        assert Category.objects.filter(id=test_category.id).exists()
