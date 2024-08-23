@@ -75,8 +75,8 @@ class TestProductViewSet:
             reverse("products:product-list"),
             data={
                 "name": "test product",
-                "price": "10.00",
-                "category": test_category,
+                "price": 10.00,
+                "category": test_category.id,
             },
         )
 
