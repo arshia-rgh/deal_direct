@@ -20,7 +20,10 @@ class ProductViewSet(ListCacheMixin, ThrottleMixin, viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
-    permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
+    permission_classes = (
+        IsAuthenticatedOrReadOnly,
+        IsOwnerOrReadOnly,
+    )
 
 
 class CategoryViewSet(ListCacheMixin, ThrottleMixin, viewsets.ModelViewSet):

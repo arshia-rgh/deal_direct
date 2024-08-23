@@ -1,3 +1,5 @@
+from itertools import product
+
 import pytest
 from django.core.cache import cache
 from django.urls import reverse
@@ -111,6 +113,30 @@ class TestProductViewSet:
 
         assert delete_response.status_code == 403
         assert len(Product.objects.all()) == 1
+
+    def test_delete_success(self, api_client, test_user, test_category):
+        test_user.is_active = True
+        test_user.save()
+
+        api_client.force_authenticate(test_user)
+
+        response = api_client.post(
+            reverse("products:product-list"),
+            data={
+                "name": "test product",
+                "price": 10.00,
+                "category": test_category.id,
+            },
+        )
+
+        assert response.status_code == 201
+        assert response.data["uploaded_by"] == test_user.id
+
+        delete_response = api_client.delete(
+            reverse("products:product-detail", kwargs={"pk": 1})
+        )
+
+        assert delete_response.status_code == 204
 
 
 @pytest.mark.django_db

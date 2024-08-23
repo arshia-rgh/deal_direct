@@ -10,12 +10,13 @@ class IsOwnerOrReadOnly(BasePermission):
 
         # Allow authenticated users to create a product
 
-        if view.action == "create":
+        if view.action in ["create", "update", "partial_update", "destroy"]:
             return (
                 request.user
                 and request.user.is_authenticated
                 and request.user.is_active
             )
+
         return False
 
     def has_object_permission(self, request, view, obj):
