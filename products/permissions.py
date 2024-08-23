@@ -33,7 +33,24 @@ class IsOwnerOrReadOnly(BasePermission):
 
 
 class IsAdminUserOrReadOnly(BasePermission):
+    """
+    Custom permission to only allow admin users to edit objects.
+
+    - SAFE_METHODS (GET, HEAD, OPTIONS) are allowed for any user.
+    - Non-safe methods (POST, PUT, DELETE) are allowed only for admin users.
+    """
+
     def has_permission(self, request, view):
+        """
+        Check if the request has permission to perform the action.
+
+        Args:
+            request (Request): The HTTP request object.
+            view (View): The view object.
+
+        Returns:
+            bool: True if the request has permission, False otherwise.
+        """
         return bool(
             request.method in SAFE_METHODS or request.user and request.user.is_staff
         )
