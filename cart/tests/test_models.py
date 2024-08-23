@@ -11,3 +11,9 @@ class TestCartModel:
         assert cart.user.username == "testuser"
         assert cart.products.count() == 0
         assert Cart.objects.filter(id=cart.id).exists()
+
+    def test_creation_invalid_data(self):
+        with pytest.raises(Exception):
+            cart = Cart.objects.create(user=None)
+
+            assert not Cart.objects.filter(id=cart.id).exists()
