@@ -81,6 +81,7 @@ class TestProductViewSet:
         )
 
         assert response.status_code == 201
+        assert response.data["uploaded_by"] == test_user.id
 
 
 @pytest.mark.django_db
