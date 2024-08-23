@@ -3,7 +3,7 @@ from rest_framework.generics import RetrieveDestroyAPIView, CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 
 from cart.models import CartItem, Cart
-from cart.permissions import IsOwner
+from cart.permissions import IsOwner, IsOwnerCartItem
 from cart.serializers import CartItemSerializer, CartSerializer
 from products.mixins import ListCacheMixin, ThrottleMixin
 
@@ -51,9 +51,9 @@ class CartItemViewSet(ListCacheMixin, ThrottleMixin, viewsets.ModelViewSet):
     """
 
     cache_key = "cart_items_list"
-    queryset = CartItem.objects
+    queryset = CartItem.objects.all()
     serializer_class = CartItemSerializer
-    permission_classes = (IsAuthenticated, IsOwner)
+    permission_classes = (IsAuthenticated, IsOwnerCartItem)
 
     def get_queryset(self):
         """
