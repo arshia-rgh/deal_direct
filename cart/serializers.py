@@ -63,3 +63,4 @@ class CartItemSerializer(serializers.ModelSerializer):
 
         request = self.context["request"]
         validated_data["cart"] = request.user.cart
+        return super().create(validated_data)
