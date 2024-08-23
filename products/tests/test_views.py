@@ -21,6 +21,13 @@ class TestProductViewSet:
         assert response.status_code == 200
         assert len(response.data) == 20
 
+        for product in response.data:
+            assert not "id" in product
+            assert "name" in product
+            assert "price" in product
+            assert "uploaded_by" in product
+            assert "bought_by" in product
+
 
 @pytest.mark.django_db
 class TestCategoryViewSet:
