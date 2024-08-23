@@ -53,6 +53,21 @@ class TestProductViewSet:
         assert response.data["uploaded_by"] == product.uploaded_by.id
         assert response.data["category"] == product.category.id
 
+    def test_create_unauthorized_user(self, api_client, test_user, test_category):
+        response = api_client.post(
+            reverse("products:product-list"),
+            data={
+                "name": "test product",
+                "price": "10.00",
+                "category": test_category,
+            },
+        )
+
+        assert response.status_code == 401
+
+    def test_create_success(self, api_client, test_user, test_category):
+        pass
+
 
 @pytest.mark.django_db
 class TestCategoryViewSet:
