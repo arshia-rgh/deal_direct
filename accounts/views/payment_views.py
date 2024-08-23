@@ -10,9 +10,27 @@ from ..permissions import IsAuthenticatedAndActive
 
 
 class IncreaseWalletAPIView(APIView):
+    """
+    API view for increasing the user's wallet balance.
+
+    This view handles the request to deposit an amount into the user's wallet.
+    It uses the `IncreaseWalletSerializer` for validation and the `IsAuthenticatedAndActive`
+    permission class to ensure that only authenticated and active users can access this view.
+    """
+
     permission_classes = (IsAuthenticatedAndActive,)
 
     def post(self, request):
+        """
+        Handle the POST request to deposit an amount into the user's wallet.
+
+        Args:
+            request (Request): The HTTP request object containing the deposit details.
+
+        Returns:
+            HttpResponseRedirect: Redirects to the payment gateway URL if the request is successful.
+            Response: A response object containing an error message and HTTP status code 400 if the request fails.
+        """
         user = request.user
         serializer = IncreaseWalletSerializer(data=request.data)
 
@@ -38,9 +56,28 @@ class IncreaseWalletAPIView(APIView):
 
 
 class VerifyDepositAPIView(APIView):
+    """
+    API view for verifying a wallet deposit.
+
+    This view handles the request to verify a deposit into the user's wallet.
+    It uses the `IsAuthenticatedAndActive` permission class to ensure that only authenticated
+    and active users can access this view.
+    """
+
     permission_classes = (IsAuthenticatedAndActive,)
 
     def post(self, request):
+        """
+        Handle the POST request to verify a deposit into the user's wallet.
+
+        Args:
+            request (Request): The HTTP request object containing the verification details.
+
+        Returns:
+            Response: A response object containing a success message and HTTP status code 200 if the verification is successful.
+            Response: A response object containing an error message and HTTP status code 400 if the verification fails.
+        """
+
         authority = request.data.get("Authority")
         amount = request.data.get("Amount")
         if not amount or not authority:
