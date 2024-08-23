@@ -66,7 +66,21 @@ class TestProductViewSet:
         assert response.status_code == 401
 
     def test_create_success(self, api_client, test_user, test_category):
-        pass
+        test_user.is_active = True
+        test_user.save()
+
+        api_client.force_authenticate(test_user)
+
+        response = api_client.post(
+            reverse("products:product-list"),
+            data={
+                "name": "test product",
+                "price": "10.00",
+                "category": test_category,
+            },
+        )
+
+        assert response.status_code == 201
 
 
 @pytest.mark.django_db

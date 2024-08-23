@@ -21,7 +21,7 @@ class Product(BaseModel):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.ImageField(upload_to="img/products/")
+    image = models.ImageField(upload_to="img/products/", null=True, blank=True)
     category = models.ForeignKey(to="Category", on_delete=models.CASCADE)
 
     uploaded_by = models.ForeignKey(
