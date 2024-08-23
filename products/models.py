@@ -9,7 +9,7 @@ class Product(BaseModel):
     Represents a product in the system.
 
     Attributes:
-        name (str): The name of the product.
+        name (str): The name of the product. (unique)
         description (str): A detailed description of the product.
         price (Decimal): The price of the product.
         image (ImageField): An image of the product.
@@ -21,7 +21,7 @@ class Product(BaseModel):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.ImageField(upload_to="img/products/")
+    image = models.ImageField(upload_to="img/products/", null=True, blank=True)
     category = models.ForeignKey(to="Category", on_delete=models.CASCADE)
 
     uploaded_by = models.ForeignKey(
@@ -42,9 +42,9 @@ class Category(BaseModel):
     Represents a category of products.
 
     Attributes:
-        name (str): The name of the category.
+        name (str): The name of the category. (unique)
         description (str): A detailed description of the category.
     """
 
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     description = models.TextField(null=True, blank=True)

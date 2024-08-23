@@ -12,7 +12,7 @@ class ProductSerializer(serializers.ModelSerializer):
         Meta (class): Meta options for the serializer.
     """
 
-    image = serializers.ImageField()
+    image = serializers.ImageField(required=False)
 
     class Meta:
         """
