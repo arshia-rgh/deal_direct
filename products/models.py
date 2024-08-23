@@ -9,7 +9,7 @@ class Product(BaseModel):
     Represents a product in the system.
 
     Attributes:
-        name (str): The name of the product.
+        name (str): The name of the product. (unique)
         description (str): A detailed description of the product.
         price (Decimal): The price of the product.
         image (ImageField): An image of the product.
@@ -42,7 +42,7 @@ class Category(BaseModel):
     Represents a category of products.
 
     Attributes:
-        name (str): The name of the category.
+        name (str): The name of the category. (unique)
         description (str): A detailed description of the category.
     """
 
