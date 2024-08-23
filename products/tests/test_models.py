@@ -1,6 +1,6 @@
 import pytest
 
-from products.models import Product
+from products.models import Product, Category
 
 
 @pytest.mark.django_db
@@ -23,3 +23,10 @@ class TestProductModel:
         test_product.delete()
 
         assert not Product.objects.filter(name="test product name").exists()
+
+
+@pytest.mark.django_db
+class TestCategoryModel:
+    def test_category_creation(self, test_category):
+        assert test_category.name == "test category name"
+        assert Category.objects.filter(id=test_category.id).exists()
