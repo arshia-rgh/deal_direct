@@ -1,5 +1,6 @@
 import pytest
 from django.core.cache import cache
+from django.test import override_settings
 from django.urls import reverse
 from model_bakery import baker
 
@@ -136,8 +137,50 @@ class TestProductViewSet:
 
         assert delete_response.status_code == 204
 
+    @override_settings(
+        REST_FRAMEWORK={
+            "DEFAULT_THROTTLE_RATES": {
+                "uploads": "5/minute",
+                "receives": "5/minute",
+            }
+        }
+    )
     def test_throttle(self, api_client, test_user, test_category):
-        pass
+        test_user.is_active = True
+        test_user.save()
+
+        api_client.force_authenticate(test_user)
+
+        for _ in range(5):
+            response = api_client.post(
+                reverse("products:product-list"),
+                data={
+                    "name": f"test product {_}",
+                    "price": 10.00,
+                    "category": test_category.id,
+                },
+            )
+            assert response.status_code == 201
+
+        response = api_client.post(
+            reverse("products:product-list"),
+            data={
+                "name": "test product",
+                "price": 10.00,
+                "category": test_category.id,
+            },
+        )
+        assert response.status_code == 429
+
+        for _ in range(5):
+            response = api_client.get(
+                reverse("products:product-detail", kwargs={"pk": 1})
+            )
+            assert response.status_code == 200
+
+        response = api_client.get(reverse("products:product-detail", kwargs={"pk": 1}))
+
+        assert response.status_code == 429
 
 
 @pytest.mark.django_db
