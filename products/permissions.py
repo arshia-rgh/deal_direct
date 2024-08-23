@@ -2,22 +2,28 @@ from rest_framework.permissions import BasePermission, SAFE_METHODS
 
 
 class IsOwnerOrReadOnly(BasePermission):
+    """
+    Custom permission to only allow owners of an object to edit it.
+
+    - Any authenticated and active user can have permission to access the view.
+    - Only the owner of the object has permission to perform update or delete actions.
+    """
+
     def has_permission(self, request, view):
-        # Allow any user to view the list or retrieve a product
+        """
+        Check if the request has permission to access the view.
 
-        if view.action in ["list", "retrieve"]:
-            return True
+        Args:
+            request (Request): The HTTP request object.
+            view (View): The view object.
 
-        # Allow authenticated users to create a product
+        Returns:
+            bool: True if the request has permission, False otherwise.
+        """
 
-        if view.action in ["create", "update", "partial_update", "destroy"]:
-            return (
-                request.user
-                and request.user.is_authenticated
-                and request.user.is_active
-            )
-
-        return False
+        return bool(
+            request.user and request.user.is_authenticated and request.user.is_active
+        )
 
     def has_object_permission(self, request, view, obj):
         # Allow any user to view the product details
