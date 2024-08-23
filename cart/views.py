@@ -1,22 +1,21 @@
 from rest_framework import viewsets
+from rest_framework.mixins import (
+    RetrieveModelMixin,
+    CreateModelMixin,
+    DestroyModelMixin,
+)
 from rest_framework.permissions import IsAuthenticated
 
-from cart.models import Cart, CartItem
+from cart.models import CartItem
 from cart.permissions import IsOwner
-from cart.serializers import CartSerializer, CartItemSerializer
+from cart.serializers import CartItemSerializer
 from products.mixins import ListCacheMixin, ThrottleMixin
 
 
-class CartViewSet(ThrottleMixin, viewsets.ModelViewSet):
-    queryset = Cart.objects
-    serializer_class = CartSerializer
-    permission_classes = (IsAuthenticated, IsOwner)
-
-    def get_queryset(self):
-        return Cart.objects.filter(user=self.request.user)
-
-    def get_object(self):
-        return Cart.objects.get(user=self.request.user)
+class CartRetrieveCreateDestroyView(
+    RetrieveModelMixin, CreateModelMixin, DestroyModelMixin
+):
+    pass
 
 
 class CartItemViewSet(ListCacheMixin, ThrottleMixin, viewsets.ModelViewSet):
