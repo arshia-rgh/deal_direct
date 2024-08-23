@@ -83,8 +83,34 @@ class TestProductViewSet:
         assert response.status_code == 201
         assert response.data["uploaded_by"] == test_user.id
 
-    def test_delete_product_with_no_owner(self, api_client, test_user, test_category):
-        pass
+    def test_delete_product_with_no_owner(
+        self, api_client, test_user, test_category, another_test_user
+    ):
+        test_user.is_active = True
+        test_user.save()
+
+        api_client.force_authenticate(test_user)
+
+        response = api_client.post(
+            reverse("products:product-list"),
+            data={
+                "name": "test product",
+                "price": 10.00,
+                "category": test_category.id,
+            },
+        )
+
+        assert response.status_code == 201
+        assert response.data["uploaded_by"] == test_user.id
+
+        api_client.force_authenticate(another_test_user)
+
+        delete_response = api_client.delete(
+            reverse("products:product-detail", kwargs={"pk": 1})
+        )
+
+        assert delete_response.status_code == 403
+        assert len(Product.objects.all()) == 1
 
 
 @pytest.mark.django_db

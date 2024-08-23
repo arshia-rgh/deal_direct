@@ -24,6 +24,16 @@ def test_user():
 
 
 @pytest.fixture
+def another_test_user():
+    return User.objects.create_user(
+        username="test user 2 ",
+        password="test password",
+        email="testmail2@email.com",
+        is_active=True,
+    )
+
+
+@pytest.fixture
 def test_product(test_category, test_user):
     image = SimpleUploadedFile(
         name="test_image.jpg",
