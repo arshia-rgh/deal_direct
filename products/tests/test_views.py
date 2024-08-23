@@ -186,4 +186,49 @@ class TestProductViewSet:
 
 @pytest.mark.django_db
 class TestCategoryViewSet:
-    pass
+    def test_list(self, api_client):
+        response = api_client.get(reverse("products:category-list"))
+
+        assert response.status_code == 200
+
+    def test_cacheing_in_list(self, api_client):
+        cache_key = "categories_list"
+        cache.delete(cache_key)
+
+        response = api_client.get(reverse("products:category-list"))
+
+        assert response.status_code == 200
+
+        cached_response = cache.get(cache_key)
+
+        assert cached_response is not None
+
+    def test_create_admin_user(self, api_client, test_user):
+        test_user.is_active = True
+        test_user.is_staff = True
+
+        test_user.save()
+
+        api_client.force_authenticate(test_user)
+
+        response = api_client.post(
+            reverse("products:category-list"), data={"name": "test_category name"}
+        )
+
+        assert response.status_code == 201
+
+    def test_create_normal_user(self, api_client, test_user):
+        test_user.is_active = True
+        test_user.is_staff = False
+        test_user.save()
+
+        api_client.force_authenticate(test_user)
+
+        response = api_client.post(
+            reverse("products:category-list"), data={"name": "test_category name"}
+        )
+
+        assert response.status_code == 403
+
+    def test_delete_admin_user(self, api_client, test_user, test_category):
+        pass
