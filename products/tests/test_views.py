@@ -1,5 +1,3 @@
-from itertools import product
-
 import pytest
 from django.core.cache import cache
 from django.urls import reverse
@@ -137,6 +135,9 @@ class TestProductViewSet:
         )
 
         assert delete_response.status_code == 204
+
+    def test_throttle(self, api_client, test_user, test_category):
+        pass
 
 
 @pytest.mark.django_db
