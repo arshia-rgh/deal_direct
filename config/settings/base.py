@@ -26,6 +26,8 @@ INSTALLED_APPS = [
     "products.apps.ProductsConfig",
     "cart.apps.CartConfig",
     "orders",
+    # only for custom commands
+    "custom_commands",
 ]
 
 MIDDLEWARE = [
