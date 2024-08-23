@@ -190,6 +190,11 @@ class TestCategoryViewSet:
         response = api_client.get(reverse("products:category-list"))
 
         assert response.status_code == 200
+        assert isinstance(response.data, list)
+        for category in response.data:
+            assert "id" in category
+            assert "name" in category
+            assert "description" in category
 
     def test_cacheing_in_list(self, api_client):
         cache_key = "categories_list"
@@ -231,4 +236,27 @@ class TestCategoryViewSet:
         assert response.status_code == 403
 
     def test_delete_admin_user(self, api_client, test_user, test_category):
-        pass
+        test_user.is_active = True
+        test_user.is_staff = True
+        test_user.save()
+
+        api_client.force_authenticate(test_user)
+
+        response = api_client.delete(
+            reverse("products:category-detail", kwargs={"pk": test_category.id})
+        )
+
+        assert response.status_code == 204
+
+    def test_delete_normal_user(self, api_client, test_user, test_category):
+        test_user.is_active = True
+        test_user.is_staff = False
+        test_user.save()
+
+        api_client.force_authenticate(test_user)
+
+        response = api_client.delete(
+            reverse("products:category-detail", kwargs={"pk": test_category.id})
+        )
+
+        assert response.status_code == 403
