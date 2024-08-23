@@ -1,6 +1,5 @@
-from django.core.cache import cache
-
 import pytest
+from django.core.cache import cache
 from django.urls import reverse
 from model_bakery import baker
 
@@ -41,6 +40,7 @@ class TestProductViewSet:
         cached_response = cache.get(cache_key)
 
         assert cached_response is not None
+        assert len(cached_response) == 20
 
 
 @pytest.mark.django_db
