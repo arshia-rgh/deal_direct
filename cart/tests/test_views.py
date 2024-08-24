@@ -132,3 +132,20 @@ class TestCartItemViewSet:
 
         assert cache_response is not None
         assert len(cache_response) == 5
+
+    def test_retrieve_one_cart_item(
+        self, api_client, test_active_user, multiple_cart_items
+    ):
+        api_client.force_authenticate(test_active_user)
+
+        cart_item = CartItem.objects.filter(cart__user=test_active_user).first()
+
+        response = api_client.get(
+            reverse("carts:cartitem-detail", kwargs={"pk": cart_item.id})
+        )
+
+        assert response.status_code == 200
+        assert response.data["product"] == cart_item.product.id
+        assert response.data["quantity"] == cart_item.quantity
+        assert response.data["cart"] == cart_item.cart.id
+        assert cart_item.cart.user == test_active_user
