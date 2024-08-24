@@ -14,7 +14,9 @@ class Order(BaseModel):
     user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="order")
     cart = models.OneToOneField(to=Cart, on_delete=models.CASCADE, related_name="order")
     status = models.CharField(
-        default=OrderStatusChoices.pending, choices=OrderStatusChoices.choices
+        max_length=255,
+        default=OrderStatusChoices.pending,
+        choices=OrderStatusChoices.choices,
     )
 
     @property
