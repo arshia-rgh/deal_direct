@@ -1,6 +1,7 @@
 import pytest
 
 from accounts.models import User
+from cart.models import Cart
 from products.models import Product, Category
 from rest_framework.test import APIClient
 
@@ -35,3 +36,8 @@ def test_product(test_category, test_user):
 @pytest.fixture
 def api_client():
     return APIClient()
+
+
+@pytest.fixture
+def test_cart(test_user):
+    return Cart.objects.create(user=test_user)

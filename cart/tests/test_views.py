@@ -48,4 +48,13 @@ class TestCartCreateAPIView:
 
 @pytest.mark.django_db
 class TestCartRetrieveDestroyAPIView:
-    pass
+    def test_retrieve_cart(self, api_client, test_user, test_cart):
+        test_user.is_active = True
+        test_user.save()
+
+        api_client.force_authenticate(test_user)
+
+        response = api_client.get(reverse("carts:cart-detail", kwargs={"pk": 1}))
+
+        assert response.status_code == 200
+        assert response.data["user"] == test_user.id
