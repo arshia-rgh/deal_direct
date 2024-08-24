@@ -1,10 +1,9 @@
-from django.core.cache import cache
-
 import pytest
+from django.core.cache import cache
 from django.urls import reverse
 from model_bakery import baker
 
-from cart.models import Cart
+from cart.models import Cart, CartItem
 from products.models import Product
 
 
@@ -72,6 +71,18 @@ class TestCartItemViewSet:
             products.append(product)
         return products
 
+    @pytest.fixture
+    def multiple_cart_items(self, multiple_products, test_cart):
+        cart_item_list = []
+        for product in multiple_products[:5]:
+            cart_item = CartItem.objects.create(
+                cart=test_cart,
+                product=product.id,
+            )
+            cart_item_list.append(cart_item)
+
+        return cart_item_list
+
     def test_create_cart_item(
         self, api_client, test_active_user, test_cart, multiple_products
     ):
@@ -94,17 +105,9 @@ class TestCartItemViewSet:
         )
 
     def test_get_all_cart_items(
-        self, api_client, test_active_user, test_cart, multiple_products
+        self, api_client, test_active_user, multiple_cart_items
     ):
         api_client.force_authenticate(test_active_user)
-
-        # add some cart items to the test_active_user cart
-        for product in multiple_products[:5]:
-            response = api_client.post(
-                reverse("carts:cartitem-list"),
-                data={"product": product.id, "quantity": 3},
-            )
-            assert response.status_code == 201
 
         response = api_client.get(reverse("carts:cartitem-list"))
 
@@ -113,9 +116,7 @@ class TestCartItemViewSet:
 
         assert len(Cart.objects.get(user=test_active_user).products.all()) == 5
 
-    def test_cache_list(
-        self, api_client, test_active_user, multiple_products, test_cart
-    ):
+    def test_cache_list(self, api_client, test_active_user, multiple_cart_items):
         cache_key = "cart_items_list"
         cache.delete(cache_key)
 
@@ -123,14 +124,6 @@ class TestCartItemViewSet:
         assert cache_response is None
 
         api_client.force_authenticate(test_active_user)
-
-        # add some cart items to the test_active_user cart
-        for product in multiple_products[:5]:
-            response = api_client.post(
-                reverse("carts:cartitem-list"),
-                data={"product": product.id, "quantity": 3},
-            )
-            assert response.status_code == 201
 
         response = api_client.get(reverse("carts:cartitem-list"))
 
