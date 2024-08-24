@@ -1,7 +1,9 @@
 import pytest
 from django.urls import reverse
+from model_bakery import baker
 
 from cart.models import Cart
+from products.models import Product
 
 
 @pytest.mark.django_db
@@ -73,4 +75,27 @@ class TestCartRetrieveDestroyAPIView:
 
 @pytest.mark.django_db
 class TestCartItemViewSet:
-    pass
+    @pytest.fixture
+    def multiple_products(self):
+        products = []
+        for _ in range(10):
+            product = baker.make(Product)
+            products.append(product)
+        return products
+
+    def test_create_cart_item(
+        self, api_client, test_user, test_cart, multiple_products
+    ):
+        test_user.is_active = True
+        test_user.save()
+
+        api_client.force_authenticate(test_user)
+
+        response = api_client.post(
+            reverse("carts:cartitem-list"), data={"product": 1, "quantity": 3}
+        )
+
+        assert response.status_code == 201
+        assert response.data["cart"] == test_user.cart.id
+        assert response.data["product"] == 1
+        assert Cart.objects.get(user=test_user).products.filter(id=1).exists()
