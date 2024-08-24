@@ -69,3 +69,8 @@ class TestCartRetrieveDestroyAPIView:
 
         assert response.status_code == 204
         assert not Cart.objects.filter(user=test_user).exists()
+
+
+@pytest.mark.django_db
+class TestCartItemViewSet:
+    pass
