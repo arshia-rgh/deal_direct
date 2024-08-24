@@ -54,7 +54,7 @@ class TestCartRetrieveDestroyAPIView:
 
         api_client.force_authenticate(test_user)
 
-        response = api_client.get(reverse("carts:cart-detail", kwargs={"pk": 1}))
+        response = api_client.get(reverse("carts:cart-detail"))
 
         assert response.status_code == 200
         assert response.data["user"] == test_user.id
@@ -67,7 +67,7 @@ class TestCartRetrieveDestroyAPIView:
 
         api_client.force_authenticate(test_user)
 
-        response = api_client.get(reverse("carts:cart-detail", kwargs={"pk": 2}))
+        response = api_client.get(reverse("carts:cart-detail"))
 
         assert response.status_code == 200
         assert response.data["id"] == 1
@@ -78,7 +78,7 @@ class TestCartRetrieveDestroyAPIView:
 
         api_client.force_authenticate(test_user)
 
-        response = api_client.delete(reverse("carts:cart-detail", kwargs={"pk": 1}))
+        response = api_client.delete(reverse("carts:cart-detail"))
 
         assert response.status_code == 204
         assert not Cart.objects.filter(user=test_user).exists()
