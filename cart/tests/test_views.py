@@ -170,3 +170,12 @@ class TestCartItemViewSet:
             )
 
             assert response.status_code == 400
+
+    def test_delete_cart_item(self, api_client, test_active_user, multiple_cart_items):
+        api_client.force_authenticate(test_active_user)
+
+        response = api_client.delete(reverse("carts:cartitem-detail", kwargs={"pk": 1}))
+
+        assert response.status_code == 204
+
+        assert not CartItem.objects.filter(id=1).exists()
