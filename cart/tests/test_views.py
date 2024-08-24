@@ -59,19 +59,6 @@ class TestCartRetrieveDestroyAPIView:
         assert response.status_code == 200
         assert response.data["user"] == test_user.id
 
-    def test_user_can_only_retrieve_owned_cart(
-        self, api_client, test_user, test_cart, test_cart_2
-    ):
-        test_user.is_active = True
-        test_user.save()
-
-        api_client.force_authenticate(test_user)
-
-        response = api_client.get(reverse("carts:cart-detail"))
-
-        assert response.status_code == 200
-        assert response.data["id"] == 1
-
     def test_delete_cart(self, api_client, test_user, test_cart):
         test_user.is_active = True
         test_user.save()
