@@ -11,7 +11,6 @@ class Order(BaseModel):
         pending = ("P", "Pending")
         completed = ("C", "Completed")
 
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="order")
     cart = models.OneToOneField(to=Cart, on_delete=models.CASCADE, related_name="order")
     status = models.CharField(
         max_length=255,
