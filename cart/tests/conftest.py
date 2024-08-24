@@ -40,8 +40,8 @@ def api_client():
 
 
 @pytest.fixture
-def test_cart(test_user):
-    return Cart.objects.create(user=test_user)
+def test_cart(test_active_user):
+    return Cart.objects.create(user=test_active_user)
 
 
 @pytest.fixture
