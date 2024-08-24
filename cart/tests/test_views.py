@@ -1,5 +1,3 @@
-from itertools import product
-
 import pytest
 from django.core.cache import cache
 from django.urls import reverse
@@ -179,3 +177,20 @@ class TestCartItemViewSet:
         assert response.status_code == 204
 
         assert not CartItem.objects.filter(id=1).exists()
+
+    def test_update_cart_item(
+        self, api_client, test_active_user, multiple_cart_items, multiple_products
+    ):
+        api_client.force_authenticate(test_active_user)
+
+        cart_item = test_active_user.cart.cartitem_set.first()
+
+        response = api_client.patch(
+            reverse("carts:cartitem-detail", kwargs={"pk": cart_item.id}),
+            data={"quantity": 1, "product": 4},
+        )
+
+        cart_item.refresh_from_db()
+        assert response.status_code == 200
+        assert cart_item.product.id == 4
+        assert cart_item.cart == test_active_user.cart
