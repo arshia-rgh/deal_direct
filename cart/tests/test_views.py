@@ -20,6 +20,8 @@ class TestCartCreateAPIView:
         assert Cart.objects.all().count() == 1
         assert response.data["products"] == []
         assert response.data["user"] == test_user.id
+        assert Cart.objects.get(user=test_user).user == test_user
+        assert Cart.objects.get(user=test_user).products.count() == 0
 
     def test_create_two_carts(self, api_client, test_user):
         test_user.is_active = True
@@ -99,3 +101,10 @@ class TestCartItemViewSet:
         assert response.data["cart"] == test_user.cart.id
         assert response.data["product"] == 1
         assert Cart.objects.get(user=test_user).products.filter(id=1).exists()
+        assert (
+            Cart.objects.get(user=test_user)
+            .products.get(id=1)
+            .cartitem_set.first()
+            .quantity
+            == 3
+        )
