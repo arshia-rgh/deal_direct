@@ -11,5 +11,5 @@ app_name = "carts"
 urlpatterns = [
     path("", include(router.urls)),
     path("carts/", CartCreateApiView.as_view(), name="cart"),
-    path("carts/<int:pk>/", CartRetrieveDestroyAPIView.as_view(), name="cart-detail"),
+    path("carts/detail/", CartRetrieveDestroyAPIView.as_view(), name="cart-detail"),
 ]
