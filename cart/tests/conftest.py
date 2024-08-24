@@ -41,3 +41,20 @@ def api_client():
 @pytest.fixture
 def test_cart(test_user):
     return Cart.objects.create(user=test_user)
+
+
+@pytest.fixture
+def test_user_2():
+    return User.objects.create_user(
+        username="testuser 2 ",
+        email="test2@gmail.com",
+        password="testpassword12",
+        is_active=True,
+    )
+
+
+@pytest.fixture
+def test_cart_2(test_user_2):
+    return Cart.objects.create(
+        user=test_user_2,
+    )
