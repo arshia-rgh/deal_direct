@@ -25,7 +25,7 @@ INSTALLED_APPS = [
     "accounts.apps.AccountsConfig",
     "products.apps.ProductsConfig",
     "cart.apps.CartConfig",
-    "orders",
+    "orders.apps.OrdersConfig",
     # only for custom commands
     "custom_commands",
 ]
