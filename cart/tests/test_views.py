@@ -1,3 +1,5 @@
+from itertools import product
+
 import pytest
 from django.core.cache import cache
 from django.urls import reverse
@@ -149,3 +151,22 @@ class TestCartItemViewSet:
         assert response.data["quantity"] == cart_item.quantity
         assert response.data["cart"] == cart_item.cart.id
         assert cart_item.cart.user == test_active_user
+
+    def test_retrieve_another_user_cart_item(
+        self, api_client, test_active_user, test_user_2, test_cart_2
+    ):
+        api_client.force_authenticate(test_active_user)
+        product_obj = baker.make(Product)
+        cart_item_for_another_user = CartItem.objects.create(
+            cart=test_cart_2, product=product_obj, quantity=2
+        )
+
+        with pytest.raises(Exception):
+            response = api_client.get(
+                reverse(
+                    "carts:cartitem-detail",
+                    kwargs={"pk": cart_item_for_another_user.id},
+                )
+            )
+
+            assert response.status_code == 400
