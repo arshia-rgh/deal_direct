@@ -1,6 +1,18 @@
 from django.db import models
+
+from accounts.models import User
+from cart.models import Cart
+from products.models import Product
 from utils.base_model import BaseModel
 
 
 class Order(BaseModel):
-    pass
+    class OrderStatusChoices(models.TextChoices):
+        pending = ("P", "Pending")
+        completed = ("C", "Completed")
+
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="order")
+    cart = models.OneToOneField(to=Cart, on_delete=models.CASCADE, related_name="order")
+    status = models.CharField(
+        default=OrderStatusChoices.pending, choices=OrderStatusChoices.choices
+    )
