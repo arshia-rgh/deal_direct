@@ -10,11 +10,12 @@ class Order(BaseModel):
     class OrderStatusChoices(models.TextChoices):
         pending = ("P", "Pending")
         completed = ("C", "Completed")
+        waiting_for_payment = ("W", "Waiting For Payment")
 
     cart = models.OneToOneField(to=Cart, on_delete=models.CASCADE, related_name="order")
     status = models.CharField(
         max_length=255,
-        default=OrderStatusChoices.pending,
+        default=OrderStatusChoices.waiting_for_payment,
         choices=OrderStatusChoices.choices,
     )
 
