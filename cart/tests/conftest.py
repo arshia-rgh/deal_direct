@@ -7,11 +7,12 @@ from rest_framework.test import APIClient
 
 
 @pytest.fixture
-def test_user():
+def test_active_user():
     return User.objects.create_user(
         username="testuser",
         email="test@gmail.com",
         password="testpassword12",
+        is_active=True,
     )
 
 

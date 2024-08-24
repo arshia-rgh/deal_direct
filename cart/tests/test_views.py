@@ -1,3 +1,5 @@
+from django.core.cache import cache
+
 import pytest
 from django.urls import reverse
 from model_bakery import baker
@@ -131,3 +133,32 @@ class TestCartItemViewSet:
         assert len(response.data) == 5
 
         assert len(Cart.objects.get(user=test_user).products.all()) == 5
+
+    def test_cache_list(self, api_client, test_user, multiple_products, test_cart):
+        cache_key = "cart_items_list"
+        cache.delete(cache_key)
+
+        cache_response = cache.get(cache_key)
+        assert cache_response is None
+
+        test_user.is_active = True
+        test_user.save()
+
+        api_client.force_authenticate(test_user)
+
+        # add some cart items to the test_user cart
+        for product in multiple_products[:5]:
+            response = api_client.post(
+                reverse("carts:cartitem-list"),
+                data={"product": product.id, "quantity": 3},
+            )
+            assert response.status_code == 201
+
+        response = api_client.get(reverse("carts:cartitem-list"))
+
+        assert response.status_code == 200
+
+        cache_response = cache.get(cache_key)
+
+        assert cache_response is not None
+        assert len(cache_response) == 5
