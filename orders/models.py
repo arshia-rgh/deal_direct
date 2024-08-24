@@ -19,6 +19,14 @@ class Order(BaseModel):
     )
 
     @property
+    def user(self):
+        return self.cart.user
+
+    @property
+    def products(self):
+        return [item.product for item in self.cart.cartitem_set.all()]
+
+    @property
     def total_price(self):
         items = self.cart.cartitem_set.all()
 
