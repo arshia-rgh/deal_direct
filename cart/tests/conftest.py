@@ -2,6 +2,7 @@ import pytest
 
 from accounts.models import User
 from products.models import Product, Category
+from rest_framework.test import APIClient
 
 
 @pytest.fixture
@@ -29,3 +30,8 @@ def test_product(test_category, test_user):
         category=test_category,
         uploaded_by=test_user,
     )
+
+
+@pytest.fixture
+def api_client():
+    return APIClient()
