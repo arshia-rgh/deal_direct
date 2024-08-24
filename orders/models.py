@@ -8,7 +8,7 @@ from utils.base_model import BaseModel
 
 class Order(BaseModel):
     class OrderStatusChoices(models.TextChoices):
-        pending = ("P", "Pending")
+        sending = ("S", "Sending")
         completed = ("C", "Completed")
         waiting_for_payment = ("W", "Waiting For Payment")
 
