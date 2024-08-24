@@ -16,3 +16,14 @@ class Order(BaseModel):
     status = models.CharField(
         default=OrderStatusChoices.pending, choices=OrderStatusChoices.choices
     )
+
+    @property
+    def total_price(self):
+        items = self.cart.cartitem_set.all()
+
+        total = 0
+
+        for item in items:
+            total += item.product.price * item.quantity
+
+        return total
