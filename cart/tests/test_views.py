@@ -44,3 +44,8 @@ class TestCartCreateAPIView:
 
         assert response.status_code == 201
         assert response.data["products"] == []
+
+
+@pytest.mark.django_db
+class TestCartRetrieveDestroyAPIView:
+    pass
