@@ -25,12 +25,12 @@ def test_category():
 
 
 @pytest.fixture
-def test_product(test_category, test_user):
+def test_product(test_category, test_active_user):
     return Product.objects.create(
         name="Test Product",
         price=10.00,
         category=test_category,
-        uploaded_by=test_user,
+        uploaded_by=test_active_user,
     )
 
 

@@ -5,25 +5,8 @@ class IsOwnerOrReadOnly(BasePermission):
     """
     Custom permission to only allow owners of an object to edit it.
 
-    - Any authenticated and active user can have permission to access the view.
     - Only the owner of the object has permission to perform update or delete actions.
     """
-
-    def has_permission(self, request, view):
-        """
-        Check if the request has permission to access the view.
-
-        Args:
-            request (Request): The HTTP request object.
-            view (View): The view object.
-
-        Returns:
-            bool: True if the request has permission, False otherwise.
-        """
-
-        return bool(
-            request.user and request.user.is_authenticated and request.user.is_active
-        )
 
     def has_object_permission(self, request, view, obj):
         # Allow any user to view the product details
