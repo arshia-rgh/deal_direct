@@ -18,3 +18,18 @@ class TestCartCreateAPIView:
         assert Cart.objects.all().count() == 1
         assert response.data["products"] == []
         assert response.data["user"] == test_user.id
+
+    def test_create_two_carts(self, api_client, test_user):
+        test_user.is_active = True
+        test_user.save()
+
+        api_client.force_authenticate(test_user)
+
+        response = api_client.post(reverse("carts:cart"))
+
+        assert response.status_code == 201
+
+        with pytest.raises(Exception):
+            response = api_client.post(reverse("carts:cart"))
+
+            assert response.status_code == 400
