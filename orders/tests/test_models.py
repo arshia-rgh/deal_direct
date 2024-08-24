@@ -15,3 +15,9 @@ class TestOrderModel:
         assert order.total_price == sum(
             item.product.price * item.quantity for item in test_cart.cartitem_set.all()
         )
+
+    def test_order_creation_invalid_data(self):
+        with pytest.raises(Exception):
+            Order.objects.create(cart="invalid cart")
+
+            assert len(Order.objects.all()) == 0
