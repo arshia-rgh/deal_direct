@@ -108,3 +108,26 @@ class TestCartItemViewSet:
             .quantity
             == 3
         )
+
+    def test_get_all_cart_items(
+        self, api_client, test_user, test_cart, multiple_products
+    ):
+        test_user.is_active = True
+        test_user.save()
+
+        api_client.force_authenticate(test_user)
+
+        # add some cart items to the test_user cart
+        for product in multiple_products[:5]:
+            response = api_client.post(
+                reverse("carts:cartitem-list"),
+                data={"product": product.id, "quantity": 3},
+            )
+            assert response.status_code == 201
+
+        response = api_client.get(reverse("carts:cartitem-list"))
+
+        assert response.status_code == 200
+        assert len(response.data) == 5
+
+        assert len(Cart.objects.get(user=test_user).products.all()) == 5
