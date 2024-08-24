@@ -33,3 +33,14 @@ class TestCartCreateAPIView:
             response = api_client.post(reverse("carts:cart"))
 
             assert response.status_code == 400
+
+    def test_create_with_ignored_data(self, api_client, test_user):
+        test_user.is_active = True
+        test_user.save()
+
+        api_client.force_authenticate(test_user)
+
+        response = api_client.post(reverse("carts:cart"), data={"products": 1})
+
+        assert response.status_code == 201
+        assert response.data["products"] == []
