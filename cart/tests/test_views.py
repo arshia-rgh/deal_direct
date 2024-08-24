@@ -76,8 +76,7 @@ class TestCartItemViewSet:
         cart_item_list = []
         for product in multiple_products[:5]:
             cart_item = CartItem.objects.create(
-                cart=test_cart,
-                product=product.id,
+                cart=test_cart, product=product, quantity=3
             )
             cart_item_list.append(cart_item)
 
