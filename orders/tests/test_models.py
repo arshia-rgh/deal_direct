@@ -21,3 +21,15 @@ class TestOrderModel:
             Order.objects.create(cart="invalid cart")
 
             assert len(Order.objects.all()) == 0
+
+    def test_update_order(self, test_cart):
+        order = Order.objects.create(cart=test_cart)
+
+        assert order.status == Order.OrderStatusChoices.pending
+
+        order.status = "C"
+        order.save()
+
+        order.refresh_from_db()
+
+        assert order.status == Order.OrderStatusChoices.completed
