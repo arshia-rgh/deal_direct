@@ -16,6 +16,12 @@ class CartSerializer(serializers.ModelSerializer):
         fields = "__all__"
         read_only_fields = ["user"]
 
+    def validate(self, attrs):
+        request = self.context["request"]
+
+        if Cart.objects.filter(user=request.user):
+            raise serializers.ValidationError("Each user can have one cart at moment")
+
     def create(self, validated_data):
         """
         Create a new Cart instance.
