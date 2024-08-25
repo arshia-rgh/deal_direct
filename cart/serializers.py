@@ -22,6 +22,8 @@ class CartSerializer(serializers.ModelSerializer):
         if Cart.objects.filter(user=request.user):
             raise serializers.ValidationError("Each user can have one cart at moment")
 
+        return attrs
+
     def create(self, validated_data):
         """
         Create a new Cart instance.
