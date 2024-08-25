@@ -75,12 +75,20 @@ class Order(BaseModel):
         return total
 
     def clean(self):
+        """
+        Ensure that the cart is not empty unless the order status is completed.
+        """
+
         if self.status != Order.OrderStatusChoices.completed and self.cart is None:
             raise ValidationError(
                 "Cart cannot be empty unless the order status is completed."
             )
 
     def save(self, **kwargs):
+        """
+        Override the save method to call the clean method before saving.
+        """
+
         self.clean()
 
         super().save(**kwargs)
