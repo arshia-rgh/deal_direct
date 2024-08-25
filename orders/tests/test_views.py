@@ -102,3 +102,8 @@ class TestOrderPayAPIView:
 
         assert response.status_code == 400
         assert response.data["error"] == "Insufficient wallet balance"
+
+
+@pytest.mark.django_db
+class TestOrderRetrieveDestroyAPIView:
+    pass
