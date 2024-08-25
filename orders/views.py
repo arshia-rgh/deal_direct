@@ -62,7 +62,7 @@ class OrderPayAPIView(ThrottleMixin, APIView):
 
         if order.total_price <= user.wallet:
             # payment successfully
-            update_wallet_balance.delay(-order.total_price)
+            update_wallet_balance.delay(user.id, -order.total_price)
 
             order.status = Order.OrderStatusChoices.sending
             order.save()

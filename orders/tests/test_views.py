@@ -43,4 +43,18 @@ class TestOrderCreateAPIView:
 
 @pytest.mark.django_db
 class TestOrderPayAPIView:
-    pass
+    def test_pay_successfully(self, api_client, test_active_user, test_order):
+        test_active_user.wallet = 90.00
+        test_active_user.save()
+
+        assert test_order.total_price == 80.00
+
+        api_client.force_authenticate(test_active_user)
+
+        response = api_client.get(reverse("orders:order-pay"))
+
+        assert response.status_code == 200
+        assert (
+            response.data["message"]
+            == "Payment was successful, Your order will be delivered in 7 days"
+        )
