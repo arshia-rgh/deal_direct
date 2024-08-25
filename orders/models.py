@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from accounts.models import User
@@ -72,3 +73,14 @@ class Order(BaseModel):
             total += item.product.price * item.quantity
 
         return total
+
+    def clean(self):
+        if self.status != Order.OrderStatusChoices.completed and self.cart is None:
+            raise ValidationError(
+                "Cart cannot be empty unless the order status is completed."
+            )
+
+    def save(self, **kwargs):
+        self.clean()
+
+        super().save(**kwargs)
