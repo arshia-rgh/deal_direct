@@ -29,25 +29,6 @@ def test_cart(test_active_user):
 
 
 @pytest.fixture
-def multiple_products():
-    products = []
-    for _ in range(5):
-        product = baker.make(Product)
-        products.append(product)
-    return products
-
-
-@pytest.fixture
-def multiple_cart_items(multiple_products, test_cart):
-    cart_item_list = []
-    for product in multiple_products:
-        cart_item = CartItem.objects.create(cart=test_cart, product=product, quantity=3)
-        cart_item_list.append(cart_item)
-
-    return cart_item_list
-
-
-@pytest.fixture
 def test_order(test_active_user):
     cart = Cart.objects.create(user=test_active_user)
     product_1 = baker.make(Product, price=10.00)
