@@ -120,3 +120,12 @@ class TestOrderRetrieveDestroyAPIView:
         response = api_client.delete(reverse("orders:order-detail"))
 
         assert response.status_code == 404
+
+    def test_retrieve_order(self, api_client, test_active_user, test_order):
+        api_client.force_authenticate(test_active_user)
+
+        response = api_client.get(reverse("orders:order-detail"))
+
+        assert response.status_code == 200
+        assert response.data["cart"] == test_active_user.cart.id
+        assert response.data["status"] == test_order.status
