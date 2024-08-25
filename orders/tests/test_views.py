@@ -1,6 +1,8 @@
 import pytest
 from django.urls import reverse
 
+from orders.models import Order
+
 
 @pytest.mark.django_db
 class TestOrderCreateAPIView:
@@ -26,3 +28,14 @@ class TestOrderCreateAPIView:
         response = api_client.post(reverse("orders:order-create"))
 
         assert response.status_code == 401
+
+    def test_user_cannot_create_order_if_order_exists(
+        self, api_client, test_active_user, test_cart
+    ):
+        api_client.force_authenticate(test_active_user)
+
+        Order.objects.create(cart=test_cart)
+
+        response = api_client.post(reverse("orders:order-create"))
+
+        assert response.status_code == 400
