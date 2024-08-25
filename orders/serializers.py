@@ -34,7 +34,10 @@ class OrderSerializer(serializers.ModelSerializer):
         """
 
         request = self.context["request"]
-        cart = request.user.cart
+        try:
+            cart = request.user.cart
+        except Exception:
+            raise serializers.ValidationError("The current user doesnt have any carts")
 
         if Order.objects.filter(cart=cart).exists():
             raise serializers.ValidationError("An order already exists for this cart.")
