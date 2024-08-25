@@ -39,3 +39,8 @@ class TestOrderCreateAPIView:
         response = api_client.post(reverse("orders:order-create"))
 
         assert response.status_code == 400
+
+
+@pytest.mark.django_db
+class TestOrderPayAPIView:
+    pass
