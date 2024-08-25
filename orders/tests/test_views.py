@@ -1,6 +1,7 @@
 import pytest
 from django.urls import reverse
 
+from accounts.tests.conftest import api_client
 from orders.models import Order
 
 
@@ -58,3 +59,11 @@ class TestOrderPayAPIView:
             response.data["message"]
             == "Payment was successful, Your order will be delivered in 7 days"
         )
+
+    def test_pay_without_any_order_created(self, api_client, test_active_user):
+        api_client.force_authenticate(test_active_user)
+
+        response = api_client.get(reverse("orders:order-pay"))
+
+        assert response.status_code == 404
+        assert response.data["error"] == "Order not found, Create One first "
