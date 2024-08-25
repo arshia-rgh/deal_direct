@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from accounts.models import User
@@ -24,7 +25,9 @@ class Order(BaseModel):
         completed = ("C", "Completed")
         waiting_for_payment = ("W", "Waiting For Payment")
 
-    cart = models.OneToOneField(to=Cart, on_delete=models.CASCADE, related_name="order")
+    cart = models.OneToOneField(
+        to=Cart, on_delete=models.CASCADE, related_name="order", blank=True, null=True
+    )
     status = models.CharField(
         max_length=255,
         default=OrderStatusChoices.waiting_for_payment,
@@ -70,3 +73,22 @@ class Order(BaseModel):
             total += item.product.price * item.quantity
 
         return total
+
+    def clean(self):
+        """
+        Ensure that the cart is not empty unless the order status is completed.
+        """
+
+        if self.status != Order.OrderStatusChoices.completed and self.cart is None:
+            raise ValidationError(
+                "Cart cannot be empty unless the order status is completed."
+            )
+
+    def save(self, **kwargs):
+        """
+        Override the save method to call the clean method before saving.
+        """
+
+        self.clean()
+
+        super().save(**kwargs)

@@ -27,6 +27,7 @@
 - [Code Formatting](#code-formatting)
   - [Pre-commit Hooks](#pre-commit-hooks)
 - [Usage](#usage)
+- [Testing](#testing)
 
 ***------------------------------------------------***
 ## Endpoints
@@ -103,3 +104,18 @@ cp sample.env .env
 ```bash
 python manage.py runserver
 ```
+
+***------------------------------------------------***
+
+## Testing
+This project aims to achieve over 95% test coverage.
+
+All tests are written using **`pytest`**.
+
+To run the tests and see the coverage report, use the following command:
+
+```bash
+pytest --cov --cov-config=.coveragerc
+```
+
+**this command will exclude **`custom_commands`** directory from testing**

@@ -1,3 +1,4 @@
+from django.http import Http404
 from rest_framework import viewsets
 from rest_framework.generics import RetrieveDestroyAPIView, CreateAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -38,8 +39,10 @@ class CartRetrieveDestroyAPIView(ThrottleMixin, RetrieveDestroyAPIView):
         Returns:
             Cart: The cart instance for the current user.
         """
-
-        return Cart.objects.get(user=self.request.user)
+        try:
+            return Cart.objects.get(user=self.request.user)
+        except Cart.DoesNotExist:
+            raise Http404("You dont have any carts yet")
 
 
 class CartItemViewSet(ListCacheMixin, ThrottleMixin, viewsets.ModelViewSet):
@@ -62,5 +65,7 @@ class CartItemViewSet(ListCacheMixin, ThrottleMixin, viewsets.ModelViewSet):
         Returns:
             QuerySet: The queryset of cart items for the current user's cart.
         """
-
-        return CartItem.objects.filter(cart=self.request.user.cart)
+        try:
+            return CartItem.objects.filter(cart=self.request.user.cart)
+        except CartItem.DoesNotExist:
+            raise Http404("Your cart doesnt contain any items")

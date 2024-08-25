@@ -1,3 +1,4 @@
+from django.http import Http404
 from rest_framework import generics
 from rest_framework import status
 from rest_framework.generics import CreateAPIView
@@ -62,7 +63,7 @@ class OrderPayAPIView(ThrottleMixin, APIView):
 
         if order.total_price <= user.wallet:
             # payment successfully
-            update_wallet_balance.delay(-order.total_price)
+            update_wallet_balance.delay(user.id, -order.total_price)
 
             order.status = Order.OrderStatusChoices.sending
             order.save()
@@ -110,4 +111,7 @@ class OrderRetrieveDestroyAPIView(ThrottleMixin, generics.RetrieveDestroyAPIView
         It uses the `OrderSerializer` to serialize the order data.
         """
 
-        return Order.objects.get(cart__user=self.request.user)
+        try:
+            return Order.objects.get(cart__user=self.request.user)
+        except Order.DoesNotExist:
+            raise Http404("Order does not exist")
