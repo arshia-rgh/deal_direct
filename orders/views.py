@@ -26,7 +26,8 @@ class OrderPayAPIView(ThrottleMixin, APIView):
             order = Order.objects.get(cart__user=user)
         except Order.DoesNotExist:
             return Response(
-                {"error": "Order not found"}, status=status.HTTP_404_NOT_FOUND
+                {"error": "Order not found, Create One first "},
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         if order.total_price <= user.wallet:
