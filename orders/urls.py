@@ -6,5 +6,5 @@ app_name = "orders"
 urlpatterns = [
     path("create/", OrderCreateAPIView.as_view(), name="order-create"),
     path("pay/", OrderPayAPIView.as_view(), name="order-pay"),
-    path("<int:pk>/", OrderRetrieveDestroyAPIView.as_view(), name="order-detail"),
+    path("detail/", OrderRetrieveDestroyAPIView.as_view(), name="order-detail"),
 ]

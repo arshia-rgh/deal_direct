@@ -106,4 +106,10 @@ class TestOrderPayAPIView:
 
 @pytest.mark.django_db
 class TestOrderRetrieveDestroyAPIView:
-    pass
+    def test_delete_order_successfully(self, api_client, test_order, test_active_user):
+        api_client.force_authenticate(test_active_user)
+
+        response = api_client.delete(reverse("orders:order-detail"))
+
+        assert response.status_code == 204
+        assert not Order.objects.filter(id=test_order.id).exists()
