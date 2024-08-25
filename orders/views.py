@@ -10,6 +10,7 @@ from orders.models import Order
 from orders.serializers import OrderSerializer
 from orders.tasks import delete_cart_after_7_days
 from products.mixins import ThrottleMixin
+from .permissions import OrderIsOwnerPermission
 
 
 class OrderCreateAPIView(ThrottleMixin, CreateAPIView):
@@ -18,7 +19,7 @@ class OrderCreateAPIView(ThrottleMixin, CreateAPIView):
 
 
 class OrderPayAPIView(ThrottleMixin, APIView):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, OrderIsOwnerPermission)
 
     def get(self, request, *args, **kwargs):
         user = request.user
@@ -64,6 +65,7 @@ class OrderPayAPIView(ThrottleMixin, APIView):
 
 class OrderRetrieveDestroyAPIView(ThrottleMixin, generics.RetrieveDestroyAPIView):
     serializer_class = OrderSerializer
+    permission_classes = (IsAuthenticated, OrderIsOwnerPermission)
 
     def get_object(self):
         return Order.objects.get(cart__user=self.request.user)
