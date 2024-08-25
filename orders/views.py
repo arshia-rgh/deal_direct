@@ -62,7 +62,7 @@ class OrderPayAPIView(ThrottleMixin, APIView):
         )
 
 
-class OrderRetrieveDestroyAPIView(generics.RetrieveDestroyAPIView):
+class OrderRetrieveDestroyAPIView(ThrottleMixin, generics.RetrieveDestroyAPIView):
     serializer_class = OrderSerializer
 
     def get_object(self):
