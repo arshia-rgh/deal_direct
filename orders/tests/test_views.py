@@ -1,6 +1,5 @@
-from django.urls import reverse
-
 import pytest
+from django.urls import reverse
 
 
 @pytest.mark.django_db
@@ -14,3 +13,11 @@ class TestOrderCreateAPIView:
 
         assert response.data["cart"] == test_cart.id
         assert response.data["status"] == "W"
+
+    def test_create_user_with_no_cart(self, api_client, test_active_user):
+        api_client.force_authenticate(test_active_user)
+
+        response = api_client.post(reverse("orders:order-create"))
+        print(response.data)
+
+        assert response.status_code == 400
