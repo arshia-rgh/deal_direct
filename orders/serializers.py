@@ -39,6 +39,8 @@ class OrderSerializer(serializers.ModelSerializer):
         if Order.objects.filter(cart=cart).exists():
             raise serializers.ValidationError("An order already exists for this cart.")
 
+        return data
+
     def create(self, validated_data):
         """
         Create a new order instance.
