@@ -28,10 +28,9 @@ class TestCartCreateAPIView:
 
         assert response.status_code == 201
 
-        with pytest.raises(Exception):
-            response = api_client.post(reverse("carts:cart"))
+        response = api_client.post(reverse("carts:cart"))
 
-            assert response.status_code == 400
+        assert response.status_code == 400
 
     def test_create_with_ignored_data(self, api_client, test_active_user):
         api_client.force_authenticate(test_active_user)
