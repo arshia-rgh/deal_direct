@@ -21,3 +21,8 @@ class TestOrderCreateAPIView:
         print(response.data)
 
         assert response.status_code == 400
+
+    def test_unauthenticated_user_cannot_create_order(self, api_client):
+        response = api_client.post(reverse("orders:order-create"))
+
+        assert response.status_code == 401
