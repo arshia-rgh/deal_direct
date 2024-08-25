@@ -13,5 +13,5 @@ def delete_cart_after_7_days(order_id):
         cart.delete()
         order.status = Order.OrderStatusChoices.completed
         order.save()
-    except Order.DoesNotExist():
+    except Order.DoesNotExist:
         pass

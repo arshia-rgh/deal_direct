@@ -24,7 +24,9 @@ class Order(BaseModel):
         completed = ("C", "Completed")
         waiting_for_payment = ("W", "Waiting For Payment")
 
-    cart = models.OneToOneField(to=Cart, on_delete=models.CASCADE, related_name="order")
+    cart = models.OneToOneField(
+        to=Cart, on_delete=models.CASCADE, related_name="order", blank=True, null=True
+    )
     status = models.CharField(
         max_length=255,
         default=OrderStatusChoices.waiting_for_payment,

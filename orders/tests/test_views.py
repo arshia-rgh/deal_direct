@@ -3,7 +3,9 @@ from django.urls import reverse
 
 from accounts.tasks import update_wallet_balance
 from accounts.tests.conftest import api_client
+from cart.models import Cart
 from orders.models import Order
+from orders.tasks import delete_cart_after_7_days
 
 
 @pytest.mark.django_db
@@ -61,6 +63,7 @@ class TestOrderPayAPIView:
             == "Payment was successful, Your order will be delivered in 7 days"
         )
 
+        # call update balance manually
         update_wallet_balance(test_active_user.id, -test_order.total_price)
 
         test_order.refresh_from_db()
@@ -68,6 +71,14 @@ class TestOrderPayAPIView:
 
         assert test_active_user.wallet == 10.00
         assert test_order.status == Order.OrderStatusChoices.sending
+
+        # manually call the task (here will be done now no need 7 days to test)
+        delete_cart_after_7_days(order_id=test_order.id)
+        test_order.refresh_from_db()
+
+        assert test_order.cart is None
+        assert test_order.status == "C"
+        assert not Cart.objects.filter(user=test_active_user).exists()
 
     def test_pay_without_any_order_created(self, api_client, test_active_user):
         api_client.force_authenticate(test_active_user)
