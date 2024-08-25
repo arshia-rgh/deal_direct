@@ -64,3 +64,6 @@ class OrderPayAPIView(ThrottleMixin, APIView):
 
 class OrderRetrieveDestroyAPIView(generics.RetrieveDestroyAPIView):
     serializer_class = OrderSerializer
+
+    def get_object(self):
+        return Order.objects.get(cart__user=self.request.user)
