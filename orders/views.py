@@ -14,14 +14,42 @@ from .permissions import OrderIsOwnerPermission
 
 
 class OrderCreateAPIView(ThrottleMixin, CreateAPIView):
+    """
+    API view to create an order.
+
+    This view allows authenticated users to create a new order.
+    It uses the `OrderSerializer` to validate and save the order data.
+    """
+
     serializer_class = OrderSerializer
     permission_classes = (IsAuthenticated,)
 
 
 class OrderPayAPIView(ThrottleMixin, APIView):
+    """
+    API view to handle order payment.
+
+    This view allows authenticated users to pay for an order.
+    It checks if the user has sufficient wallet balance to pay for the order.
+    If the payment is successful, it updates the order status and schedules
+    a task to delete the cart after 7 days.
+    """
+
     permission_classes = (IsAuthenticated, OrderIsOwnerPermission)
 
     def get(self, request, *args, **kwargs):
+        """
+        Handle GET request to pay for an order.
+
+        Args:
+            request (Request): The HTTP request object.
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+
+        Returns:
+            Response: The HTTP response with the payment status.
+        """
+
         user = request.user
 
         try:
@@ -64,8 +92,22 @@ class OrderPayAPIView(ThrottleMixin, APIView):
 
 
 class OrderRetrieveDestroyAPIView(ThrottleMixin, generics.RetrieveDestroyAPIView):
+    """
+    API view to retrieve or destroy an order.
+
+    This view allows authenticated users to retrieve or delete their order.
+    It uses the `OrderSerializer` to serialize the order data.
+    """
+
     serializer_class = OrderSerializer
     permission_classes = (IsAuthenticated, OrderIsOwnerPermission)
 
     def get_object(self):
+        """
+        API view to retrieve or destroy an order.
+
+        This view allows authenticated users to retrieve or delete their order.
+        It uses the `OrderSerializer` to serialize the order data.
+        """
+
         return Order.objects.get(cart__user=self.request.user)
