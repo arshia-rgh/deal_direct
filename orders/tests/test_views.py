@@ -1,6 +1,7 @@
 import pytest
 from django.urls import reverse
 
+from accounts.tasks import update_wallet_balance
 from accounts.tests.conftest import api_client
 from orders.models import Order
 
@@ -59,6 +60,14 @@ class TestOrderPayAPIView:
             response.data["message"]
             == "Payment was successful, Your order will be delivered in 7 days"
         )
+
+        update_wallet_balance(test_active_user.id, -test_order.total_price)
+
+        test_order.refresh_from_db()
+        test_active_user.refresh_from_db()
+
+        assert test_active_user.wallet == 10.00
+        assert test_order.status == Order.OrderStatusChoices.sending
 
     def test_pay_without_any_order_created(self, api_client, test_active_user):
         api_client.force_authenticate(test_active_user)
