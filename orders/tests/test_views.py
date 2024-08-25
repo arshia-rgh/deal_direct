@@ -67,3 +67,18 @@ class TestOrderPayAPIView:
 
         assert response.status_code == 404
         assert response.data["error"] == "Order not found, Create One first "
+
+    def test_pay_with_insufficient_wallet_balance(
+        self, api_client, test_active_user, test_order
+    ):
+        test_active_user.wallet = 70.00
+        test_active_user.save()
+
+        assert test_order.total_price == 80.00
+
+        api_client.force_authenticate(test_active_user)
+
+        response = api_client.get(reverse("orders:order-pay"))
+
+        assert response.status_code == 400
+        assert response.data["error"] == "Insufficient wallet balance"
