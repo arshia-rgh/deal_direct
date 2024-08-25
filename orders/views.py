@@ -1,3 +1,4 @@
+from django.http import Http404
 from rest_framework import generics
 from rest_framework import status
 from rest_framework.generics import CreateAPIView
@@ -110,4 +111,7 @@ class OrderRetrieveDestroyAPIView(ThrottleMixin, generics.RetrieveDestroyAPIView
         It uses the `OrderSerializer` to serialize the order data.
         """
 
-        return Order.objects.get(cart__user=self.request.user)
+        try:
+            return Order.objects.get(cart__user=self.request.user)
+        except Order.DoesNotExist:
+            raise Http404("Order does not exist")

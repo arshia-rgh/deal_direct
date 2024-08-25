@@ -113,3 +113,10 @@ class TestOrderRetrieveDestroyAPIView:
 
         assert response.status_code == 204
         assert not Order.objects.filter(id=test_order.id).exists()
+
+    def test_delete_order_without_any_order(self, api_client, test_active_user):
+        api_client.force_authenticate(test_active_user)
+
+        response = api_client.delete(reverse("orders:order-detail"))
+
+        assert response.status_code == 404
