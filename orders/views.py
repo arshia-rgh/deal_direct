@@ -1,9 +1,10 @@
+from rest_framework import generics
 from rest_framework import status
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import generics
+
 from accounts.tasks import update_wallet_balance
 from orders.models import Order
 from orders.serializers import OrderSerializer
@@ -31,14 +32,24 @@ class OrderPayAPIView(ThrottleMixin, APIView):
             )
 
         if order.total_price <= user.wallet:
+            # payment successfully
             update_wallet_balance.delay(-order.total_price)
 
             order.status = Order.OrderStatusChoices.sending
             order.save()
 
+            # products delivered successfully
             delete_cart_after_7_days.apply_async(
                 (order.id,), countdown=7 * 24 * 60 * 60
             )
+
+            # update all sellers wallet balance
+            for item in order.cart.cartitem_set.all():
+                item.product.bought_by = request.user
+                product_owner = item.product.uploaded_by
+                update_wallet_balance(
+                    product_owner.id, item.product.price * item.quantity
+                )
 
             return Response(
                 {
