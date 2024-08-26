@@ -23,12 +23,26 @@ services:
       POSTGRES_PORT: ${DB_PORT}
 
   celery:
-    image: celery:latest
+    build: .
+    command: celery -A config worker --loglevel=info
+    volumes:
+      - .:/app
+    env_file:
+      - .env
     environment:
       CELERY_BROKER_URL: ${CELERY_BROKER_URL}
       CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND}
+
     depends_on:
+      - db
+      - rabbitmq
       - redis
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5673:5672"
+      - "15672:15672"
 
   redis:
     image: redis:latest

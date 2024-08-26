@@ -106,6 +106,7 @@ celerybeat.pid
 
 # Environments
 .env
+.production_env
 .venv
 env/
 venv/
@@ -148,10 +149,3 @@ cython_debug/
 Thumbs.db
 media/
 ENDPOINTS.md/
-
-
-
-*.pyc
-
-.git
-.gitignore
