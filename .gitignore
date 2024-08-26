@@ -148,3 +148,10 @@ cython_debug/
 Thumbs.db
 media/
 ENDPOINTS.md/
+
+
+
+*.pyc
+
+.git
+.gitignore
