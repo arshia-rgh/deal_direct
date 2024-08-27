@@ -1,0 +1,59 @@
+services:
+  server:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+      redis:
+        condition: service_started
+    env_file:
+      - .env
+    environment:
+      - CELERY_BROKER_URL=amqp://guest:guest@rabbitmq:5672//
+      - CELERY_RESULT_BACKEND=rpc://
+      - REDIS_URL=redis://redis:6379/0
+
+  db:
+   image: postgres
+   restart: always
+   user: postgres
+   secrets:
+     - db-password
+   volumes:
+     - db-data:/var/lib/postgresql/data
+   environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
+   expose:
+     - 5432
+   healthcheck:
+     test: [ "CMD", "pg_isready" ]
+     interval: 10s
+     timeout: 5s
+     retries: 5
+
+  rabbitmq:
+   image: rabbitmq:3-management
+   ports:
+     - "5672:5672"
+     - "15672:15672"
+   environment:
+     - RABBITMQ_DEFAULT_USER=guest
+     - RABBITMQ_DEFAULT_PASS=guest
+
+  redis:
+   image: redis:alpine
+   ports:
+     - "6379:6379"
+volumes:
+  db-data:
+
+secrets:
+  db-password:
+    file: db/password.txt
