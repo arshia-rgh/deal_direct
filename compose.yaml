@@ -6,54 +6,66 @@ services:
       - "8000:8000"
     depends_on:
       db:
-        condition: service_healthy
+        condition: service_started
       rabbitmq:
         condition: service_started
       redis:
         condition: service_started
     env_file:
       - .env
-    environment:
-      - CELERY_BROKER_URL=amqp://guest:guest@rabbitmq:5672//
-      - CELERY_RESULT_BACKEND=rpc://
-      - REDIS_URL=redis://redis:6379/0
+    networks:
+      - app_network
 
   db:
-   image: postgres
-   restart: always
-   user: postgres
-   secrets:
-     - db-password
-   volumes:
-     - db-data:/var/lib/postgresql/data
-   environment:
+    image: postgres
+    restart: always
+    user: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
-   expose:
-     - 5432
-   healthcheck:
-     test: [ "CMD", "pg_isready" ]
-     interval: 10s
-     timeout: 5s
-     retries: 5
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    expose:
+      - 5432
+    networks:
+      - app_network
+
+
+  celery:
+    build: .
+    command: celery -A config worker --loglevel=info
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    environment:
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND}
+    networks:
+      - app_network
+    depends_on:
+      - db
+      - rabbitmq
 
   rabbitmq:
-   image: rabbitmq:3-management
-   ports:
-     - "5672:5672"
-     - "15672:15672"
-   environment:
-     - RABBITMQ_DEFAULT_USER=guest
-     - RABBITMQ_DEFAULT_PASS=guest
+    image: rabbitmq:3-management
+    restart: always
+    container_name:
+      rabbitmq
+    ports:
+      - "5673:5672"
+      - "15672:15672"
+    networks:
+      - app_network
 
   redis:
-   image: redis:alpine
-   ports:
-     - "6379:6379"
+    image: redis:alpine
+    ports:
+      - "6380:6380"
 volumes:
   db-data:
 
-secrets:
-  db-password:
-    file: db/password.txt
+networks:
+  app_network:
+    driver: bridge

@@ -149,3 +149,4 @@ cython_debug/
 Thumbs.db
 media/
 ENDPOINTS.md/
+.dev.env
