@@ -9,7 +9,7 @@ services:
         condition: service_started
       rabbitmq:
         condition: service_started
-      redis:
+      cache:
         condition: service_started
     env_file:
       - .env
@@ -59,12 +59,20 @@ services:
     networks:
       - app_network
 
-  redis:
-    image: redis:alpine
+  cache:
+    image: redis:6.2-alpine
+    restart: always
     ports:
-      - "6380:6380"
+      - '6380:6379'
+    volumes:
+      - cache:/data
+    networks:
+      - app_network
+
 volumes:
   db-data:
+  cache:
+    driver: local
 
 networks:
   app_network:

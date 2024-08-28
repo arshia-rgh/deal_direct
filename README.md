@@ -18,12 +18,17 @@
 
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Production-blue)
 
+![Swagger UI](https://img.shields.io/badge/Swagger-Interactive_API_Docs-brightgreen)
+
+![Redoc](https://img.shields.io/badge/Redoc-API_Docs-red)
+
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
 ***------------------------------------------------***
 ## Table of Contents
 - [Endpoints](#endpoints)
 - [ERD](#erd)
+- [API Documentation](#api-documentation)
 - [Code Formatting](#code-formatting)
   - [Pre-commit Hooks](#pre-commit-hooks)
 - [Usage](#usage)
@@ -39,6 +44,19 @@ To see the current endpoints, run the following command:
 python manage.py stdout_endpoints > ENDPOINTS.md
 ```
 ***------------------------------------------------***
+
+## API Documentation
+
+The API documentation is available in two formats:
+
+- **Swagger UI**: Provides an interactive API documentation interface.
+  - URL: `http://127.0.0.1:8000/api/schema/swagger-ui/`
+
+- **Redoc**: Provides a more detailed and customizable API documentation interface.
+  - URL: `http://127.0.0.1:8000/api/schema/redoc/`
+
+***------------------------------------------------***
+
 ## ERD
 checkout the diagram at:
 

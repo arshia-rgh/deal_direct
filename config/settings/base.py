@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_extensions",
     "rest_framework_simplejwt",
+    "drf_spectacular",
     # local apps
     "accounts.apps.AccountsConfig",
     "products.apps.ProductsConfig",
@@ -122,6 +123,7 @@ REST_FRAMEWORK = {
         "rest_framework.throttling.ScopedRateThrottle",
     ],
     "DEFAULT_THROTTLE_RATES": {"receives": "1000/day", "uploads": "40/day"},
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 # JWT
