@@ -27,6 +27,7 @@
 - [Code Formatting](#code-formatting)
   - [Pre-commit Hooks](#pre-commit-hooks)
 - [Usage](#usage)
+  - [Using Docker](#using-docker)
 - [Testing](#testing)
 
 ***------------------------------------------------***
@@ -104,8 +105,16 @@ cp sample.env .env
 ```bash
 python manage.py runserver
 ```
+### Using Docker
 
-***------------------------------------------------***
+To build and run the Docker containers, use the following commands:
+```bash
+docker-compose up --build
+```
+
+This will start all the necessary services defined in the `docker-compose.yml` file.
+
+For more details, refer to the [Dockerfile](Dockerfile) in the project repository.***------------------------------------------------***
 
 ## Testing
 This project aims to achieve over 95% test coverage.
