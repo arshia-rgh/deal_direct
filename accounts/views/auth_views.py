@@ -21,9 +21,10 @@ from accounts.tasks import (
     send_password_reset_email,
     send_email_verification_link,
 )
+from utils.mixins import ThrottleMixin, LoggingMixin
 
 
-class UserRegisterView(generics.CreateAPIView):
+class UserRegisterView(ThrottleMixin, LoggingMixin, generics.CreateAPIView):
     """
     API view for user registration.
 
@@ -66,7 +67,7 @@ class UserRegisterView(generics.CreateAPIView):
         )
 
 
-class VerifyEmailView(APIView):
+class VerifyEmailView(LoggingMixin, APIView):
     """
     View that handles email verification
     """
@@ -108,7 +109,9 @@ class VerifyEmailView(APIView):
             )
 
 
-class UserProfileRetrieveUpdateView(generics.RetrieveUpdateAPIView):
+class UserProfileRetrieveUpdateView(
+    ThrottleMixin, LoggingMixin, generics.RetrieveUpdateAPIView
+):
     """
     API view for retrieving and updating the authenticated user's profile.
 
@@ -130,7 +133,7 @@ class UserProfileRetrieveUpdateView(generics.RetrieveUpdateAPIView):
         return self.request.user
 
 
-class UserPasswordChangeView(generics.UpdateAPIView):
+class UserPasswordChangeView(ThrottleMixin, LoggingMixin, generics.UpdateAPIView):
     """
     API view for changing the authenticated user's password.
 
@@ -173,7 +176,7 @@ class UserPasswordChangeView(generics.UpdateAPIView):
         )
 
 
-class PasswordResetRequestAPIView(APIView):
+class PasswordResetRequestAPIView(ThrottleMixin, LoggingMixin, APIView):
     """
     API view for requesting a password reset.
 
@@ -205,7 +208,7 @@ class PasswordResetRequestAPIView(APIView):
                 )
 
 
-class PasswordResetConfirmAPIView(APIView):
+class PasswordResetConfirmAPIView(ThrottleMixin, LoggingMixin, APIView):
     """
     API view for confirming a password reset.
 
