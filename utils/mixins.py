@@ -56,10 +56,15 @@ class LoggingMixin:
     logger = logging.getLogger(__name__)
 
     def dispatch(self, request, *args, **kwargs):
-        self.logger.info(f"Request: {request.method} {request.get_full_path()}")
+        user = request.user if request.user.is_autenticated else "Anonymous"
+        self.logger.info(
+            f"User: {user}, Request: {request.method} {request.get_full_path()}"
+        )
 
         response = super().dispatch(request, *args, **kwargs)
 
-        self.logger.info(f"Response: {response.status_code} {response.data}")
+        self.logger.info(
+            f"User: {user}, Response: {response.status_code} {response.data}"
+        )
 
         return response
