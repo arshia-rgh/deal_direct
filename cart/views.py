@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from cart.models import CartItem, Cart
 from cart.permissions import IsOwner, IsOwnerCartItem
 from cart.serializers import CartItemSerializer, CartSerializer
-from products.mixins import ListCacheMixin, ThrottleMixin
+from utils.mixins import ListCacheMixin, ThrottleMixin
 
 
 class CartCreateApiView(ThrottleMixin, CreateAPIView):

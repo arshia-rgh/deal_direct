@@ -10,7 +10,7 @@ from accounts.tasks import update_wallet_balance
 from orders.models import Order
 from orders.serializers import OrderSerializer
 from orders.tasks import delete_cart_after_7_days
-from products.mixins import ThrottleMixin
+from utils.mixins import ThrottleMixin
 from .permissions import OrderIsOwnerPermission
 
 

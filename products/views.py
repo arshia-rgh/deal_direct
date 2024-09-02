@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from products.models import Product, Category
 from products.serializers import ProductSerializer, CategorySerializer
-from .mixins import ListCacheMixin, ThrottleMixin
+from utils.mixins import ListCacheMixin, ThrottleMixin
 from .permissions import IsOwnerOrReadOnly, IsAdminUserOrReadOnly
 
 
