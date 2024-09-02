@@ -5,11 +5,12 @@ from rest_framework.views import APIView
 
 from accounts.serializers import IncreaseWalletSerializer
 from accounts.tasks import update_wallet_balance
+from utils.mixins import ThrottleMixin, LoggingMixin
 from .zarinpal import send_request, verify
 from ..permissions import IsAuthenticatedAndActive
 
 
-class IncreaseWalletAPIView(APIView):
+class IncreaseWalletAPIView(ThrottleMixin, LoggingMixin, APIView):
     """
     API view for increasing the user's wallet balance.
 
@@ -55,7 +56,7 @@ class IncreaseWalletAPIView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class VerifyDepositAPIView(APIView):
+class VerifyDepositAPIView(ThrottleMixin, LoggingMixin, APIView):
     """
     API view for verifying a wallet deposit.
 

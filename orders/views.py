@@ -10,11 +10,11 @@ from accounts.tasks import update_wallet_balance
 from orders.models import Order
 from orders.serializers import OrderSerializer
 from orders.tasks import delete_cart_after_7_days
-from products.mixins import ThrottleMixin
+from utils.mixins import ThrottleMixin, LoggingMixin
 from .permissions import OrderIsOwnerPermission
 
 
-class OrderCreateAPIView(ThrottleMixin, CreateAPIView):
+class OrderCreateAPIView(ThrottleMixin, LoggingMixin, CreateAPIView):
     """
     API view to create an order.
 
@@ -26,7 +26,7 @@ class OrderCreateAPIView(ThrottleMixin, CreateAPIView):
     permission_classes = (IsAuthenticated,)
 
 
-class OrderPayAPIView(ThrottleMixin, APIView):
+class OrderPayAPIView(ThrottleMixin, LoggingMixin, APIView):
     """
     API view to handle order payment.
 
@@ -92,7 +92,9 @@ class OrderPayAPIView(ThrottleMixin, APIView):
         )
 
 
-class OrderRetrieveDestroyAPIView(ThrottleMixin, generics.RetrieveDestroyAPIView):
+class OrderRetrieveDestroyAPIView(
+    ThrottleMixin, LoggingMixin, generics.RetrieveDestroyAPIView
+):
     """
     API view to retrieve or destroy an order.
 
