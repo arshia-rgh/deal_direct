@@ -6,10 +6,10 @@ from rest_framework.permissions import IsAuthenticated
 from cart.models import CartItem, Cart
 from cart.permissions import IsOwner, IsOwnerCartItem
 from cart.serializers import CartItemSerializer, CartSerializer
-from utils.mixins import ListCacheMixin, ThrottleMixin
+from utils.mixins import ListCacheMixin, ThrottleMixin, LoggingMixin
 
 
-class CartCreateApiView(ThrottleMixin, CreateAPIView):
+class CartCreateApiView(ThrottleMixin, LoggingMixin, CreateAPIView):
     """
     API view to create a new cart.
 
@@ -21,7 +21,7 @@ class CartCreateApiView(ThrottleMixin, CreateAPIView):
     permission_classes = (IsAuthenticated,)
 
 
-class CartRetrieveDestroyAPIView(ThrottleMixin, RetrieveDestroyAPIView):
+class CartRetrieveDestroyAPIView(ThrottleMixin, LoggingMixin, RetrieveDestroyAPIView):
     """
     API view to retrieve or destroy a cart.
 
@@ -45,7 +45,9 @@ class CartRetrieveDestroyAPIView(ThrottleMixin, RetrieveDestroyAPIView):
             raise Http404("You dont have any carts yet")
 
 
-class CartItemViewSet(ListCacheMixin, ThrottleMixin, viewsets.ModelViewSet):
+class CartItemViewSet(
+    ListCacheMixin, ThrottleMixin, LoggingMixin, viewsets.ModelViewSet
+):
     """
     ViewSet for managing cart items.
 
