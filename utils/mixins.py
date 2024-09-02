@@ -1,3 +1,5 @@
+import logging
+
 from django.core.cache import cache
 from rest_framework.response import Response
 from rest_framework.throttling import ScopedRateThrottle
@@ -51,4 +53,13 @@ class ThrottleMixin:
 
 
 class LoggingMixin:
-    pass
+    logger = logging.getLogger(__name__)
+
+    def dispatch(self, request, *args, **kwargs):
+        self.logger.info(f"Request: {request.method} {request.get_full_path()}")
+
+        response = super().dispatch(request, *args, **kwargs)
+
+        self.logger.info(f"Response: {response.status_code} {response.data}")
+
+        return response
