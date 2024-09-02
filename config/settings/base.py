@@ -166,7 +166,7 @@ LOGGING = {
         "console": {"class": "logging.StreamHandler"},
         "file": {
             "class": "logging.FileHandler",
-            "filename": "general.log",
+            "filename": os.path.join(BASE_DIR, "logs", "general.log"),
             "formatter": "verbose",
         },
     },
