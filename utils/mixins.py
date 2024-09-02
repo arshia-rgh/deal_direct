@@ -48,3 +48,7 @@ class ThrottleMixin:
         else:
             self.throttle_scope = "receives"
         return [ScopedRateThrottle()]
+
+
+class LoggingMixin:
+    pass
