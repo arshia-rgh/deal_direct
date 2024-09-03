@@ -1,4 +1,5 @@
 import pytest
+from django.contrib.sessions.models import Session
 from django.urls import reverse
 
 
@@ -23,4 +24,27 @@ class TestSessionListView:
 
 @pytest.mark.django_db
 class TestSessionLogoutView:
-    pass
+    def test_logout_session_successful(self, api_client, active_user):
+        api_client.login(username="testuser", password="testpassword12")
+
+        session = api_client.session
+        session.save()
+
+        assert len(Session.objects.all()) == 1
+
+        # check session data
+        session_instance = Session.objects.get(session_key=session.session_key)
+
+        session_data = session_instance.get_decoded()
+
+        assert session_data["_auth_user_id"] == "1"
+        # end of check session data
+
+        response = api_client.delete(
+            reverse("accounts:session_logout", args=(session.session_key,))
+        )
+
+        assert response.status_code == 200
+        assert response.data["message"] == "Session logged out successfully"
+
+        assert len(Session.objects.all()) == 0
