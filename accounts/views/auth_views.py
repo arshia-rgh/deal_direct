@@ -238,7 +238,3 @@ class PasswordResetConfirmAPIView(ThrottleMixin, LoggingMixin, APIView):
                     status=status.HTTP_200_OK,
                 )
         return Response({"error": "Invalid link"}, status=status.HTTP_400_BAD_REQUEST)
-
-
-class SessionListView(generics.ListAPIView):
-    pass
