@@ -166,11 +166,11 @@ class UserPasswordChangeView(ThrottleMixin, LoggingMixin, generics.UpdateAPIView
         Returns:
             Response: A response object containing a success message and HTTP status code 200.
         """
-        self.object = self.get_object()
+        user_object = self.get_object()
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        self.object.set_password(serializer.validated_data["password"])
-        self.object.save()
+        user_object.set_password(serializer.validated_data["password"])
+        user_object.save()
         return Response(
             {"message": "Password changed successfully"}, status=status.HTTP_200_OK
         )
