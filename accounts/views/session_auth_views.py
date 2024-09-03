@@ -10,9 +10,30 @@ from utils.mixins import ThrottleMixin, LoggingMixin
 
 
 class SessionListAPIView(ThrottleMixin, LoggingMixin, APIView):
+    """
+    API view to list active sessions for the authenticated user.
+
+    This view retrieves all active sessions and filters them to include only
+    those belonging to the authenticated user.
+
+    Methods:
+        get(request, *args, **kwargs):
+            Retrieves and returns the list of active sessions for the authenticated user.
+    """
+
     permission_classes = (IsAuthenticatedAndActive,)
 
     def get(self, request, *args, **kwargs):
+        """
+        Retrieves and returns the list of active sessions for the authenticated user.
+
+        Args:
+            request (HttpRequest): The HTTP request object.
+
+        Returns:
+            Response: A response object containing the list of active sessions.
+        """
+
         sessions = Session.objects.filter(expire_date__gt=timezone.now())
         session_data = []
 
@@ -32,9 +53,30 @@ class SessionListAPIView(ThrottleMixin, LoggingMixin, APIView):
 
 
 class SessionLogoutDestroyView(ThrottleMixin, LoggingMixin, generics.DestroyAPIView):
+    """
+    API view to log out a specific session for the authenticated user.
+
+    This view deletes a session if it belongs to the authenticated user.
+
+    Methods:
+        delete(request, *args, **kwargs):
+            Deletes the specified session if it belongs to the authenticated user.
+    """
+
     permission_classes = (IsAuthenticatedAndActive,)
 
     def delete(self, request, *args, **kwargs):
+        """
+        Deletes the specified session if it belongs to the authenticated user.
+
+        Args:
+            request (HttpRequest): The HTTP request object.
+            kwargs (dict): Additional keyword arguments, including the session key.
+
+        Returns:
+            Response: A response object indicating the result of the delete operation.
+        """
+
         session_key = kwargs.get("session_key")
 
         try:
