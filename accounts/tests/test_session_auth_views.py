@@ -14,3 +14,8 @@ class TestSessionListView:
             assert "session_key" in session
             assert "expire_date" in session
             assert "last_activity" in session
+
+    def test_list_sessions_unauthorized(self, api_client):
+        response = api_client.get(reverse("accounts:session_list"))
+
+        assert response.status_code == 401
