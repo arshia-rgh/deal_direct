@@ -31,4 +31,30 @@ class SessionListAPIView(APIView):
 
 
 class SessionLogoutDestroyView(generics.DestroyAPIView):
-    pass
+    permission_classes = (IsAuthenticatedAndActive,)
+
+    def delete(self, request, *args, **kwargs):
+        session_key = kwargs.get("session_key")
+
+        try:
+            session = Session.objects.get(session_key=session_key)
+
+            session_data = session.get_decoded()
+
+            if session_data.get("_auth_user_id") == str(request.user.id):
+                session.delete()
+
+                return Response(
+                    {"message": "Session logged out successfully"},
+                    status=status.HTTP_200_OK,
+                )
+
+            else:
+                return Response(
+                    {"error": "Unauthorized"}, status=status.HTTP_403_FORBIDDEN
+                )
+
+        except Session.DoesNotExist:
+            return Response(
+                {"error": "Session not found"}, status=status.HTTP_404_NOT_FOUND
+            )
