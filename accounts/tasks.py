@@ -53,3 +53,8 @@ def send_password_reset_email(user_id):
     subject = "Reset your password"
     message = f"Please click the link below to reset your password:\n{reset_link}"
     send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email])
+
+
+@shared_task
+def send_account_activity_report(user_id):
+    pass
