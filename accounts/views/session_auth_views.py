@@ -6,9 +6,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.permissions import IsAuthenticatedAndActive
+from utils.mixins import ThrottleMixin, LoggingMixin
 
 
-class SessionListAPIView(APIView):
+class SessionListAPIView(ThrottleMixin, LoggingMixin, APIView):
     permission_classes = (IsAuthenticatedAndActive,)
 
     def get(self, request, *args, **kwargs):
@@ -30,7 +31,7 @@ class SessionListAPIView(APIView):
         return Response(session_data, status=status.HTTP_200_OK)
 
 
-class SessionLogoutDestroyView(generics.DestroyAPIView):
+class SessionLogoutDestroyView(ThrottleMixin, LoggingMixin, generics.DestroyAPIView):
     permission_classes = (IsAuthenticatedAndActive,)
 
     def delete(self, request, *args, **kwargs):
