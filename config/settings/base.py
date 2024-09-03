@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "rest_framework_simplejwt",
     "drf_spectacular",
+    "django_filters",
     # local apps
     "accounts.apps.AccountsConfig",
     "products.apps.ProductsConfig",
