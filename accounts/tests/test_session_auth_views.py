@@ -1,6 +1,7 @@
 import pytest
 from django.contrib.sessions.models import Session
 from django.urls import reverse
+from django.utils import timezone
 
 
 @pytest.mark.django_db
@@ -64,3 +65,28 @@ class TestSessionLogoutView:
         )
 
         assert response.status_code == 404
+
+    def test_logout_another_user_session(
+        self, api_client, active_user, another_active_user
+    ):
+        api_client.force_authenticate(active_user)
+
+        another_user_session = Session.objects.create(
+            session_key="another user session key",
+            session_data="",
+            expire_date=timezone.now() + timezone.timedelta(days=1),
+        )
+
+        another_user_session_data = another_user_session.get_decoded()
+        another_user_session_data["_auth_user_id"] = str(another_active_user.id)
+
+        another_user_session.session_data = Session.objects.encode(
+            another_user_session_data
+        )
+        another_user_session.save()
+
+        response = api_client.delete(
+            reverse("accounts:session_logout", args=(another_user_session.session_key,))
+        )
+
+        assert response.status_code == 403
