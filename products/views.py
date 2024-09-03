@@ -5,6 +5,7 @@ from products.models import Product, Category
 from products.serializers import ProductSerializer, CategorySerializer
 from utils.mixins import ListCacheMixin, ThrottleMixin, LoggingMixin
 from .permissions import IsOwnerOrReadOnly, IsAdminUserOrReadOnly
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class ProductViewSet(
@@ -21,6 +22,8 @@ class ProductViewSet(
     cache_key = "products_list"
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["category"]
 
     permission_classes = (
         IsAuthenticatedOrReadOnly,
