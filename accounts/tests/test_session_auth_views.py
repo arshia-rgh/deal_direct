@@ -48,3 +48,10 @@ class TestSessionLogoutView:
         assert response.data["message"] == "Session logged out successfully"
 
         assert len(Session.objects.all()) == 0
+
+    def test_logout_session_unauthorized(self, api_client):
+        response = api_client.delete(
+            reverse("accounts:session_logout", args=("fake session key",))
+        )
+
+        assert response.status_code == 401
