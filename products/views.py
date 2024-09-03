@@ -45,3 +45,5 @@ class CategoryViewSet(
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = (IsAdminUserOrReadOnly,)
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["name"]
