@@ -55,3 +55,12 @@ class TestSessionLogoutView:
         )
 
         assert response.status_code == 401
+
+    def test_logout_session_nonexistent_session(self, api_client, active_user):
+        api_client.force_authenticate(active_user)
+
+        response = api_client.delete(
+            reverse("accounts:session_logout", args=("nonexistent session key",))
+        )
+
+        assert response.status_code == 404
