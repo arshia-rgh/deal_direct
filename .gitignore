@@ -150,4 +150,5 @@ Thumbs.db
 media/
 ENDPOINTS.md/
 .dev.env
+.produc.env
 logs/

@@ -10,7 +10,7 @@ from .zarinpal import send_request, verify
 from ..permissions import IsAuthenticatedAndActive
 
 
-class IncreaseWalletAPIView(ThrottleMixin, LoggingMixin, APIView):
+class IncreaseWalletAPIView(ThrottleMixin, APIView):
     """
     API view for increasing the user's wallet balance.
 

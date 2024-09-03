@@ -10,6 +10,10 @@ from accounts.views.auth_views import (
     PasswordResetConfirmAPIView,
 )
 from accounts.views.payment_views import IncreaseWalletAPIView, VerifyDepositAPIView
+from accounts.views.session_auth_views import (
+    SessionListAPIView,
+    SessionLogoutDestroyView,
+)
 
 app_name = "accounts"
 urlpatterns = [
@@ -32,6 +36,13 @@ urlpatterns = [
         "reset-password/<uidb64>/<token>/",
         PasswordResetConfirmAPIView.as_view(),
         name="password_reset_confirm",
+    ),
+    # sessions
+    path("sessions/", SessionListAPIView.as_view(), name="session_list"),
+    path(
+        "sessions/<str:session_key>/logout/",
+        SessionLogoutDestroyView.as_view(),
+        name="session_logout",
     ),
     # payments
     path("deposit/", IncreaseWalletAPIView.as_view(), name="deposit"),

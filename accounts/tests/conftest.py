@@ -79,3 +79,14 @@ def active_user():
         is_active=True,
         wallet=0.00,
     )
+
+
+@pytest.fixture
+def another_active_user():
+    return User.objects.create_user(
+        username="testuser2",
+        email="test2@gmail.com",
+        password="testpassword12",
+        is_active=True,
+        wallet=0.00,
+    )
