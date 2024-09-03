@@ -57,4 +57,12 @@ def send_password_reset_email(user_id):
 
 @shared_task
 def send_account_activity_report(user_id):
+    from django.contrib.auth import get_user_model
+
+    User = get_user_model()
+
+    user = User.objects.get(user_id)
+
+    # TODO Implement logic to generate report
+
     pass
