@@ -19,3 +19,8 @@ class TestSessionListView:
         response = api_client.get(reverse("accounts:session_list"))
 
         assert response.status_code == 401
+
+
+@pytest.mark.django_db
+class TestSessionLogoutView:
+    pass
