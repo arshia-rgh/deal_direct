@@ -1,5 +1,6 @@
 from django.contrib.sessions.models import Session
 from django.utils import timezone
+from rest_framework import generics
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -27,3 +28,7 @@ class SessionListAPIView(APIView):
                 )
 
         return Response(session_data, status=status.HTTP_200_OK)
+
+
+class SessionLogoutDestroyView(generics.DestroyAPIView):
+    pass
