@@ -1,4 +1,5 @@
 from django.http import Http404
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.generics import RetrieveDestroyAPIView, CreateAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -59,6 +60,10 @@ class CartItemViewSet(
     queryset = CartItem.objects.all()
     serializer_class = CartItemSerializer
     permission_classes = (IsAuthenticated, IsOwnerCartItem)
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = [
+        "product__category__name",
+    ]
 
     def get_queryset(self):
         """
