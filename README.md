@@ -1,8 +1,12 @@
 # DealDirect
 
+![Python](https://img.shields.io/badge/Python-3.12%2B-blue)
+
 ![Django](https://img.shields.io/badge/Django-5%2B-brightgreen)
 
-![Python](https://img.shields.io/badge/Python-3.12%2B-blue)
+![Django REST Framework](https://img.shields.io/badge/DRF-API_Framework-green)
+
+![Django Channels](https://img.shields.io/badge/Django_Channels-WebSockets-brightgreen)
 
 ![Redis](https://img.shields.io/badge/Redis-Caching-red)
 
@@ -21,9 +25,6 @@
 ![Swagger UI](https://img.shields.io/badge/Swagger-Interactive_API_Docs-brightgreen)
 
 ![Redoc](https://img.shields.io/badge/Redoc-API_Docs-red)
-
-![Django Channels](https://img.shields.io/badge/Django_Channels-WebSockets-brightgreen)
-
 
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
