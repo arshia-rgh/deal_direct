@@ -4,7 +4,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
 from chat.models import ChatRoom
-from chat.permissions import IsParticipant
+from chat.permissions import IsParticipantViewSet, IsParticipantAccess
 from chat.serializers import ChatRoomSerializer
 from products.models import Product
 from utils.mixins import ThrottleMixin, LoggingMixin, ListCacheMixin
@@ -16,7 +16,7 @@ class ChatRoomViewSet(
     cache_key = "chat_rooms_list"
     queryset = ChatRoom.objects.all()
     serializer_class = ChatRoomSerializer
-    permission_classes = (IsAuthenticated, IsParticipant)
+    permission_classes = (IsAuthenticated, IsParticipantViewSet)
 
     def perform_create(self, serializer):
         chat_room = serializer.save()
@@ -42,14 +42,7 @@ class AccessChatRoomView(LoginRequiredMixin, TemplateView):
         return data
 
     def dispatch(self, request, *args, **kwargs):
-        room_name = request.GET.get("room_name")
-        if not room_name:
-            return self.handle_no_permission()
-
-        if (
-            not request.user.is_authenticated
-            and request.user.chatroom_set.filter(name=room_name).exists()
-        ):
+        if not IsParticipantAccess().has_permission(request, self):
             return self.handle_no_permission()
 
         return super().dispatch(request, *args, **kwargs)
