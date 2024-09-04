@@ -11,6 +11,9 @@ SECRET_KEY = os.getenv("SECRET_KEY", get_random_secret_key())
 
 # Application definition
 INSTALLED_APPS = [
+    # third party app
+    "daphne",
+    # default apps
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
