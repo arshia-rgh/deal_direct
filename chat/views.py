@@ -22,3 +22,6 @@ class ChatRoomViewSet(
         product_id = self.request.data["product"]
         product = Product.objects.get(id=product_id)
         chat_room.participants.add(product)
+
+    def get_queryset(self):
+        return ChatRoom.objects.filter(participants=self.request.user)
