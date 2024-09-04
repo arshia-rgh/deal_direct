@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from chat.models import ChatRoom
 from chat.serializers import ChatRoomSerializer
+from products.models import Product
 from utils.mixins import ThrottleMixin, LoggingMixin, ListCacheMixin
 
 
@@ -18,3 +19,6 @@ class ChatRoomViewSet(
         chat_room = serializer.save()
 
         chat_room.participants.add(self.request.user)
+        product_id = self.request.data["product"]
+        product = Product.objects.get(id=product_id)
+        chat_room.participants.add(product)
