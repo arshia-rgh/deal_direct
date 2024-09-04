@@ -139,7 +139,24 @@ This will start all the necessary services defined in the `docker-compose.yml` f
 
 For more details, refer to the [Dockerfile](Dockerfile) in the project repository.
 ***------------------------------------------------***
+## Chat Feature
 
+### How to Use the Chat
+
+1. **Run the Django Development Server**:
+   ```sh
+   python manage.py runserver
+2. Access the Chat Room:
+   - Open a web browser and navigate to http://localhost:8000/chat/<room_name>/, replacing <room_name> with the desired chat room name.
+
+
+3. Start Chatting:
+   - Type a message in the input box and press "Send" or hit the Enter key to send the message.
+   Messages will appear in the chat log.
+
+
+4. Permissions:
+   - The IsParticipant permission class ensures that only authenticated users who are participants of the chat room can access the chat.
 ## Testing
 This project aims to achieve over 95% test coverage.
 
