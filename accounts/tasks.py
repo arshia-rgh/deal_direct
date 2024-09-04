@@ -89,7 +89,7 @@ def send_account_activity_report(user_id):
 
     User = get_user_model()
 
-    user = User.objects.get(user_id)
+    user = User.objects.get(id=user_id)
 
     seven_days_ago = timezone.now() - timezone.timedelta(days=7)
     products_uploaded = Product.objects.filter(uploaded_by=user).filter(
