@@ -22,6 +22,9 @@
 
 ![Redoc](https://img.shields.io/badge/Redoc-API_Docs-red)
 
+![Django Channels](https://img.shields.io/badge/Django_Channels-WebSockets-brightgreen)
+
+
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
 ***------------------------------------------------***
@@ -33,6 +36,8 @@
   - [Pre-commit Hooks](#pre-commit-hooks)
 - [Usage](#usage)
   - [Using Docker](#using-docker)
+- [Chat Feature](#chat-feature)
+
 - [Testing](#testing)
 
 ***------------------------------------------------***
@@ -132,8 +137,27 @@ docker-compose up --build
 
 This will start all the necessary services defined in the `docker-compose.yml` file.
 
-For more details, refer to the [Dockerfile](Dockerfile) in the project repository.***------------------------------------------------***
+For more details, refer to the [Dockerfile](Dockerfile) in the project repository.
+***------------------------------------------------***
+## Chat Feature
+You can start real time chat for a product with the seller of the product.
 
+### How to Use the Chat
+
+1. **Run the Django Development Server**:
+   ```sh
+   python manage.py runserver
+2. Access the Chat Room:
+   - Open a web browser and navigate to http://localhost:8000/chat/<room_name>/, replacing <room_name> with the desired chat room name.
+
+
+3. Start Chatting:
+   - Type a message in the input box and press "Send" or hit the Enter key to send the message.
+   Messages will appear in the chat log.
+
+
+4. Permissions:
+   - The IsParticipant permission class ensures that only authenticated users who are participants of the chat room can access the chat.
 ## Testing
 This project aims to achieve over 95% test coverage.
 

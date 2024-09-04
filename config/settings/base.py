@@ -11,6 +11,9 @@ SECRET_KEY = os.getenv("SECRET_KEY", get_random_secret_key())
 
 # Application definition
 INSTALLED_APPS = [
+    # third party app
+    "daphne",
+    # default apps
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -28,6 +31,7 @@ INSTALLED_APPS = [
     "products.apps.ProductsConfig",
     "cart.apps.CartConfig",
     "orders.apps.OrdersConfig",
+    "chat.apps.ChatConfig",
     # only for custom commands
     "custom_commands",
 ]
@@ -189,3 +193,5 @@ LOGGING = {
         }
     },
 }
+
+ASGI_APPLICATION = "config.asgi.application"
