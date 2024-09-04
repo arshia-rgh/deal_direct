@@ -14,3 +14,8 @@ class ChatRoom(BaseModel):
             self.name = "_".join(participant_names)
 
         super().save(**kwargs)
+
+    def add_participants(self, user):
+        if self.participants.count() >= 2:
+            raise ValueError("A room cannot have more than 2 participants.")
+        self.participants.add(user)
