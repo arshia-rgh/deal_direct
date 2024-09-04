@@ -1,13 +1,14 @@
 from django.db import models
 
 from accounts.models import User
+from products.models import Product
 from utils.base_model import BaseModel
 
 
 class ChatRoom(BaseModel):
     name = models.CharField(max_length=255, unique=True)
     product = models.ForeignKey(
-        to="Product", on_delete=models.CASCADE, related_name="room"
+        to=Product, on_delete=models.CASCADE, related_name="room"
     )
     participants = models.ManyToManyField(to=User, related_name="rooms")
 
