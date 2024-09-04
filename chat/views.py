@@ -17,6 +17,4 @@ class ChatRoomViewSet(
     def perform_create(self, serializer):
         chat_room = serializer.save()
 
-        chat_room.add_participants(self.request.user)
-
-        chat_room.save()
+        chat_room.participants.add(self.request.user)

@@ -7,4 +7,4 @@ class ChatRoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChatRoom
         fields = "__all__"
-        read_only_fields = ["id", "created", "modified"]
+        read_only_fields = ["id", "created", "modified", "name", "participants"]
