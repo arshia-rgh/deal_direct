@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
@@ -30,7 +31,7 @@ class ChatRoomViewSet(
         return ChatRoom.objects.filter(participants=self.request.user)
 
 
-class AccessChatRoomView(TemplateView):
+class AccessChatRoomView(LoginRequiredMixin, TemplateView):
     template_name = "chat/chat.html"
 
     def get_context_data(self, **kwargs):
@@ -39,3 +40,16 @@ class AccessChatRoomView(TemplateView):
         data["room_name"] = room_name
 
         return data
+
+    def dispatch(self, request, *args, **kwargs):
+        room_name = request.GET.get("room_name")
+        if not room_name:
+            return self.handle_no_permission()
+
+        if (
+            not request.user.is_authenticated
+            and request.user.chatroom_set.filter(name=room_name).exists()
+        ):
+            return self.handle_no_permission()
+
+        return super().dispatch(request, *args, **kwargs)
