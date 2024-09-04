@@ -2,9 +2,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Verify Your Email Address</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
-
+    <div class="container">
+        <h2>Hello {{ user.first_name }},</h2>
+        <p>Thank you for registering with us. Please click the button below to verify your email address:</p>
+        <a href="{{ verification_link }}" class="button">Verify Email</a>
+        <p>If you did not create an account, no further action is required.</p>
+        <p>Best regards,<br>DealDirect</p>
+    </div>
 </body>
 </html>
