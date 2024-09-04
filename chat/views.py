@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
 from chat.models import ChatRoom
+from chat.permissions import IsParticipant
 from chat.serializers import ChatRoomSerializer
 from products.models import Product
 from utils.mixins import ThrottleMixin, LoggingMixin, ListCacheMixin
@@ -13,7 +14,7 @@ class ChatRoomViewSet(
     cache_key = "chat_rooms_list"
     queryset = ChatRoom.objects.all()
     serializer_class = ChatRoomSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsParticipant)
 
     def perform_create(self, serializer):
         chat_room = serializer.save()
