@@ -67,8 +67,20 @@ def send_password_reset_email(user_id):
     reset_link = f"{settings.BASE_URL}{reverse('accounts:password_reset_confirm', kwargs={'uidb64': uid, 'token': token})}"
 
     subject = "Reset your password"
-    message = f"Please click the link below to reset your password:\n{reset_link}"
-    send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email])
+    context = {
+        "user": user,
+        "reset_link": reset_link,
+    }
+
+    html_message = render_to_string("emails/password_reset_html.html", context)
+    plain_message = strip_tags(html_message)
+    send_mail(
+        subject,
+        plain_message,
+        settings.EMAIL_HOST_USER,
+        [user.email],
+        html_message=html_message,
+    )
 
 
 @shared_task
