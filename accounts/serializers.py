@@ -33,6 +33,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             "username",
             "password",
             "phone_number",
+            "receive_reports",
         ]
 
     def create(self, validated_data):
@@ -62,6 +63,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "email",
             "username",
             "phone_number",
+            "receive_reports",
             "wallet",
         ]
         read_only_fields = ["wallet"]

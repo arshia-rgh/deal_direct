@@ -12,7 +12,7 @@ class User(AbstractUser):
         is_active (BooleanField): Indicates whether the user account is active.
          (Based on if the user confirmed his email)
         wallet (DecimalField): The user's wallet balance, with a maximum of 10 digits and 2 decimal places.
-
+        receive_reports (BooleanField): Indicates if the user wants to receive reports weekly
     """
 
     email = models.EmailField(
@@ -28,3 +28,4 @@ class User(AbstractUser):
     is_active = models.BooleanField(default=False)
 
     wallet = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    receive_reports = models.BooleanField(default=False)
