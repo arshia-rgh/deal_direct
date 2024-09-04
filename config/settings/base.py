@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "products.apps.ProductsConfig",
     "cart.apps.CartConfig",
     "orders.apps.OrdersConfig",
+    "chat.apps.ChatConfig",
     # only for custom commands
     "custom_commands",
 ]
