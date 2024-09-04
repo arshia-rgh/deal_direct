@@ -26,8 +26,20 @@ def send_email_verification_link(user_id):
     verification_link = f"{settings.BASE_URL}{reverse('accounts:verify_email', kwargs={'uidb64': uid, 'token': token})}"
 
     subject = "Verify your email address"
-    message = f"Please click the link below to verify your email address:\n{verification_link}"
-    send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email])
+    context = {
+        "user": user,
+        "verification_link": verification_link,
+    }
+
+    html_message = render_to_string("emails/email_verification_html.html", context)
+    plain_message = strip_tags(html_message)
+    send_mail(
+        subject,
+        plain_message,
+        settings.EMAIL_HOST_USER,
+        [user.email],
+        html_message=html_message,
+    )
 
 
 @shared_task
