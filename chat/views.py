@@ -21,9 +21,10 @@ class ChatRoomViewSet(
         chat_room = serializer.save()
 
         chat_room.participants.add(self.request.user)
+        # add seller of the product to the participants too
         product_id = self.request.data["product"]
         product = Product.objects.get(id=product_id)
-        chat_room.participants.add(product)
+        chat_room.participants.add(product.uploaded_by)
 
     def get_queryset(self):
         return ChatRoom.objects.filter(participants=self.request.user)
