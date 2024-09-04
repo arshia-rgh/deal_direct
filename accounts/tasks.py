@@ -2,8 +2,12 @@ from celery import shared_task
 from django.conf import settings
 from django.core.mail import send_mail
 from django.db.models import F
+from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils import timezone
+from django.utils.html import strip_tags
 
+from products.models import Product
 from utils.email_verification_generator import (
     generate_email_verification_token,
     generate_uid,
@@ -63,6 +67,29 @@ def send_account_activity_report(user_id):
 
     user = User.objects.get(user_id)
 
-    # TODO Implement logic to generate report
+    seven_days_ago = timezone.now() - timezone.timedelta(days=7)
+    products_uploaded = Product.objects.filter(uploaded_by=user).filter(
+        created__gte=seven_days_ago
+    )
+    products_bought = Product.objects.filter(bought_by=user).filter(
+        modified__gte=seven_days_ago
+    )
 
-    pass
+    report_html = render_to_string(
+        "emails/account_activity_report_html.html",
+        {
+            "user": user,
+            "products_uploaded": products_uploaded,
+            "products_bought": products_bought,
+        },
+    )
+
+    report_text = strip_tags(report_html)
+
+    send_mail(
+        "Your Account Activity Report",
+        report_text,
+        settings.EMAIL_HOST_USER,
+        [user.email],
+        html_message=report_html,
+    )
