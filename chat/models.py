@@ -13,6 +13,8 @@ class ChatRoom(BaseModel):
 
     def save(self, **kwargs):
         if not self.name:
-            self.name = self.product.name
+            self.name = (
+                f"{self.product.name} - Seller: {self.product.uploaded_by.username}"
+            )
 
         super().save(**kwargs)
