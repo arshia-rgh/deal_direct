@@ -22,6 +22,9 @@
 
 ![Redoc](https://img.shields.io/badge/Redoc-API_Docs-red)
 
+![Django Channels](https://img.shields.io/badge/Django_Channels-WebSockets-brightgreen)
+
+
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
 ***------------------------------------------------***
@@ -33,6 +36,8 @@
   - [Pre-commit Hooks](#pre-commit-hooks)
 - [Usage](#usage)
   - [Using Docker](#using-docker)
+- [Chat Feature](#chat-feature)
+
 - [Testing](#testing)
 
 ***------------------------------------------------***
@@ -132,7 +137,8 @@ docker-compose up --build
 
 This will start all the necessary services defined in the `docker-compose.yml` file.
 
-For more details, refer to the [Dockerfile](Dockerfile) in the project repository.***------------------------------------------------***
+For more details, refer to the [Dockerfile](Dockerfile) in the project repository.
+***------------------------------------------------***
 
 ## Testing
 This project aims to achieve over 95% test coverage.
