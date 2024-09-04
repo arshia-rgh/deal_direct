@@ -1,3 +1,4 @@
+from django.views.generic import TemplateView
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
@@ -26,3 +27,14 @@ class ChatRoomViewSet(
 
     def get_queryset(self):
         return ChatRoom.objects.filter(participants=self.request.user)
+
+
+class AccessChatRoomView(TemplateView):
+    template_name = "chat/chat.html"
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        room_name = self.request.GET.get("room_name")
+        data["room_name"] = room_name
+
+        return data
