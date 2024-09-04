@@ -2,9 +2,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Account Activity Report</title>
 </head>
 <body>
+    <h1>Account Activity Report</h1>
+    <p>Dear {{ user.email }},</p>
+    <p>Here is your account activity report:</p>
 
+    <h2>Products Bought in the Last 7 Days</h2>
+    <ul>
+        {% for product in products_bought %}
+            <li>{{ product.name }} - {{ product.bought_at }}</li>
+        {% empty %}
+            <li>No products bought in the last 7 days.</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Products Uploaded in the Last 7 Days</h2>
+    <ul>
+        {% for product in products_uploaded %}
+            <li>{{ product.name }} - {{ product.uploaded_at }}</li>
+        {% empty %}
+            <li>No products uploaded in the last 7 days.</li>
+        {% endfor %}
+    </ul>
 </body>
 </html>
