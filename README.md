@@ -140,6 +140,7 @@ This will start all the necessary services defined in the `docker-compose.yml` f
 For more details, refer to the [Dockerfile](Dockerfile) in the project repository.
 ***------------------------------------------------***
 ## Chat Feature
+You can start real time chat for a product with the seller of the product.
 
 ### How to Use the Chat
 
