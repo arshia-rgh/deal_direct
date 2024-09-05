@@ -1,6 +1,6 @@
 import pytest
+from django.conf import settings as django_settings
 from django.core.cache import cache
-from django.test import override_settings
 from django.urls import reverse
 from model_bakery import baker
 from rest_framework.throttling import ScopedRateThrottle
@@ -138,34 +138,54 @@ class TestProductViewSet:
 
         assert delete_response.status_code == 204
 
-    @override_settings(
-        REST_FRAMEWORK={
-            "DEFAULT_THROTTLE_RATES": {
-                "uploads": "5/minute",
-                "receives": "5/minute",
-            }
+    @pytest.fixture
+    def configure_throttle_settings(self, settings):
+        settings.REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"] = {
+            "uploads": "1/hour",
+            "receives": "1/hour",
         }
-    )
-    def test_throttle(self, api_client, test_user, test_category):
+
+    # @pytest.fixture
+    # def configure_throttle_settings(self):
+    #     with override_settings(
+    #             REST_FRAMEWORK={
+    #                 "DEFAULT_THROTTLE_RATES": {
+    #                     "uploads": "5/day",
+    #                     "receives": "5/day",
+    #                 }
+    #             }
+    #     ):
+    #         yield
+
+    def test_throttle(
+        self, api_client, test_user, test_category, configure_throttle_settings
+    ):
+        # Check if the throttle settings are overridden
+        assert django_settings.REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"] == {
+            "uploads": "1/hour",
+            "receives": "1/hour",
+        }
+        # Clear the history of the throttle to start fresh
         ScopedRateThrottle().history = []
-        # TODO (why) when i run this test alone it passed but if a run all tests it will fail
+        cache.clear()
+
+        # TODO - This test is failing ( i dont know why) - settngs are overridden but still the test is failing - throttling is working when i manually test it
         test_user.is_active = True
         test_user.save()
 
         api_client.force_authenticate(test_user)
 
-        for _ in range(5):
-            response = api_client.post(
-                reverse("products:product-list"),
-                data={
-                    "name": f"test product {_}",
-                    "price": 10.00,
-                    "category": test_category.id,
-                },
-            )
-            assert response.status_code == 201
+        allowed_response_uploads_scope = api_client.post(
+            reverse("products:product-list"),
+            data={
+                "name": f"test product  1",
+                "price": 10.00,
+                "category": test_category.id,
+            },
+        )
+        assert allowed_response_uploads_scope.status_code == 201
 
-        response = api_client.post(
+        throttled_response_uploads_scope = api_client.post(
             reverse("products:product-list"),
             data={
                 "name": "test product",
@@ -173,17 +193,18 @@ class TestProductViewSet:
                 "category": test_category.id,
             },
         )
-        assert response.status_code == 429
+        assert throttled_response_uploads_scope.status_code == 429
 
-        for _ in range(5):
-            response = api_client.get(
-                reverse("products:product-detail", kwargs={"pk": 1})
-            )
-            assert response.status_code == 200
+        allowed_response_receives_scope = api_client.get(
+            reverse("products:product-detail", kwargs={"pk": 1})
+        )
+        assert allowed_response_receives_scope.status_code == 200
 
-        response = api_client.get(reverse("products:product-detail", kwargs={"pk": 1}))
+        throttled_response_receives_scope = api_client.get(
+            reverse("products:product-detail", kwargs={"pk": 1})
+        )
 
-        assert response.status_code == 429
+        assert throttled_response_receives_scope.status_code == 429
 
 
 @pytest.mark.django_db
