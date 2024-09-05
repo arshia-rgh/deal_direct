@@ -65,3 +65,8 @@ class TestChatRoomViewSet:
 
         assert response.status_code == 200
         assert response.data["id"] == chat_room.id
+
+
+@pytest.mark.django_db
+class TestAccessChatRoomView:
+    pass
