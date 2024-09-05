@@ -52,3 +52,16 @@ class TestChatRoomViewSet:
 
         assert response.status_code == 204
         assert not ChatRoom.objects.filter(id=chat_room.id).exists()
+
+    def test_get_chat_room(self, api_client, test_active_user, test_product):
+        chat_room = ChatRoom.objects.create(product=test_product)
+        chat_room.participants.add(test_active_user)
+
+        api_client.force_authenticate(test_active_user)
+
+        response = api_client.get(
+            reverse("chats:chatroom-detail", kwargs={"pk": chat_room.id})
+        )
+
+        assert response.status_code == 200
+        assert response.data["id"] == chat_room.id
