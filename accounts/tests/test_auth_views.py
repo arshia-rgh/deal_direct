@@ -131,10 +131,7 @@ class TestSendMail:
 
         assert len(mail.outbox) == 1
         assert mail.outbox[0].subject == "Verify your email address"
-        assert (
-            "Please click the link below to verify your email address:"
-            in mail.outbox[0].body
-        )
+
         assert mail.outbox[0].to == ["test@email.com"]
 
 

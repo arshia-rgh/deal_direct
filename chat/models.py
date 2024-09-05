@@ -6,7 +6,7 @@ from utils.base_model import BaseModel
 
 
 class ChatRoom(BaseModel):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255, unique=True, blank=True)
     product = models.ForeignKey(
         to=Product, on_delete=models.CASCADE, related_name="room"
     )
