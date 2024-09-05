@@ -3,6 +3,7 @@ from django.core.cache import cache
 from django.test import override_settings
 from django.urls import reverse
 from model_bakery import baker
+from rest_framework.throttling import ScopedRateThrottle
 
 from products.models import Product, Category
 
@@ -146,6 +147,7 @@ class TestProductViewSet:
         }
     )
     def test_throttle(self, api_client, test_user, test_category):
+        ScopedRateThrottle().history = []
         # TODO (why) when i run this test alone it passed but if a run all tests it will fail
         test_user.is_active = True
         test_user.save()
