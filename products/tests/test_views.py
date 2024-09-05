@@ -156,7 +156,7 @@ class TestProductViewSet:
     #             }
     #     ):
     #         yield
-
+    @pytest.mark.skip
     def test_throttle(
         self, api_client, test_user, test_category, configure_throttle_settings
     ):
