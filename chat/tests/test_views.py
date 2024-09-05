@@ -24,3 +24,31 @@ class TestChatRoomViewSet:
             test_active_user
             in ChatRoom.objects.get(product=test_product).participants.all()
         )
+
+        assert (
+            test_product.uploaded_by
+            in ChatRoom.objects.get(product=test_product).participants.all()
+        )
+
+    def test_delete_chat_room(self, api_client, test_active_user, test_product):
+        chat_room = ChatRoom.objects.create(product=test_product)
+        assert ChatRoom.objects.all().count() == 1
+
+        api_client.force_authenticate(test_active_user)
+
+        # test if the user isn't the participant of this chat room (must 404)
+        response = api_client.delete(
+            reverse("chats:chatroom-detail", kwargs={"pk": chat_room.id})
+        )
+
+        assert response.status_code == 404
+
+        # add user as a participant of the chat room
+        chat_room.participants.add(test_active_user)
+
+        response = api_client.delete(
+            reverse("chats:chatroom-detail", kwargs={"pk": chat_room.id})
+        )
+
+        assert response.status_code == 204
+        assert not ChatRoom.objects.filter(id=chat_room.id).exists()
