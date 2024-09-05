@@ -25,3 +25,5 @@ CACHES = {
 # Celery
 CELERY_BROKER_URL = "amqp://localhost"
 CELERY_RESULT_BACKEND = "rpc://"
+
+CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
