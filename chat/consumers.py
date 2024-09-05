@@ -26,14 +26,19 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json["message"]
+        username = self.scope["user"].username
 
         await self.channel_layer.group_send(
-            self.room_group_name, {"type": "chat_message", "message": message}
+            self.room_group_name,
+            {"type": "chat_message", "message": message, "username": username},
         )
 
     async def chat_message(self, event):
         message = event["message"]
-        await self.send(text_data=json.dumps({"message": message}))
+        username = event["username"]
+        await self.send(
+            text_data=json.dumps({"message": message, "username": username})
+        )
 
     @staticmethod
     def sanitize_room_name(room_name):

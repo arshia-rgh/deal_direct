@@ -16,7 +16,7 @@
 
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            document.querySelector('#chat-log').innerHTML += ('<br>' + data.message);
+            document.querySelector('#chat-log').innerHTML += ('<br>' + data.username + ': ' + data.message);
         };
 
         chatSocket.onclose = function(e) {
