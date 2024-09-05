@@ -1,5 +1,6 @@
 import pytest
 
+from accounts.models import User
 from chat.models import ChatRoom
 
 
@@ -19,3 +20,21 @@ class TestChatRoomModel:
             == f"{test_product.name} - Seller: {test_product.uploaded_by.username}"
         )
         assert instance.product == test_product
+
+    def test_add_participant(self, test_product):
+        instance = ChatRoom.objects.create(product=test_product)
+        user = User.objects.create_user(username="testuser", password="testpass")
+        instance.participants.add(user)
+
+        assert user in instance.participants.all()
+
+    def test_remove_participant(self, test_product):
+        instance = ChatRoom.objects.create(product=test_product)
+        user = User.objects.create_user(username="testuser", password="testpass")
+        instance.participants.add(user)
+
+        assert user in instance.participants.all()
+
+        instance.participants.remove(user)
+
+        assert user not in instance.participants.all()
