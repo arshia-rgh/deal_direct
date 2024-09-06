@@ -26,4 +26,5 @@ CACHES = {
 CELERY_BROKER_URL = "amqp://localhost"
 CELERY_RESULT_BACKEND = "rpc://"
 
+# channel layers config for development
 CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
