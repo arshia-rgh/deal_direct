@@ -4,6 +4,8 @@ DEBUG = False
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(",")
 CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS").split(",")
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 DATABASES = {
     "default": {
