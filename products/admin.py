@@ -22,7 +22,7 @@ class ProductAdmin(admin.ModelAdmin):
         "uploaded_by__email",
         "bought_by__email",
     ]
-    list_filter = ["created", "modified"]
+    list_filter = ["created", "modified", "category"]
 
     def category_name(self, obj):
         return obj.category.name
