@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from orders.models import Order
 from .models import Cart, CartItem
 
 
@@ -20,12 +21,19 @@ class CartItemInline(admin.TabularInline):
     total.short_description = "Total"
 
 
+class OrderInline(admin.TabularInline):
+    model = Order
+    extra = 0
+    readonly_fields = ["status", "total_price", "created", "modified"]
+    can_delete = False
+
+
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
     list_display = ["id", "user", "created", "modified", "total_price"]
     search_fields = ["user__username", "user__email"]
     list_filter = ["created", "modified"]
-    inlines = [CartItemInline]
+    inlines = [CartItemInline, OrderInline]
 
     def total_price(self, obj):
         return sum(
