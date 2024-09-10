@@ -6,6 +6,8 @@ from .models import Cart, CartItem
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
     list_display = ["id", "user", "created", "modified", "total_price"]
+    search_fields = ["user__username", "user__email"]
+    list_filter = ["created", "modified"]
 
     def total_price(self, obj):
         return sum(
