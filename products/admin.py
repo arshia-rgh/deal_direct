@@ -22,7 +22,7 @@ class ProductAdmin(admin.ModelAdmin):
         "uploaded_by__email",
         "bought_by__email",
     ]
-    list_filter = ["created", "modified", "category"]
+    list_filter = ["created", "modified", "category__name"]
 
     def category_name(self, obj):
         return obj.category.name
@@ -46,6 +46,6 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ["id", "name", "description", "created", "modified"]
-    list_filter = ["created", "modified", "product__name"]
+    list_filter = ["created", "modified"]
     readonly_fields = ["created", "modified"]
-    search_fields = ["name", "product__name"]
+    search_fields = ["name"]
