@@ -5,7 +5,7 @@ from chat.models import ChatRoom
 
 @admin.register(ChatRoom)
 class ChatRoomAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "product__name", "participants"]
+    list_display = ["id", "name", "product__name", "get_participants"]
     filter_horizontal = ["participants"]
 
     def product__name(self, obj):
@@ -13,7 +13,7 @@ class ChatRoomAdmin(admin.ModelAdmin):
 
     product__name.short_description = "Product Name"
 
-    def participants(self, obj):
+    def get_participants(self, obj):
         return ", ".join([user.username for user in obj.participants.all()])
 
-    participants.short_description = "Participants"
+    get_participants.short_description = "Participants"
