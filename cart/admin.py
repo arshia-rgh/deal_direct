@@ -37,4 +37,24 @@ class CartAdmin(admin.ModelAdmin):
 
 @admin.register(CartItem)
 class CartItemAdmin(admin.ModelAdmin):
-    pass
+    list_display = [
+        "id",
+        "product__name",
+        "cart__user",
+        "quantity",
+        "created",
+        "modified",
+    ]
+    search_fields = ["cart__user__username", "cart__user__email", "product__name"]
+    list_filter = ["created", "modified"]
+    readonly_fields = ("created", "modified")
+
+    def product__name(self, obj):
+        return obj.product.name
+
+    product__name.short_description = "Product Name"
+
+    def cart__user(self, obj):
+        return obj.cart.user
+
+    cart__user.short_description = "User (In Cart)"
