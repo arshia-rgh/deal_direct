@@ -35,6 +35,7 @@ class ProductAdmin(admin.ModelAdmin):
     uploaded_by_username.short_description = "Seller"
 
     def bought_by_username(self, obj):
+        # bought_by can be empty so used try-except to avoid 500 errors
         try:
             return obj.bought_by.username
         except Exception:
