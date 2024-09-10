@@ -45,4 +45,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    pass
+    list_display = ["id", "name", "description", "created", "modified"]
+    list_filter = ["created", "modified", "product__name"]
+    readonly_fields = ["created", "modified"]
+    search_fields = ["name", "product__name"]
