@@ -47,7 +47,7 @@ class CartItemAdmin(admin.ModelAdmin):
     ]
     search_fields = ["cart__user__username", "cart__user__email", "product__name"]
     list_filter = ["created", "modified"]
-    readonly_fields = ("created", "modified")
+    readonly_fields = ["created", "modified"]
 
     def product__name(self, obj):
         return obj.product.name

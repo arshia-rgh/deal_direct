@@ -7,6 +7,9 @@ from chat.models import ChatRoom
 class ChatRoomAdmin(admin.ModelAdmin):
     list_display = ["id", "name", "product__name", "get_participants"]
     filter_horizontal = ["participants"]
+    list_filter = ["created", "modified"]
+    search_fields = ["name", "participants__username", "participants__email"]
+    readonly_fields = ["created", "modified"]
 
     def product__name(self, obj):
         return obj.product.name
