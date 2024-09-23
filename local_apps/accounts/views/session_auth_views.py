@@ -3,13 +3,12 @@ from django.utils import timezone
 from rest_framework import generics
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from local_apps.accounts.permissions import IsAuthenticatedAndActive
 from utils.mixins import ThrottleMixin, LoggingMixin
 
 
-class SessionListAPIView(ThrottleMixin, LoggingMixin, APIView):
+class SessionListAPIView(ThrottleMixin, LoggingMixin, generics.GenericAPIView):
     """
     API view to list active sessions for the authenticated user.
 
