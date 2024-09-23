@@ -3,8 +3,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from accounts.serializers import IncreaseWalletSerializer
-from accounts.tasks import update_wallet_balance
+from local_apps.accounts.serializers import IncreaseWalletSerializer
+from local_apps.accounts.tasks import update_wallet_balance
 from utils.mixins import ThrottleMixin, LoggingMixin
 from .zarinpal import send_request, verify
 from ..permissions import IsAuthenticatedAndActive

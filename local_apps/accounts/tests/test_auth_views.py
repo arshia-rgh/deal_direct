@@ -6,7 +6,10 @@ from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
-from accounts.tasks import send_email_verification_link, send_password_reset_email
+from local_apps.accounts.tasks import (
+    send_email_verification_link,
+    send_password_reset_email,
+)
 
 User = get_user_model()
 

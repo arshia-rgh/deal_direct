@@ -1,8 +1,6 @@
 import pytest
 from django.urls import reverse
 
-from accounts.tests.conftest import active_user
-
 
 @pytest.mark.django_db
 class TestDeposit:

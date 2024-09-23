@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import strip_tags
 
-from products.models import Product
+from local_apps.products.models import Product
 from utils.email_verification_generator import (
     generate_email_verification_token,
     generate_uid,

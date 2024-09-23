@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from accounts.views.auth_views import (
+from local_apps.accounts.views.auth_views import (
     UserRegisterView,
     VerifyEmailView,
     UserProfileRetrieveUpdateView,
@@ -9,8 +9,11 @@ from accounts.views.auth_views import (
     PasswordResetRequestAPIView,
     PasswordResetConfirmAPIView,
 )
-from accounts.views.payment_views import IncreaseWalletAPIView, VerifyDepositAPIView
-from accounts.views.session_auth_views import (
+from local_apps.accounts.views.payment_views import (
+    IncreaseWalletAPIView,
+    VerifyDepositAPIView,
+)
+from local_apps.accounts.views.session_auth_views import (
     SessionListAPIView,
     SessionLogoutDestroyView,
 )

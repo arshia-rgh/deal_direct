@@ -7,16 +7,16 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from accounts.models import User
-from accounts.permissions import IsAuthenticatedAndActive
-from accounts.serializers import (
+from local_apps.accounts.models import User
+from local_apps.accounts.permissions import IsAuthenticatedAndActive
+from local_apps.accounts.serializers import (
     UserRegisterSerializer,
     UserProfileSerializer,
     UserPasswordChangeSerializer,
     PasswordResetRequestSerializer,
     PasswordResetConfirmSerializer,
 )
-from accounts.tasks import (
+from local_apps.accounts.tasks import (
     update_wallet_balance,
     send_password_reset_email,
     send_email_verification_link,
