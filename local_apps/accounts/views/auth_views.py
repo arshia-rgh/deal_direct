@@ -176,7 +176,7 @@ class UserPasswordChangeView(ThrottleMixin, LoggingMixin, generics.UpdateAPIView
         )
 
 
-class PasswordResetRequestAPIView(ThrottleMixin, LoggingMixin, APIView):
+class PasswordResetRequestAPIView(ThrottleMixin, LoggingMixin, generics.GenericAPIView):
     """
     API view for requesting a password reset.
 
@@ -189,9 +189,10 @@ class PasswordResetRequestAPIView(ThrottleMixin, LoggingMixin, APIView):
     """
 
     permission_classes = (AllowAny,)
+    serializer_class = PasswordResetRequestSerializer
 
     def post(self, request):
-        serializer = PasswordResetRequestSerializer(data=request.data)
+        serializer = self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             email = serializer.validated_data["email"]
             try:
@@ -208,7 +209,7 @@ class PasswordResetRequestAPIView(ThrottleMixin, LoggingMixin, APIView):
                 )
 
 
-class PasswordResetConfirmAPIView(ThrottleMixin, LoggingMixin, APIView):
+class PasswordResetConfirmAPIView(ThrottleMixin, LoggingMixin, generics.GenericAPIView):
     """
     API view for confirming a password reset.
 
@@ -220,6 +221,9 @@ class PasswordResetConfirmAPIView(ThrottleMixin, LoggingMixin, APIView):
             Handles the POST request to confirm the password reset and change the user password.
     """
 
+    permission_classes = (AllowAny,)
+    serializer_class = PasswordResetConfirmSerializer
+
     def post(self, request, uidb64, token):
         try:
             uid = force_str(urlsafe_base64_decode(uidb64))
@@ -228,7 +232,7 @@ class PasswordResetConfirmAPIView(ThrottleMixin, LoggingMixin, APIView):
             user = None
 
         if user is not None and default_token_generator.check_token(user, token):
-            serializer = PasswordResetConfirmSerializer(data=request.data)
+            serializer = self.get_serializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 new_password = serializer.validated_data["password"]
                 user.set_password(new_password)
