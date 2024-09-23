@@ -3,7 +3,7 @@ from unittest.mock import patch
 import pytest
 from django.core.management import call_command
 
-from accounts.models import User
+from local_apps.accounts.models import User
 
 
 @pytest.fixture
