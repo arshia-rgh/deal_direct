@@ -1,11 +1,10 @@
 import pytest
 from django.urls import reverse
 
-from accounts.tasks import update_wallet_balance
-from accounts.tests.conftest import api_client
-from cart.models import Cart
-from orders.models import Order
-from orders.tasks import delete_cart_after_7_days
+from local_apps.accounts.tasks import update_wallet_balance
+from local_apps.cart.models import Cart
+from local_apps.orders.models import Order
+from local_apps.orders.tasks import delete_cart_after_7_days
 
 
 @pytest.mark.django_db

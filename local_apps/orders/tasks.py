@@ -1,6 +1,6 @@
 from celery import shared_task
 
-from orders.models import Order
+from local_apps.orders.models import Order
 
 
 @shared_task

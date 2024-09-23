@@ -2,10 +2,10 @@ import pytest
 from model_bakery import baker
 from rest_framework.test import APIClient
 
-from accounts.models import User
-from cart.models import Cart, CartItem
-from orders.models import Order
-from products.models import Product
+from local_apps.accounts.models import User
+from local_apps.cart.models import Cart, CartItem
+from local_apps.orders.models import Order
+from local_apps.products.models import Product
 
 
 @pytest.fixture

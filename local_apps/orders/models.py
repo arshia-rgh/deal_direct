@@ -1,9 +1,9 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 
-from accounts.models import User
-from cart.models import Cart
-from products.models import Product
+from local_apps.accounts.models import User
+from local_apps.cart.models import Cart
+from local_apps.products.models import Product
 from utils.base_model import BaseModel
 
 

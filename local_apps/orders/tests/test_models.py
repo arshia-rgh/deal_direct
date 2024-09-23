@@ -1,6 +1,6 @@
 import pytest
 
-from orders.models import Order
+from local_apps.orders.models import Order
 
 
 @pytest.mark.django_db

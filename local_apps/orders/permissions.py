@@ -1,4 +1,4 @@
-from cart.permissions import IsOwner
+from local_apps.cart.permissions import IsOwner
 
 
 class OrderIsOwnerPermission(IsOwner):

@@ -6,10 +6,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from accounts.tasks import update_wallet_balance
-from orders.models import Order
-from orders.serializers import OrderSerializer
-from orders.tasks import delete_cart_after_7_days
+from local_apps.accounts.tasks import update_wallet_balance
+from local_apps.orders.models import Order
+from local_apps.orders.serializers import OrderSerializer
+from local_apps.orders.tasks import delete_cart_after_7_days
 from utils.mixins import ThrottleMixin, LoggingMixin
 from .permissions import OrderIsOwnerPermission
 
