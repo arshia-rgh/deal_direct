@@ -3,8 +3,8 @@ from django.core.cache import cache
 from django.urls import reverse
 from model_bakery import baker
 
-from cart.models import Cart, CartItem
-from products.models import Product
+from local_apps.cart.models import Cart, CartItem
+from local_apps.products.models import Product
 
 
 @pytest.mark.django_db

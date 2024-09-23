@@ -1,8 +1,8 @@
 import pytest
 
-from accounts.models import User
-from cart.models import Cart
-from products.models import Product, Category
+from local_apps.accounts.models import User
+from local_apps.cart.models import Cart
+from local_apps.products.models import Product, Category
 from rest_framework.test import APIClient
 
 

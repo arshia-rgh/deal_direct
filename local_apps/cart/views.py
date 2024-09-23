@@ -4,9 +4,9 @@ from rest_framework import viewsets
 from rest_framework.generics import RetrieveDestroyAPIView, CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 
-from cart.models import CartItem, Cart
-from cart.permissions import IsOwner, IsOwnerCartItem
-from cart.serializers import CartItemSerializer, CartSerializer
+from local_apps.cart.models import CartItem, Cart
+from local_apps.cart.permissions import IsOwner, IsOwnerCartItem
+from local_apps.cart.serializers import CartItemSerializer, CartSerializer
 from utils.mixins import ListCacheMixin, ThrottleMixin, LoggingMixin
 
 

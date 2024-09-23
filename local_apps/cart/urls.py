@@ -1,7 +1,11 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from cart.views import CartItemViewSet, CartCreateApiView, CartRetrieveDestroyAPIView
+from local_apps.cart.views import (
+    CartItemViewSet,
+    CartCreateApiView,
+    CartRetrieveDestroyAPIView,
+)
 
 router = DefaultRouter()
 

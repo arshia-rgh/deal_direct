@@ -1,7 +1,6 @@
 import pytest
 
-from cart.models import Cart, CartItem
-from cart.tests.conftest import test_active_user
+from local_apps.cart.models import Cart, CartItem
 
 
 @pytest.mark.django_db
