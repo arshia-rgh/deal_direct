@@ -5,10 +5,11 @@ from rest_framework import status
 from rest_framework.response import Response
 
 from local_apps.accounts.permissions import IsAuthenticatedAndActive
+from local_apps.accounts.serializers.session_serialiazer import SessionSerializer
 from utils.mixins import ThrottleMixin, LoggingMixin
 
 
-class SessionListAPIView(ThrottleMixin, LoggingMixin, generics.GenericAPIView):
+class SessionListAPIView(ThrottleMixin, LoggingMixin, generics.ListAPIView):
     """
     API view to list active sessions for the authenticated user.
 
@@ -21,26 +22,18 @@ class SessionListAPIView(ThrottleMixin, LoggingMixin, generics.GenericAPIView):
     """
 
     permission_classes = (IsAuthenticatedAndActive,)
+    serializer_class = SessionSerializer
+    queryset = Session.objects.none()
 
-    def get(self, request, *args, **kwargs):
-        """
-        Retrieves and returns the list of active sessions for the authenticated user.
-
-        Args:
-            request (HttpRequest): The HTTP request object.
-
-        Returns:
-            Response: A response object containing the list of active sessions.
-        """
-
+    def get_queryset(self):
         sessions = Session.objects.filter(expire_date__gt=timezone.now())
-        session_data = []
+        user_sessions = []
 
         for session in sessions:
             data = session.get_decoded()
 
-            if data.get("_auth_user_id") == str(request.user.id):
-                session_data.append(
+            if data.get("_auth_user_id") == str(self.request.user.id):
+                user_sessions.append(
                     {
                         "session_key": session.session_key,
                         "expire_date": session.expire_date,
@@ -48,7 +41,7 @@ class SessionListAPIView(ThrottleMixin, LoggingMixin, generics.GenericAPIView):
                     }
                 )
 
-        return Response(session_data, status=status.HTTP_200_OK)
+        return user_sessions
 
 
 class SessionLogoutDestroyView(ThrottleMixin, LoggingMixin, generics.DestroyAPIView):
