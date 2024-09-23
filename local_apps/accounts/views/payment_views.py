@@ -70,7 +70,6 @@ class VerifyDepositAPIView(ThrottleMixin, LoggingMixin, generics.GenericAPIView)
     """
 
     permission_classes = (IsAuthenticatedAndActive,)
-    serializer_class = VerifyDepositSerializer
 
     def post(self, request):
         """
@@ -84,30 +83,24 @@ class VerifyDepositAPIView(ThrottleMixin, LoggingMixin, generics.GenericAPIView)
             Response: A response object containing an error message and HTTP status code 400 if the verification fails.
         """
 
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            authority = serializer.validated_data.get("Authority")
-            amount = serializer.validated_data.get("Amount")
-            if not amount or not authority:
-                return Response(
-                    {"error": "Authority and Amount are required"},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-            response = verify(amount, authority)
-            if response["status"]:
-                user = request.user
-                update_wallet_balance.delay(user.id, amount)
+        authority = request.data.get("Authority")
+        amount = request.data.get("Amount")
+        if not amount or not authority:
+            return Response(
+                {"error": "Authority and Amount are required"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        response = verify(amount, authority)
+        if response["status"]:
+            user = request.user
+            update_wallet_balance.delay(user.id, amount)
 
-                return Response(
-                    {
-                        "status": "Payment verified successfully",
-                        "RefID": response["RefID"],
-                    },
-                    status=status.HTTP_200_OK,
-                )
-            else:
-                return Response(
-                    {"error": "Payment verification failed", "code": response["code"]},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"status": "Payment verified successfully", "RefID": response["RefID"]},
+                status=status.HTTP_200_OK,
+            )
+        else:
+            return Response(
+                {"error": "Payment verification failed", "code": response["code"]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )

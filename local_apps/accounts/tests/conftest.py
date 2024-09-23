@@ -54,19 +54,19 @@ def authenticated_user(api_client, test_user):
 
 @pytest.fixture
 def mock_send_request():
-    with patch("accounts.views.payment_views.send_request") as mock:
+    with patch("local_apps.accounts.views.payment_views.send_request") as mock:
         yield mock
 
 
 @pytest.fixture
 def mock_verify():
-    with patch("accounts.views.payment_views.verify") as mock:
+    with patch("local_apps.accounts.views.payment_views.verify") as mock:
         yield mock
 
 
 @pytest.fixture
 def mock_update_wallet_balance():
-    with patch("accounts.views.payment_views.update_wallet_balance") as mock:
+    with patch("local_apps.accounts.views.payment_views.update_wallet_balance") as mock:
         yield mock
 
 

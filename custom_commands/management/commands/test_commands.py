@@ -8,7 +8,7 @@ from local_apps.accounts.models import User
 
 @pytest.fixture
 def mock_send_report():
-    with patch("accounts.tasks.send_account_activity_report.delay") as mock:
+    with patch("local_apps.accounts.tasks.send_account_activity_report.delay") as mock:
         yield mock
 
 

@@ -31,7 +31,7 @@ def send_email_verification_link(user_id):
         "verification_link": verification_link,
     }
 
-    html_message = render_to_string("emails/email_verification_html.html", context)
+    html_message = render_to_string("emails/email_verification.html", context)
     plain_message = strip_tags(html_message)
     send_mail(
         subject,
@@ -72,7 +72,7 @@ def send_password_reset_email(user_id):
         "reset_link": reset_link,
     }
 
-    html_message = render_to_string("emails/password_reset_html.html", context)
+    html_message = render_to_string("emails/password_reset.html", context)
     plain_message = strip_tags(html_message)
     send_mail(
         subject,
@@ -100,7 +100,7 @@ def send_account_activity_report(user_id):
     )
 
     report_html = render_to_string(
-        "emails/account_activity_report_html.html",
+        "emails/account_activity_report.html",
         {
             "user": user,
             "products_uploaded": products_uploaded,
