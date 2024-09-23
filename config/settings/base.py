@@ -27,11 +27,11 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    "local_apps.accounts.apps.AccountsConfig",
-    "local_apps.products.apps.ProductsConfig",
-    "local_apps.cart.apps.CartConfig",
-    "local_apps.orders.apps.OrdersConfig",
-    "local_apps.chat.apps.ChatConfig",
+    "apps.accounts.apps.AccountsConfig",
+    "apps.products.apps.ProductsConfig",
+    "apps.cart.apps.CartConfig",
+    "apps.orders.apps.OrdersConfig",
+    "apps.chat.apps.ChatConfig",
 ]
 
 INSTALLED_APPS = (
@@ -46,7 +46,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "local_apps.accounts.middleware.SessionTrackingMiddleware",
+    "apps.accounts.middleware.SessionTrackingMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"

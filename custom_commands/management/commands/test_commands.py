@@ -3,12 +3,12 @@ from unittest.mock import patch
 import pytest
 from django.core.management import call_command
 
-from local_apps.accounts.models import User
+from apps.accounts.models import User
 
 
 @pytest.fixture
 def mock_send_report():
-    with patch("local_apps.accounts.tasks.send_account_activity_report.delay") as mock:
+    with patch("apps.accounts.tasks.send_account_activity_report.delay") as mock:
         yield mock
 
 

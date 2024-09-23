@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 
-from local_apps.accounts.models import User
-from local_apps.accounts.tasks import send_account_activity_report
+from apps.accounts.models import User
+from apps.accounts.tasks import send_account_activity_report
 
 
 class Command(BaseCommand):
