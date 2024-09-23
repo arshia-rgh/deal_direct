@@ -1,8 +1,8 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from products.models import Product, Category
-from products.serializers import ProductSerializer, CategorySerializer
+from local_apps.products.models import Product, Category
+from local_apps.products.serializers import ProductSerializer, CategorySerializer
 from utils.mixins import ListCacheMixin, ThrottleMixin, LoggingMixin
 from .permissions import IsOwnerOrReadOnly, IsAdminUserOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend

@@ -5,7 +5,7 @@ from django.urls import reverse
 from model_bakery import baker
 from rest_framework.throttling import ScopedRateThrottle
 
-from products.models import Product, Category
+from local_apps.products.models import Product, Category
 
 
 @pytest.mark.django_db

@@ -2,8 +2,8 @@ import pytest
 from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework.test import APIClient
 
-from accounts.models import User
-from products.models import Product, Category
+from local_apps.accounts.models import User
+from local_apps.products.models import Product, Category
 
 
 @pytest.fixture

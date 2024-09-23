@@ -1,6 +1,6 @@
 import pytest
 
-from products.models import Product, Category
+from local_apps.products.models import Product, Category
 
 
 @pytest.mark.django_db
