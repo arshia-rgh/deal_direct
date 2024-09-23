@@ -19,7 +19,6 @@ DEFAULT_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-    "daphne",
     "rest_framework",
     "django_extensions",
     "rest_framework_simplejwt",
@@ -35,7 +34,9 @@ LOCAL_APPS = [
     "local_apps.chat.apps.ChatConfig",
 ]
 
-INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + LOCAL_APPS + ["custom_commands"]
+INSTALLED_APPS = (
+    ["daphne"] + DEFAULT_APPS + THIRD_PARTY_APPS + LOCAL_APPS + ["custom_commands"]
+)
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
