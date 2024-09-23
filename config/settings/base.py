@@ -9,32 +9,33 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY", get_random_secret_key())
 
-# Application definition
-INSTALLED_APPS = [
-    # third party app
-    "daphne",
-    # default apps
+DEFAULT_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # third party apps
+]
+
+THIRD_PARTY_APPS = [
+    "daphne",
     "rest_framework",
     "django_extensions",
     "rest_framework_simplejwt",
     "drf_spectacular",
     "django_filters",
-    # local apps
-    "accounts.apps.AccountsConfig",
-    "products.apps.ProductsConfig",
-    "cart.apps.CartConfig",
-    "orders.apps.OrdersConfig",
-    "chat.apps.ChatConfig",
-    # only for custom commands
-    "custom_commands",
 ]
+
+LOCAL_APPS = [
+    "local_apps.accounts.apps.AccountsConfig",
+    "local_apps.products.apps.ProductsConfig",
+    "local_apps.cart.apps.CartConfig",
+    "local_apps.orders.apps.OrdersConfig",
+    "local_apps.chat.apps.ChatConfig",
+]
+
+INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + LOCAL_APPS + ["custom_commands"]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -44,7 +45,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "accounts.middleware.SessionTrackingMiddleware",
+    "local_apps.accounts.middleware.SessionTrackingMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
