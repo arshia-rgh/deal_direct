@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 
 from local_apps.accounts.models import User
 from local_apps.accounts.permissions import IsAuthenticatedAndActive
-from local_apps.accounts.serializers import (
+from local_apps.accounts.serializers.auth_serializers import (
     UserRegisterSerializer,
     UserProfileSerializer,
     UserPasswordChangeSerializer,

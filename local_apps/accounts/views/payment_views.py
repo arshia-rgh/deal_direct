@@ -3,7 +3,7 @@ from rest_framework import generics
 from rest_framework import status
 from rest_framework.response import Response
 
-from local_apps.accounts.serializers import (
+from local_apps.accounts.serializers.payment_serializers import (
     IncreaseWalletSerializer,
     VerifyDepositSerializer,
 )
