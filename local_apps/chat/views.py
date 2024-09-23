@@ -2,10 +2,10 @@ from django.views.generic import TemplateView
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
-from chat.models import ChatRoom
-from chat.permissions import IsParticipantViewSet, IsParticipantAccess
-from chat.serializers import ChatRoomSerializer
-from products.models import Product
+from local_apps.chat.models import ChatRoom
+from local_apps.chat.permissions import IsParticipantViewSet, IsParticipantAccess
+from local_apps.chat.serializers import ChatRoomSerializer
+from local_apps.products.models import Product
 from utils.mixins import ThrottleMixin, LoggingMixin, ListCacheMixin
 
 

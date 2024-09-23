@@ -1,9 +1,8 @@
 import pytest
 from django.urls import reverse
 
-from accounts.models import User
-from chat.models import ChatRoom
-from chat.tests.conftest import api_client
+from local_apps.accounts.models import User
+from local_apps.chat.models import ChatRoom
 
 
 @pytest.mark.django_db

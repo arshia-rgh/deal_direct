@@ -4,7 +4,7 @@ import re
 from channels.exceptions import DenyConnection
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-from chat.models import ChatRoom
+from local_apps.chat.models import ChatRoom
 
 
 class ChatRoomConsumer(AsyncWebsocketConsumer):

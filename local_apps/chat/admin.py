@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from chat.models import ChatRoom
+from local_apps.chat.models import ChatRoom
 
 
 @admin.register(ChatRoom)

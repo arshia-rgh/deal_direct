@@ -1,7 +1,7 @@
 import pytest
 
-from accounts.models import User
-from chat.models import ChatRoom
+from local_apps.accounts.models import User
+from local_apps.chat.models import ChatRoom
 
 
 @pytest.mark.django_db

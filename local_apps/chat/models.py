@@ -1,7 +1,7 @@
 from django.db import models
 
-from accounts.models import User
-from products.models import Product
+from local_apps.accounts.models import User
+from local_apps.products.models import Product
 from utils.base_model import BaseModel
 
 
