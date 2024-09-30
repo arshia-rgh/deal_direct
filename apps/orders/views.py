@@ -69,9 +69,7 @@ class OrderPayAPIView(ThrottleMixin, LoggingMixin, APIView):
             order.save()
 
             # products delivered successfully
-            delete_cart_after_7_days.apply_async(
-                (order.id,), countdown=7 * 24 * 60 * 60
-            )
+            delete_cart_after_7_days.apply_async(order.id, countdown=7 * 24 * 60 * 60)
 
             # update all sellers wallet balance
             for item in order.cart.cartitem_set.all():
